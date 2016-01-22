@@ -60,7 +60,7 @@
 <meta property="og:description" content="在之前的博文中，已经介绍了如何创建一个Hexo网站并且将其托管至Github上，从而实现一个静态的博客网站。由于国内访问Github速度较慢甚至无法访问，因此有了国内版的Github，也就是Gitcafe。将网站托管至Gitcafe上的好处就是，你的网站即使在国内的网络环境下也能被访问，同时也便于百度等中文搜索引擎的收录。
 将博客托管至Gitcafe与托管至Github类似，但是仍存在一些细小的差">
 <meta property="og:image" content="http://i.imgur.com/gw8SKtu.png">
-<meta property="og:updated_time" content="2016-01-21T03:33:39.109Z">
+<meta property="og:updated_time" content="2016-01-22T15:01:31.823Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何将博客托管至Gitcafe及相应的DNS设置">
 <meta name="twitter:description" content="在之前的博文中，已经介绍了如何创建一个Hexo网站并且将其托管至Github上，从而实现一个静态的博客网站。由于国内访问Github速度较慢甚至无法访问，因此有了国内版的Github，也就是Gitcafe。将网站托管至Gitcafe上的好处就是，你的网站即使在国内的网络环境下也能被访问，同时也便于百度等中文搜索引擎的收录。
@@ -333,15 +333,15 @@
 <h1 id="将博客托管至Gitcafe上">将博客托管至Gitcafe上</h1><h2 id="注册Gitcafe账号">注册Gitcafe账号</h2><p>打开<a href="https://gitcafe.com" target="_blank" rel="external">Gitcafe官网</a>，注册账号。</p>
 <h2 id="配置SSH">配置SSH</h2><p>假设你已经完成将网站托管至Github上，此时你的本地已经生成了SSH公钥文件，打开这个文件并复制其中的内容。下面是我的ssh公钥文件路径</p>
 <pre><code>C:<span class="command">\Users</span><span class="command">\ZhangJie</span><span class="command">\.</span>ssh<span class="command">\id</span>_rsa.pub
-</code></pre><p>打开Gitcafe主页，登陆后进入到“账户设置”中，点击左侧的“SSH公钥管理”，然后“添加新的公钥”，将之前的内容粘贴到对应的栏目里即可。</p>
-<p>为了测试ssh是否配置成功，打开本地的git bash，输入</p>
+</code></pre><p>打开Gitcafe主页，登陆后进入到“账户设置”中，点击左侧的<code>SSH公钥管理</code>，然后<code>添加新的公钥</code>，将之前的内容粘贴到对应的栏目里即可。</p>
+<p>为了测试ssh是否配置成功，打开本地的<code>git bash</code>，输入</p>
 <pre><code><span class="title">ssh</span> -T git<span class="variable">@gitcafe</span>.com
 </code></pre><p>如果显示</p>
 <pre><code><span class="variable">Hi</span> <span class="variable">USERNAME</span><span class="exclamation_mark">!</span> <span class="variable">You've</span> <span class="function_or_atom">successfully</span> <span class="function_or_atom">authenticated</span>...
 </code></pre><p>则说明配置成功，此时你可以免密码将本地的项目文件同步至Gitcafe中。</p>
 <p>如果依然存在问题，可以查看<a href="https://help.gitcafe.com/manuals/help/ssh-key" target="_blank" rel="external">官网详细的帮助页面</a>。</p>
 <h2 id="创建同名项目以及修改配置文件">创建同名项目以及修改配置文件</h2><p>在Gitcafe上新建一个与你的账户名同名的项目。</p>
-<p>修改站点目录下的配置文件，找到”deploy”项。我的deploy项内容如下</p>
+<p>修改站点目录下的配置文件，找到<code>deploy</code>项。我的deploy项内容如下</p>
 <pre><code><span class="comment"># Deployment</span>
 <span class="comment">## Docs: http://hexo.io/docs/deployment.html</span>
 deploy:
@@ -349,21 +349,23 @@ deploy:
   repo: 
     github: git<span class="macrocall">@github</span>.com:JeyZhang/JeyZhang.github.io.git
     gitcafe: git<span class="macrocall">@gitcafe</span>.com:JeyZhang/JeyZhang.git,gitcafe-pages
-</code></pre><p>注意对于gitcafe，网站应该托管至其”gitcafe-pages”分支上。</p>
+</code></pre><p>注意对于gitcafe，网站应该托管至其<code>gitcafe-pages</code>分支上。</p>
 <h2 id="将本地网站同步至Gitcafe项目中">将本地网站同步至Gitcafe项目中</h2><p>在网站根目录下，打开gitbash，输入</p>
 <pre><code>hexo <span class="keyword">g</span> -<span class="literal">d</span>
 </code></pre><p>即可将本地网站同步至Github和Gitcafe上。</p>
-<p>（注意：在本地网站根目录下的source文件夹下，需要新建一个文件名为”CNAME”的文件（无后缀名），里面填写你所绑定的域名地址，如www.jeyzhang.com.）</p>
-<h2 id="测试是否成功将网站托管至Gitcafe上">测试是否成功将网站托管至Gitcafe上</h2><p>如果项目根目录下存在”CNAME”文件，暂时现将其删除。（因为目前你还没有将你的网站域名解析至Gitcafe服务器上）</p>
+<p>（注意：在本地网站根目录下的source文件夹下，需要新建一个文件名为<code>CNAME</code>的文件（无后缀名），里面填写你所绑定的域名地址，如www.jeyzhang.com.）</p>
+<h2 id="测试是否成功将网站托管至Gitcafe上">测试是否成功将网站托管至Gitcafe上</h2><p>如果项目根目录下存在<code>CNAME</code>文件，暂时现将其删除。（因为目前你还没有将你的网站域名解析至Gitcafe服务器上）</p>
 <p>在浏览器输入地址</p>
 <pre><code><span class="string">http:</span><span class="comment">//jeyzhang.gitcafe.io</span>
 </code></pre><p>看网站是否访问成功（国内网络即可）。</p>
 <h1 id="DNS解析设置">DNS解析设置</h1><p>笔者使用<a href="https://www.dnspod.cn" target="_blank" rel="external">DNSPod</a>的域名解析,我的域名解析设置如下</p>
 <p><img src="http://i.imgur.com/gw8SKtu.png" alt=""></p>
-<p>国内线路选择Gitcafe，国外线路选择Github，从而实现国内外分流访问网站。主机记录为”@”可以实现访问”××××××.com”时，自动填充”www”开头，因为之前我们绑定的网站是”www.××××××.com”的二级域名。</p>
+<p>国内线路选择Gitcafe，国外线路选择Github，从而实现国内外分流访问网站。主机记录为<code>@</code>可以实现访问<code>××××××.com</code>时，自动填充”www”开头，因为之前我们绑定的网站是<code>www.××××××.com</code>的二级域名。</p>
 <p>等待一段时间生效即可。</p>
 <hr>
 <p>本文结束，感谢欣赏。</p>
+<p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
+<p><a href="http://www.jeyzhang.com/blog-on-gitcafe-with-dns-settings.html">http://www.jeyzhang.com/blog-on-gitcafe-with-dns-settings.html</a></p>
 </span>
       
     </div>
@@ -492,7 +494,7 @@ deploy:
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

@@ -13,7 +13,7 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 ----------
 
-## 安装和配置Hexo及Github ##
+## **安装和配置Hexo及Github** ##
 
 ### 安装Hexo ###
 
@@ -30,7 +30,7 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 ### 使用Hexo进行本地建站 ###
 
-选择一个本地的文件夹，如"D:\hexo"。
+选择一个本地的文件夹，如`D:\hexo`。
 
 输入
 
@@ -38,7 +38,7 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 	cd D:\hexo
 	npm install
 
-如果hexo安装成功，则在D:\hexo文件夹下的文件目录为
+如果hexo安装成功，则在`D:\hexo`文件夹下的文件目录为
 
 	.
 	├── _config.yml // 网站的配置信息，你可以在此配置大部分的参数。
@@ -69,11 +69,11 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 ### 创建与账号同名的Repository ###
 
-注册并登陆Github官网成功后，点击页面右上角的"+"，选择"New repository"。
+注册并登陆Github官网成功后，点击页面右上角的`+`，选择`New repository`。
 
-在"Repository name"中填写"你的Github账号名.github.io"，这里是"MyGithub.github.io"。"Description"中填写对此repository的描述信息(可选，但建议填写，如"Personal website")。
+在`Repository name`中填写`你的Github账号名.github.io`，这里是`MyGithub.github.io`。`Description`中填写对此repository的描述信息(可选，但建议填写，如`Personal website`)。
 
-点击"Create repository"，完成创建。
+点击`Create repository`，完成创建。
 
 ### 配置SSH ###
 
@@ -87,7 +87,7 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 	ssh-keygen -t rsa -C "your e-mail"
 
-其中，"your e-mail"是你注册Github时用到的邮箱。
+其中，`your e-mail`是你注册Github时用到的邮箱。
 
 然后接下来几步都直接按回车键，最后生成如下
 
@@ -95,9 +95,9 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 **(2) 复制公钥内容到Github账户信息中**
 
-打开~/.ssh/id_rsa.pub文件，复制里面的内容；
+打开`~/.ssh/id_rsa.pub`文件，复制里面的内容；
 
-打开Github官网，登陆后进入到个人设置(点击头像->setting)，点击右侧的"SSH Keys"，点击"Add SSH key"；填写title之后，将之前复制的内容粘贴到Key框中，最后点击"Add key"即可。
+打开Github官网，登陆后进入到个人设置(`点击头像->setting`)，点击右侧的`SSH Keys`，点击`Add SSH key`；填写title之后，将之前复制的内容粘贴到Key框中，最后点击`Add key`即可。
 
 **(3) 测试SSH是否配置成功**
 
@@ -113,7 +113,7 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 ### 将网站发布到Github的同名repository中 ###
 
-打开D:\Hexo文件夹中的_config.yml文件，找到如下位置，填写
+打开`D:\Hexo`文件夹中的`_config.yml`文件，找到如下位置，填写
 
 	# Deployment
 	## Docs: http://hexo.io/docs/deployment.html
@@ -121,11 +121,11 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 	  type: git
 	  repo: git@github.com:MyGithub/MyGithub.github.io
 
-**注**： (1) 其中"MyGithub"替换成你的Github账户; (2) 注意在yml文件中，":"后面都是要带空格的。
+**注**： (1) 其中`MyGithub`替换成你的Github账户; (2) 注意在yml文件中，`:`后面都是要带空格的。
 
-此时，通过访问 http://MyGithub.github.io 可以看到默认的Hexo首页面（与之前本地测试时一样）。
+此时，通过访问`http://MyGithub.github.io`可以看到默认的Hexo首页面（与之前本地测试时一样）。
 
-## 选择Hexo主题及发表文章 ##
+## **选择Hexo主题及发表文章** ##
 
 ### 简洁的Next主题 ###
 
@@ -138,7 +138,7 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 **(2) 修改网站的主题为Next**
 
-打开 D:\Hexo 下的_config.yml文件，找到theme字段，将其修改为next
+打开`D:\Hexo`下的`_config.yml`文件，找到`theme`字段，将其修改为`next`
 
 	# Extensions
 	## Plugins: http://hexo.io/plugins/
@@ -163,11 +163,11 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 ### 发表新文章 ###
 
-发表文章操作非常简单，在网站存放的根目录打开git bash，输入
+发表文章操作非常简单，在网站存放的根目录打开`git bash`，输入
 
 	hexo n "name of the new post"
 
-回车后，在source文件夹下的_post文件夹下，可以看到新建了一个"name of the new post.md"的文件，打开
+回车后，在source文件夹下的_post文件夹下，可以看到新建了一个`name of the new post.md`的文件，打开
 
 	title: name of the new post
 	date: 2015-12-09 22:55:25
@@ -178,7 +178,7 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 	[tag1, tag2, tag3, ...]
 
-在"- - -"下方添加正文内容即可，注意需要使用markdown语法进行书写。
+在`- - -`下方添加正文内容即可，注意需要使用markdown语法进行书写。
 
 [在这里](http://wowubuntu.com/markdown/)有关于Markdown语法的简单说明。推荐使用[MarkdownPad2](http://markdownpad.com/)进行md文件的编辑工作。
 
@@ -188,9 +188,9 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 即可生成新网站，并且同步Github上的网站内容。
 
-## 注册及绑定自己的域名地址 ##
+## **注册及绑定自己的域名地址** ##
 
-截止到目前为止，你应该可以通过访问 http://MyGithub.github.io 来看到以上创建的网站了。
+截止到目前为止，你应该可以通过访问`http://MyGithub.github.io`来看到以上创建的网站了。
 
 但是，如何拥有一个属于自己的域名地址，并将其指向在Github上所创建的网站呢？
 
@@ -206,7 +206,7 @@ Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费�
 
 ![](http://i.imgur.com/AqhPQst.png)
 
-其中，当记录类型为A时，记录值为服务器的ip地址，这里的服务器地址为存放Github page的地址，你可以通过命令行输入
+其中，当记录类型为A时，记录值为服务器的ip地址，这里的服务器地址为存放`Github page`的地址，你可以通过命令行输入
 
 	ping github.io
 
@@ -228,9 +228,11 @@ CNAME文件设置的目的是，通过访问 MyGithub.github.io 可以跳转到�
 
 ----------
 
-通过以上的设置，相信你已经可以通过注册域名来访问一个默认的hexo主题页面了。之后的工作就在于，(1)如何对主题进行个性化设置及(2)发表博文以充实网站内容。[这里](http://theme-next.iissnan.com/)有关于next主题的个性化设置说明。
+通过以上的设置，相信你已经可以通过注册域名来访问一个默认的hexo主题页面了。之后的工作就在于，(1)如何对主题进行个性化设置及；(2)发表博文以充实网站内容。[这里](http://theme-next.iissnan.com/)有关于next主题的个性化设置说明。
 
-如果发现博文中的错误或者遇到问题，都可以在下方的评论区留言哈:)
+本文结束，感谢欣赏。
 
-欢迎转载和参考，请注明本文的[链接地址](http://www.jeyzhang.com/Hexo-Github-%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/)。
+**欢迎转载，请注明本文的链接地址：**
+
+http://www.jeyzhang.com/hexo-github-blog-building.html
 

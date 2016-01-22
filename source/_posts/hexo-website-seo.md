@@ -10,7 +10,7 @@ SEO (Search Engine Optimization)，即搜索引擎优化。对网站做SEO优化
 
 ## SEO优化之title ##
 
-编辑站点目录下的themes/layout/index.swig文件，
+编辑站点目录下的`themes/layout/index.swig`文件，
 
 将下面的代码
 
@@ -20,11 +20,11 @@ SEO (Search Engine Optimization)，即搜索引擎优化。对网站做SEO优化
 
 ![](http://i.imgur.com/hNv09sO.png)
 
-这时将网站的描述及关键词加入了网站的title中，更有利于详细地描述网站。
+这时将网站的描述及关键词加入了网站的`title`中，更有利于详细地描述网站。
 
 ## 添加robots.txt ##
 
-robots.txt是一种存放于网站根目录下的ASCII编码的文本文件，它的作用是告诉搜索引擎此网站中哪些内容是可以被爬取的，哪些是禁止爬取的。robots.txt应该放在站点目录下的source文件中，网站生成后在网站的根目录(站点目录/public/)下。
+robots.txt是一种存放于网站根目录下的ASCII编码的文本文件，它的作用是告诉搜索引擎此网站中哪些内容是可以被爬取的，哪些是禁止爬取的。robots.txt应该放在站点目录下的source文件中，网站生成后在网站的根目录(`站点目录/public/`)下。
 
 我的robots.txt文件内容如下
 
@@ -63,3 +63,11 @@ Sitemap即网站地图，它的作用在于便于搜索引擎更加智能地抓�
 	Sitemap: http://www.jeyzhang.com/sitemap.xml
 	Sitemap: http://www.jeyzhang.com/baidusitemap.xml
 
+
+----------
+
+本文结束，感谢欣赏。
+
+**欢迎转载，请注明本文的链接地址：**
+
+http://www.jeyzhang.com/hexo-website-seo.html

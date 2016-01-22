@@ -14,7 +14,7 @@ TensorFlow是Google在2015年11月份开源的人工智能系统（[**Github项�
 
 ### 什么是数据流图(Data Flow Graph) ###
 
-数据流图是描述“有向图”中的数值计算过程。“有向图”中的节点通常代表数学运算，但也可以表示数据的输入、输出和读写等操作；“有向图”中的边表示节点之间的某种联系，它负责传输多维数据(Tensors)。图中这些"tensors"的"flow"也就是TensorFlow的命名来源。
+数据流图是描述`有向图`中的数值计算过程。`有向图`中的节点通常代表数学运算，但也可以表示数据的输入、输出和读写等操作；`有向图`中的边表示节点之间的某种联系，它负责传输多维数据(Tensors)。图中这些`tensors`的`flow`也就是TensorFlow的命名来源。
 
 节点可以被分配到多个计算设备上，可以异步和并行地执行操作。因为是有向图，所以只有等到之前的入度节点们的计算状态完成后，当前节点才能执行操作。
 
@@ -95,7 +95,7 @@ MNIST数据集是含标注信息的，以上图片分别代表5, 0, 4和1。
 
 MNIST数据集一共包含三个部分：训练数据集(55,000份，mnist.train)、测试数据集(10,000份，mnist.test)和验证数据集(5,000份，mnist.validation)。一般来说，训练数据集是用来训练模型，验证数据集可以检验所训练出来的模型的正确性和是否过拟合，测试集是不可见的（相当于一个黑盒），但我们最终的目的是使得所训练出来的模型在测试集上的效果（这里是准确性）达到最佳。
 
-MNIST中的一个数据样本包含两块：手写体图片和对于的label。这里我们用"xs"和"ys"分别代表图片和对应的label，训练数据集和测试数据集都有xs和ys，我们使用 mnist.train.images 和 mnist.train.labels 表示训练数据集中图片数据和对于的label数据。
+MNIST中的一个数据样本包含两块：手写体图片和对于的label。这里我们用`xs`和`ys`分别代表图片和对应的label，训练数据集和测试数据集都有xs和ys，我们使用 mnist.train.images 和 mnist.train.labels 表示训练数据集中图片数据和对于的label数据。
 
 一张图片是一个28*28的像素点矩阵，我们可以用一个同大小的二维整数矩阵来表示。如下：
 
@@ -103,11 +103,11 @@ MNIST中的一个数据样本包含两块：手写体图片和对于的label。�
 
 但是，这里我们可以先简单地使用一个长度为28 * 28 = 784的一维数组来表示图像，因为下面仅仅使用softmax regression来对图片进行识别分类（尽管这样做会损失图片的二维空间信息，所以实际上最好的计算机视觉算法是会利用图片的二维信息的）。
 
-所以MNIST的训练数据集可以是一个形状为55000 * 784位的"tensor"，也就是一个多维数组，第一维表示图片的索引，第二维表示图片中像素的索引（"tensor"中的像素值在0到1之间）。如下图：
+所以MNIST的训练数据集可以是一个形状为55000 * 784位的`tensor`，也就是一个多维数组，第一维表示图片的索引，第二维表示图片中像素的索引（"tensor"中的像素值在0到1之间）。如下图：
 
 ![](http://i.imgur.com/rnNXzOC.png)
 
-MNIST中的数字手写体图片的label值在1到9之间，是图片所表示的真实数字。这里用One-hot vector来表述label值，vector的长度为label值的数目，vector中有且只有一位为1，其他为0.为了方便，我们表示某个数字时在vector中所对应的索引位置设置1，其他位置元素为0. 例如用[0,0,0,1,0,0,0,0,0,0]来表示"3"。所以，mnist.train.labels是一个55000 * 10的二维数组。如下：
+MNIST中的数字手写体图片的label值在1到9之间，是图片所表示的真实数字。这里用One-hot vector来表述label值，vector的长度为label值的数目，vector中有且只有一位为1，其他为0.为了方便，我们表示某个数字时在vector中所对应的索引位置设置1，其他位置元素为0. 例如用[0,0,0,1,0,0,0,0,0,0]来表示`3`。所以，mnist.train.labels是一个55000 * 10的二维数组。如下：
 
 ![](http://i.imgur.com/8X0IbcY.png)
 
@@ -115,7 +115,7 @@ MNIST中的数字手写体图片的label值在1到9之间，是图片所表示�
 
 ### Softmax Regression模型 ###
 
-数字手写体图片的识别，实际上可以转化成一个概率问题，如果我们知道一张图片表示"9"的概率为80%，而剩下的20%概率分布在"8"，"6"和其他数字上，那么从概率的角度上，我们可以大致推断该图片表示的是9.
+数字手写体图片的识别，实际上可以转化成一个概率问题，如果我们知道一张图片表示`9`的概率为80%，而剩下的20%概率分布在`8`，`6`和其他数字上，那么从概率的角度上，我们可以大致推断该图片表示的是9.
 
 Softmax Regression是一个简单的模型，很适合用来处理得到一个待分类对象在多个类别上的概率分布。所以，这个模型通常是很多高级模型的最后一步。
 
@@ -172,9 +172,9 @@ $$ y = softmax( Wx + b ) $$
 
 	x = tf.placeholder(tf.float32, [None, 784])
 
-这里的 \\( x \\) 不是一个特定的值，而是一个占位符，即需要时指定。如前所述，我们用一个1 * 784维的向量来表示一张MNIST中的图片。我们用[None, 784]这样一个二维的tensor来表示整个MNIST数据集，其中None表示可以为任意值。
+这里的 \\( x \\) 不是一个特定的值，而是一个占位符，即需要时指定。如前所述，我们用一个1 * 784维的向量来表示一张MNIST中的图片。我们用[None, 784]这样一个二维的tensor来表示整个MNIST数据集，其中`None`表示可以为任意值。
 
-我们使用Variable(变量)来表示模型中的权值和偏置，这些参数是可变的。如下，
+我们使用`Variable`(变量)来表示模型中的权值和偏置，这些参数是可变的。如下，
 
 	W = tf.Variable(tf.zeros([784, 10]))
 	b = tf.Variable(tf.zeros([10]))
@@ -185,7 +185,7 @@ $$ y = softmax( Wx + b ) $$
   
 	y = tf.nn.softmax(tf.matmul(x, W) + b)
 
-其中，matmul函数实现了 x 和 W 的乘积，这里 x 为二维矩阵，所以放在前面。可以看出，在TensorFlow中实现softmax regression模型是很简单的。
+其中，`matmul`函数实现了 x 和 W 的乘积，这里 x 为二维矩阵，所以放在前面。可以看出，在TensorFlow中实现softmax regression模型是很简单的。
 
 ### 模型的训练 ###
 
@@ -234,11 +234,11 @@ TensorFlow提供了以上简单抽象的函数调用功能，你不需要关心�
 
 怎样评价所训练出来的模型？显然，我们可以用图片预测类别的准确率。
 
-首先，利用tf.argmax()函数来得到预测和实际的图片label值，再用一个tf.equal()函数来判断预测值和真实值是否一致。如下：
+首先，利用`tf.argmax()`函数来得到预测和实际的图片label值，再用一个`tf.equal()`函数来判断预测值和真实值是否一致。如下：
 
 	correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
 
-correct_prediction是一个布尔值的列表，例如 [True, False, True, True]。可以使用tf.cast()函数将其转换为[1, 0, 1, 1]，以方便准确率的计算（以上的是准确率为0.75）。
+correct_prediction是一个布尔值的列表，例如 [True, False, True, True]。可以使用`tf.cast()`函数将其转换为[1, 0, 1, 1]，以方便准确率的计算（以上的是准确率为0.75）。
 
 	accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
@@ -248,9 +248,17 @@ correct_prediction是一个布尔值的列表，例如 [True, False, True, True]
 
 Softmax regression模型由于模型较简单，所以在测试集上的准确率在91%左右，这个结果并不算太好。通过一些简单的优化，准确率可以达到97%，目前最好的模型的准确率为99.7%。（[**这里**](http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html)有众多模型在MNIST数据集上的运行结果）。
 
+----------
 
+本文结束，感谢欣赏。
 
+**欢迎转载，请注明本文的链接地址：**
 
+http://www.jeyzhang.com/tensorflow-learning-notes.html
+
+**参考资料**
+
+[TensorFlow官方帮助文档](https://www.tensorflow.org/versions/master/get_started/index.html)
 
 
 

@@ -2,43 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
-    <lastmod>2016-01-22T02:47:01.741Z</lastmod>
+    <loc>http://www.jeyzhang.com/markdown-common-problems.html</loc>
+    <lastmod>2016-01-22T15:16:41.075Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/tensorflow-learning-notes.html</loc>
-    <lastmod>2016-01-21T09:12:57.645Z</lastmod>
+    <lastmod>2016-01-22T15:15:30.800Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/next-theme-personal-settings.html</loc>
-    <lastmod>2016-01-21T03:33:39.133Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html</loc>
-    <lastmod>2016-01-21T03:33:39.128Z</lastmod>
+    <lastmod>2016-01-22T15:11:14.081Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/hexo-website-seo.html</loc>
-    <lastmod>2016-01-21T03:33:39.120Z</lastmod>
+    <lastmod>2016-01-22T15:07:40.678Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/hexo-github-blog-building.html</loc>
-    <lastmod>2016-01-21T03:33:39.114Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/blog-on-gitcafe-with-dns-settings.html</loc>
-    <lastmod>2016-01-21T03:33:39.109Z</lastmod>
+    <lastmod>2016-01-22T15:06:22.739Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/2015-campus-recruit-summary.html</loc>
-    <lastmod>2016-01-21T03:33:39.105Z</lastmod>
+    <lastmod>2016-01-22T15:01:54.154Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/blog-on-gitcafe-with-dns-settings.html</loc>
+    <lastmod>2016-01-22T15:01:31.823Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html</loc>
+    <lastmod>2016-01-22T14:58:36.545Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
+    <lastmod>2016-01-22T14:53:43.115Z</lastmod>
   </url>
   
   <url>

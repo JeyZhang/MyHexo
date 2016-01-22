@@ -24,9 +24,9 @@ categories: Hexo
 
 	C:\Users\ZhangJie\.ssh\id_rsa.pub
 
-打开Gitcafe主页，登陆后进入到“账户设置”中，点击左侧的“SSH公钥管理”，然后“添加新的公钥”，将之前的内容粘贴到对应的栏目里即可。
+打开Gitcafe主页，登陆后进入到“账户设置”中，点击左侧的`SSH公钥管理`，然后`添加新的公钥`，将之前的内容粘贴到对应的栏目里即可。
 
-为了测试ssh是否配置成功，打开本地的git bash，输入
+为了测试ssh是否配置成功，打开本地的`git bash`，输入
 
 	ssh -T git@gitcafe.com
 
@@ -42,7 +42,7 @@ categories: Hexo
 
 在Gitcafe上新建一个与你的账户名同名的项目。
 
-修改站点目录下的配置文件，找到"deploy"项。我的deploy项内容如下
+修改站点目录下的配置文件，找到`deploy`项。我的deploy项内容如下
 
 	# Deployment
 	## Docs: http://hexo.io/docs/deployment.html
@@ -52,7 +52,7 @@ categories: Hexo
 	    github: git@github.com:JeyZhang/JeyZhang.github.io.git
 	    gitcafe: git@gitcafe.com:JeyZhang/JeyZhang.git,gitcafe-pages
 
-注意对于gitcafe，网站应该托管至其"gitcafe-pages"分支上。
+注意对于gitcafe，网站应该托管至其`gitcafe-pages`分支上。
 
 ## 将本地网站同步至Gitcafe项目中 ##
 
@@ -62,11 +62,11 @@ categories: Hexo
 
 即可将本地网站同步至Github和Gitcafe上。
 
-（注意：在本地网站根目录下的source文件夹下，需要新建一个文件名为"CNAME"的文件（无后缀名），里面填写你所绑定的域名地址，如www.jeyzhang.com.）
+（注意：在本地网站根目录下的source文件夹下，需要新建一个文件名为`CNAME`的文件（无后缀名），里面填写你所绑定的域名地址，如www.jeyzhang.com.）
 
 ## 测试是否成功将网站托管至Gitcafe上 ##
 
-如果项目根目录下存在"CNAME"文件，暂时现将其删除。（因为目前你还没有将你的网站域名解析至Gitcafe服务器上）
+如果项目根目录下存在`CNAME`文件，暂时现将其删除。（因为目前你还没有将你的网站域名解析至Gitcafe服务器上）
 
 在浏览器输入地址
 
@@ -80,10 +80,14 @@ categories: Hexo
 
 ![](http://i.imgur.com/gw8SKtu.png)
 
-国内线路选择Gitcafe，国外线路选择Github，从而实现国内外分流访问网站。主机记录为"@"可以实现访问"××××××.com"时，自动填充"www"开头，因为之前我们绑定的网站是"www.××××××.com"的二级域名。
+国内线路选择Gitcafe，国外线路选择Github，从而实现国内外分流访问网站。主机记录为`@`可以实现访问`××××××.com`时，自动填充"www"开头，因为之前我们绑定的网站是`www.××××××.com`的二级域名。
 
 等待一段时间生效即可。
 
 ----------
 
 本文结束，感谢欣赏。
+
+**欢迎转载，请注明本文的链接地址：**
+
+http://www.jeyzhang.com/blog-on-gitcafe-with-dns-settings.html

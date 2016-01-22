@@ -68,7 +68,7 @@
 <meta property="og:image" content="http://i.imgur.com/sqlI5oC.png">
 <meta property="og:image" content="http://i.imgur.com/ANwDWKW.png">
 <meta property="og:image" content="http://i.imgur.com/f0c2kWB.png">
-<meta property="og:updated_time" content="2016-01-21T09:12:57.645Z">
+<meta property="og:updated_time" content="2016-01-22T15:15:30.800Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TensorFlow学习笔记">
 <meta name="twitter:description" content="TensorFlow 简介TensorFlow是Google在2015年11月份开源的人工智能系统（Github项目地址），是之前所开发的深度学习基础架构DistBelief的改进版本，该系统可以被用于语音识别、图片识别等多个领域。
@@ -334,7 +334,7 @@
         <span itemprop="articleBody"><p><img src="http://i.imgur.com/UT4vj57.jpg" alt="Tensor Flow"></p>
 <h2 id="TensorFlow_简介">TensorFlow 简介</h2><p>TensorFlow是Google在2015年11月份开源的人工智能系统（<a href="https://github.com/tensorflow/tensorflow" target="_blank" rel="external"><strong>Github项目地址</strong></a>），是之前所开发的深度学习基础架构DistBelief的改进版本，该系统可以被用于语音识别、图片识别等多个领域。</p>
 <p><a href="https://www.tensorflow.org/" target="_blank" rel="external">官网</a>上对TensorFlow的介绍是，一个使用数据流图(data flow graphs)技术来进行数值计算的开源软件库。数据流图中的节点，代表数值运算；节点节点之间的边，代表<strong>多维数据</strong>(tensors)之间的某种联系。你可以在多种设备（含有CPU或GPU）上通过简单的API调用来使用该系统的功能。TensorFlow是由Google Brain团队的研发人员负责的项目。</p>
-<h3 id="什么是数据流图(Data_Flow_Graph)">什么是数据流图(Data Flow Graph)</h3><p>数据流图是描述“有向图”中的数值计算过程。“有向图”中的节点通常代表数学运算，但也可以表示数据的输入、输出和读写等操作；“有向图”中的边表示节点之间的某种联系，它负责传输多维数据(Tensors)。图中这些”tensors”的”flow”也就是TensorFlow的命名来源。</p>
+<h3 id="什么是数据流图(Data_Flow_Graph)">什么是数据流图(Data Flow Graph)</h3><p>数据流图是描述<code>有向图</code>中的数值计算过程。<code>有向图</code>中的节点通常代表数学运算，但也可以表示数据的输入、输出和读写等操作；<code>有向图</code>中的边表示节点之间的某种联系，它负责传输多维数据(Tensors)。图中这些<code>tensors</code>的<code>flow</code>也就是TensorFlow的命名来源。</p>
 <p>节点可以被分配到多个计算设备上，可以异步和并行地执行操作。因为是有向图，所以只有等到之前的入度节点们的计算状态完成后，当前节点才能执行操作。</p>
 <h3 id="TensorFlow的特性">TensorFlow的特性</h3><p><strong>1 灵活性</strong></p>
 <p>TensorFlow不是一个严格的神经网络工具包，只要你可以使用数据流图来描述你的计算过程，你可以使用TensorFlow做任何事情。你还可以方便地根据需要来构建数据流图，用简单的Python语言来实现高层次的功能。</p>
@@ -386,16 +386,16 @@ sess.<span class="built_in">run</span>(init)
 <pre><code>from tensorflow<span class="class">.examples</span><span class="class">.tutorials</span><span class="class">.mnist</span> import input_data
 mnist = input_data.<span class="function"><span class="title">read_data_sets</span><span class="params">(<span class="string">"MNIST_data/"</span>, one_hot=True)</span></span>    
 </code></pre><p>MNIST数据集一共包含三个部分：训练数据集(55,000份，mnist.train)、测试数据集(10,000份，mnist.test)和验证数据集(5,000份，mnist.validation)。一般来说，训练数据集是用来训练模型，验证数据集可以检验所训练出来的模型的正确性和是否过拟合，测试集是不可见的（相当于一个黑盒），但我们最终的目的是使得所训练出来的模型在测试集上的效果（这里是准确性）达到最佳。</p>
-<p>MNIST中的一个数据样本包含两块：手写体图片和对于的label。这里我们用”xs”和”ys”分别代表图片和对应的label，训练数据集和测试数据集都有xs和ys，我们使用 mnist.train.images 和 mnist.train.labels 表示训练数据集中图片数据和对于的label数据。</p>
+<p>MNIST中的一个数据样本包含两块：手写体图片和对于的label。这里我们用<code>xs</code>和<code>ys</code>分别代表图片和对应的label，训练数据集和测试数据集都有xs和ys，我们使用 mnist.train.images 和 mnist.train.labels 表示训练数据集中图片数据和对于的label数据。</p>
 <p>一张图片是一个28*28的像素点矩阵，我们可以用一个同大小的二维整数矩阵来表示。如下：</p>
 <p><img src="http://i.imgur.com/QoBA21J.png" alt=""></p>
 <p>但是，这里我们可以先简单地使用一个长度为28 * 28 = 784的一维数组来表示图像，因为下面仅仅使用softmax regression来对图片进行识别分类（尽管这样做会损失图片的二维空间信息，所以实际上最好的计算机视觉算法是会利用图片的二维信息的）。</p>
-<p>所以MNIST的训练数据集可以是一个形状为55000 * 784位的”tensor”，也就是一个多维数组，第一维表示图片的索引，第二维表示图片中像素的索引（”tensor”中的像素值在0到1之间）。如下图：</p>
+<p>所以MNIST的训练数据集可以是一个形状为55000 * 784位的<code>tensor</code>，也就是一个多维数组，第一维表示图片的索引，第二维表示图片中像素的索引（”tensor”中的像素值在0到1之间）。如下图：</p>
 <p><img src="http://i.imgur.com/rnNXzOC.png" alt=""></p>
-<p>MNIST中的数字手写体图片的label值在1到9之间，是图片所表示的真实数字。这里用One-hot vector来表述label值，vector的长度为label值的数目，vector中有且只有一位为1，其他为0.为了方便，我们表示某个数字时在vector中所对应的索引位置设置1，其他位置元素为0. 例如用[0,0,0,1,0,0,0,0,0,0]来表示”3”。所以，mnist.train.labels是一个55000 * 10的二维数组。如下：</p>
+<p>MNIST中的数字手写体图片的label值在1到9之间，是图片所表示的真实数字。这里用One-hot vector来表述label值，vector的长度为label值的数目，vector中有且只有一位为1，其他为0.为了方便，我们表示某个数字时在vector中所对应的索引位置设置1，其他位置元素为0. 例如用[0,0,0,1,0,0,0,0,0,0]来表示<code>3</code>。所以，mnist.train.labels是一个55000 * 10的二维数组。如下：</p>
 <p><img src="http://i.imgur.com/8X0IbcY.png" alt=""></p>
 <p>以上是MNIST数据集的描述及TensorFlow中表示。下面介绍Softmax Regression模型。</p>
-<h3 id="Softmax_Regression模型">Softmax Regression模型</h3><p>数字手写体图片的识别，实际上可以转化成一个概率问题，如果我们知道一张图片表示”9”的概率为80%，而剩下的20%概率分布在”8”，”6”和其他数字上，那么从概率的角度上，我们可以大致推断该图片表示的是9.</p>
+<h3 id="Softmax_Regression模型">Softmax Regression模型</h3><p>数字手写体图片的识别，实际上可以转化成一个概率问题，如果我们知道一张图片表示<code>9</code>的概率为80%，而剩下的20%概率分布在<code>8</code>，<code>6</code>和其他数字上，那么从概率的角度上，我们可以大致推断该图片表示的是9.</p>
 <p>Softmax Regression是一个简单的模型，很适合用来处理得到一个待分类对象在多个类别上的概率分布。所以，这个模型通常是很多高级模型的最后一步。</p>
 <p>Softmax Regression大致分为两步（暂时不知道如何合理翻译，转原话）：</p>
 <p><strong>Step 1</strong>: add up the evidence of our input being in certain classes;<br><strong>Step 2</strong>: convert that evidence into probabilities.</p>
@@ -422,14 +422,14 @@ mnist = input_data.<span class="function"><span class="title">read_data_sets</sp
 <pre><code><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf
 </code></pre><p>我们利用一些符号变量来描述交互计算的过程，创建如下</p>
 <pre><code>x = tf.<span class="function"><span class="title">placeholder</span><span class="params">(tf.float32, [None, <span class="number">784</span>])</span></span>
-</code></pre><p>这里的 \( x \) 不是一个特定的值，而是一个占位符，即需要时指定。如前所述，我们用一个1 * 784维的向量来表示一张MNIST中的图片。我们用[None, 784]这样一个二维的tensor来表示整个MNIST数据集，其中None表示可以为任意值。</p>
-<p>我们使用Variable(变量)来表示模型中的权值和偏置，这些参数是可变的。如下，</p>
+</code></pre><p>这里的 \( x \) 不是一个特定的值，而是一个占位符，即需要时指定。如前所述，我们用一个1 * 784维的向量来表示一张MNIST中的图片。我们用[None, 784]这样一个二维的tensor来表示整个MNIST数据集，其中<code>None</code>表示可以为任意值。</p>
+<p>我们使用<code>Variable</code>(变量)来表示模型中的权值和偏置，这些参数是可变的。如下，</p>
 <pre><code>W = tf.<span class="function"><span class="title">Variable</span><span class="params">(tf.zeros([<span class="number">784</span>, <span class="number">10</span>])</span></span>)
 <span class="tag">b</span> = tf.<span class="function"><span class="title">Variable</span><span class="params">(tf.zeros([<span class="number">10</span>])</span></span>)
 </code></pre><p>这里的W和b均被初始化为0值矩阵。W的维数为784 * 10，是因为我们需要将一个784维的像素值经过相应的权值之乘转化为10个类别上的evidence值；b是十个类别上累加的偏置值。</p>
 <p><strong>实现softmax regression模型仅需要一行代码</strong>，如下</p>
 <pre><code>y = tf<span class="class">.nn</span><span class="class">.softmax</span>(tf.<span class="function"><span class="title">matmul</span><span class="params">(x, W)</span></span> + b)
-</code></pre><p>其中，matmul函数实现了 x 和 W 的乘积，这里 x 为二维矩阵，所以放在前面。可以看出，在TensorFlow中实现softmax regression模型是很简单的。</p>
+</code></pre><p>其中，<code>matmul</code>函数实现了 x 和 W 的乘积，这里 x 为二维矩阵，所以放在前面。可以看出，在TensorFlow中实现softmax regression模型是很简单的。</p>
 <h3 id="模型的训练">模型的训练</h3><p>在机器学习中，通常需要选择一个代价函数（或者损失函数），来指示训练模型的好坏。这里，我们使用交叉熵函数（cross-entropy）作为代价函数，交叉熵是一个源于信息论中信息压缩领域的概念，但是现在已经应用在多个领域。它的定义如下：</p>
 <p>$$ H_{y’}\left( y\right) = -\sum _{i}y_{i}’\log \left( y_{i}\right) $$</p>
 <p>这里 \( y \) 是所预测的概率分布，而 \( y’ \) 是真实的分布(one-hot vector表示的图片label)。直观上，交叉熵函数的输出值表示了预测的概率分布与真实的分布的符合程度。更加深入地理解交叉熵函数，可参考<a href="http://colah.github.io/posts/2015-09-Visual-Information/" target="_blank" rel="external">这篇博文</a>。</p>
@@ -453,13 +453,19 @@ sess.<span class="function"><span class="title">run</span><span class="params">(
 </code></pre><p>每一次的循环中，我们取训练数据中的100个随机数据，这种操作成为批处理(batch)。然后，每次运行train_step时，将之前所选择的数据，填充至所设置的占位符中，作为模型的输入。</p>
 <p>以上过程成为<strong>随机梯度下降</strong>，在这里使用它是非常合适的。因为它既能保证运行效率，也能一定程度上保证程序运行的正确性。（理论上，我们应该在每一次循环过程中，利用所有的训练数据来得到正确的梯度下降方向，但这样将非常耗时）。</p>
 <h3 id="模型的评价">模型的评价</h3><p>怎样评价所训练出来的模型？显然，我们可以用图片预测类别的准确率。</p>
-<p>首先，利用tf.argmax()函数来得到预测和实际的图片label值，再用一个tf.equal()函数来判断预测值和真实值是否一致。如下：</p>
+<p>首先，利用<code>tf.argmax()</code>函数来得到预测和实际的图片label值，再用一个<code>tf.equal()</code>函数来判断预测值和真实值是否一致。如下：</p>
 <pre><code>correct_prediction = tf.<span class="function"><span class="title">equal</span><span class="params">(tf.argmax(y,<span class="number">1</span>)</span></span>, tf.<span class="function"><span class="title">argmax</span><span class="params">(y_,<span class="number">1</span>)</span></span>)
-</code></pre><p>correct_prediction是一个布尔值的列表，例如 [True, False, True, True]。可以使用tf.cast()函数将其转换为[1, 0, 1, 1]，以方便准确率的计算（以上的是准确率为0.75）。</p>
+</code></pre><p>correct_prediction是一个布尔值的列表，例如 [True, False, True, True]。可以使用<code>tf.cast()</code>函数将其转换为[1, 0, 1, 1]，以方便准确率的计算（以上的是准确率为0.75）。</p>
 <pre><code>accuracy = tf.<span class="function"><span class="title">reduce_mean</span><span class="params">(tf.cast(correct_prediction, <span class="string">"float"</span>)</span></span>)
 </code></pre><p>最后，我们来获取模型在测试集上的准确率，</p>
 <pre><code><span class="tag">print</span>(sess.<span class="function">run</span>(accuracy, feed_dict={<span class="attribute">x</span>: mnist.test.images, <span class="attribute">y_</span>: mnist.test.labels}))
 </code></pre><p>Softmax regression模型由于模型较简单，所以在测试集上的准确率在91%左右，这个结果并不算太好。通过一些简单的优化，准确率可以达到97%，目前最好的模型的准确率为99.7%。（<a href="http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html" target="_blank" rel="external"><strong>这里</strong></a>有众多模型在MNIST数据集上的运行结果）。</p>
+<hr>
+<p>本文结束，感谢欣赏。</p>
+<p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
+<p><a href="http://www.jeyzhang.com/tensorflow-learning-notes.html">http://www.jeyzhang.com/tensorflow-learning-notes.html</a></p>
+<p><strong>参考资料</strong></p>
+<p><a href="https://www.tensorflow.org/versions/master/get_started/index.html" target="_blank" rel="external">TensorFlow官方帮助文档</a></p>
 </span>
       
     </div>
@@ -588,7 +594,7 @@ sess.<span class="function"><span class="title">run</span><span class="params">(
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

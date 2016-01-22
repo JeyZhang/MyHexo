@@ -6,13 +6,13 @@ categories: Hexo
 
 关于Hexo的文章阅读量设置问题，大多数人都是使用[不蒜子](http://service.ibruce.info/)的代码实现。但是这个方法仅局限于在文章页面显示阅读数，首页是不显示的。
 
-下面介绍如何在首页及文章页面都显示**`文章的阅读量`**，显示效果如下：
+下面介绍如何在首页及文章页面都显示`文章的阅读量`，显示效果如下：
 
 ![](http://i.imgur.com/AMdIdpW.png)
 
 ----------
 
-## 配置[LeanCloud](https://leancloud.cn/) ##
+## **配置[LeanCloud](https://leancloud.cn/)** ##
 
 ### 注册 ###
 
@@ -44,14 +44,15 @@ categories: Hexo
 
 ### Web安全性 ###
 
-为了保证应用的统计计数功能仅使用于自己的博客系统，你可以在`应用->设置->安全中心`的`Web安全域名`中加入自己的博客域名，以保证数据的调用安全。
+为了保证应用的统计计数功能仅应用于自己的博客系统，你可以在`应用->设置->安全中心`的`Web安全域名`中加入自己的博客域名，以保证数据的调用安全。
 
-## 修改NexT主题文件 ##
+## **修改NexT主题文件** ##
 
 ### 添加lean-analytics.swig文件 ###
 
 在主题目录下的`\layout\_scripts`路径下，新建一个名称为`lean-analytics.swig`的文件，并添加如下内容：
 
+```
 	<!-- custom analytics part create by xiamo -->
 	<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
 	<script>AV.initialize("{{theme.leancloud_visitors.app_id}}", "{{theme.leancloud_visitors.app_key}}");</script>
@@ -134,6 +135,7 @@ categories: Hexo
 		}
 	}); 
 	</script>
+```
 
 其中，控制显示的格式的主要为`content`变量，按自己的需求相应修改即可。
 
@@ -145,23 +147,23 @@ categories: Hexo
 
 插入如下代码
 
-(目前显示有点问题)
-
-		  {% raw %}{% if theme.leancloud_visitors.enable %}
+```
+		  {% if theme.leancloud_visitors.enable %}
 			 &nbsp; | &nbsp;
 			 <span id="{{ url_for(post.path) }}"class="leancloud_visitors" data-flag-title="{{ post.title }}">
              &nbsp;{{__('post.visitors')}}
             </span>
-		  {% endif %}{% endraw %}
-
+		  {% endif %}
+```
 ### 修改layout.swig文件 ###
 
 在主题目录下的`layout`目录下，编辑`_layout.swig`文件，在`</body>`的上方（大概在70行左右）插入如下代码：
 
-	{% raw %}	{% if theme.leancloud_visitors.enable %}
+```
+	{% if theme.leancloud_visitors.enable %}
 	{% include '_scripts/lean-analytics.swig' %}
-	{% endif %}{% endraw %}
-
+	{% endif %}
+```
 
 ### 修改语言配置文件 ###
 
@@ -182,7 +184,7 @@ categories: Hexo
 
 其他语言与之类似，将`visitors`设置成你希望翻译的字段。
 
-
+**最后，重新生成并部署你的网站即可。**
 
 ----------
 

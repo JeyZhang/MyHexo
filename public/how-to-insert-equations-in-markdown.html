@@ -61,7 +61,7 @@
 <meta property="og:description" content="MathJax插件著名的Stackoverflow网站上的漂亮公式，就是使用了MathJax插件的效果。添加MathJax插件也非常简单，只需要在markdown文件中，添加MathJax CDN，如下：
 &amp;lt;script type=&quot;text/javascript&quot;
    src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config">
-<meta property="og:updated_time" content="2016-01-21T03:33:39.128Z">
+<meta property="og:updated_time" content="2016-01-22T14:58:36.545Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何在markdown中插入公式">
 <meta name="twitter:description" content="MathJax插件著名的Stackoverflow网站上的漂亮公式，就是使用了MathJax插件的效果。添加MathJax插件也非常简单，只需要在markdown文件中，添加MathJax CDN，如下：
@@ -325,35 +325,35 @@
       
 
       
-        <span itemprop="articleBody"><h2 id="MathJax插件">MathJax插件</h2><p>著名的<a href="http://stackoverflow.com/" target="_blank" rel="external">Stackoverflow</a>网站上的漂亮公式，就是使用了MathJax插件的效果。添加MathJax插件也非常简单，只需要在markdown文件中，添加<strong>MathJax CDN</strong>，如下：</p>
+        <span itemprop="articleBody"><h2 id="MathJax插件"><strong>MathJax插件</strong></h2><p>著名的<a href="http://stackoverflow.com/" target="_blank" rel="external">Stackoverflow</a>网站上的漂亮公式，就是使用了MathJax插件的效果。添加MathJax插件也非常简单，只需要在markdown文件中，添加<code>MathJax CDN</code>，如下：</p>
 <pre><code><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>
    <span class="attribute">src</span>=<span class="value">"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"</span>&gt;</span><span class="undefined">
 </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
 </code></pre><p>就可以在md文件中插入Tex格式的公式了。</p>
-<p><strong>行间公式</strong>的形式为</p>
+<p><code>行间公式</code>的形式为</p>
 <pre><code><span class="variable">$$</span> 此处插入公式 <span class="variable">$$</span>
-</code></pre><p>而<strong>行内公式</strong>的形式为</p>
+</code></pre><p>而<code>行内公式</code>的形式为</p>
 <pre><code><span class="string">\\(</span> 此处插入公式 <span class="string">\\)</span>
-</code></pre><h2 id="在MarkdownPad_2中编辑公式">在MarkdownPad 2中编辑公式</h2><p>之前的博文有推荐<a href="http://markdownpad.com/" target="_blank" rel="external">Markdown Pad 2</a>作为Window下的Markdown编辑器。如果你是使用该软件作为markdown的编辑器，你只需要在软件的”Tools &gt; Options &gt; Advanced &gt; HTML Head Editor”中添加上述的<strong>MathJax CDN</strong>即可。</p>
+</code></pre><h2 id="在MarkdownPad_2中编辑公式"><strong>在MarkdownPad 2中编辑公式</strong></h2><p>之前的博文有推荐<a href="http://markdownpad.com/" target="_blank" rel="external">Markdown Pad 2</a>作为Window下的Markdown编辑器。如果你是使用该软件作为markdown的编辑器，你只需要在软件的<code>Tools-&gt; Options-&gt; Advanced-&gt; HTML Head Editor</code>中添加上述的<code>MathJax CDN</code>即可。</p>
 <p>这样你就不必每次都在md文件中重复添加了。</p>
-<h2 id="好用的Tex公式生成器">好用的Tex公式生成器</h2><p>推荐一个在线手写公式转Tex格式的利器：<a href="https://webdemo.myscript.com/#/demo/equation" target="_blank" rel="external">Web Equation</a>。通过手写公式，即可得到公式所对应的Tex格式，非常好用。</p>
-<h2 id="示例">示例</h2><p>举个栗子。在Markdown Pad 2新建文件，添加如下内容：</p>
+<h2 id="好用的Tex公式生成器"><strong>好用的Tex公式生成器</strong></h2><p>推荐一个在线手写公式转Tex格式的利器：<a href="https://webdemo.myscript.com/#/demo/equation" target="_blank" rel="external">Web Equation</a>。通过手写公式，即可得到公式所对应的Tex格式，非常好用。</p>
+<h2 id="示例"><strong>示例</strong></h2><p>举个栗子。在<code>Markdown Pad 2</code>中新建文件，添加如下内容：</p>
 <pre><code>最后，我们在一个图片类别的evidence中加入偏置(bias)，加入偏置的目的是加入一些与输入独立无关的信息。所以图片类别的evidence为
 
 <span class="formula">$$ evidence<span class="command">\_</span><span class="special">{</span>i<span class="special">}</span>=<span class="command">\sum</span> <span class="command">\_</span><span class="special">{</span>j<span class="special">}</span>W<span class="command">\_</span><span class="special">{</span>ij<span class="special">}</span>x<span class="command">\_</span><span class="special">{</span>j<span class="special">}</span>+b<span class="command">\_</span><span class="special">{</span>i<span class="special">}</span> $$</span>
 
 其中，<span class="command">\\</span>( W<span class="command">\_</span>i <span class="command">\\</span>) 和 <span class="command">\\</span>( b<span class="command">\_</span>i <span class="command">\\</span>) 分别为类别 <span class="command">\\</span>( i <span class="command">\\</span>) 的权值和偏置。
-</code></pre><p>（<strong>注意</strong>：markdown文件中的”_“前需要加上”\“转移符。）</p>
-<p>最终效果如下（在Markdown Pad 2编辑器进行预览，快捷键为F6）：</p>
+</code></pre><p>（<strong>注意</strong>：markdown文件中的<code>_</code>前需要加上<code>\</code>转移符。）</p>
+<p>最终效果如下（在Markdown Pad 2编辑器进行预览，快捷键为<code>F6</code>）：</p>
 <hr>
 <p>最后，我们在一个图片类别的evidence中加入偏置(bias)，加入偏置的目的是加入一些与输入独立无关的信息。所以图片类别的evidence为</p>
 <p>$$ evidence_{i}=\sum _{j}W_{ij}x_{j}+b_{i} $$</p>
 <p>其中，\( W_i \) 和 \( b_i \) 分别为类别 \( i \) 的权值和偏置。</p>
 <hr>
-<h2 id="Hexo中显示数学公式">Hexo中显示数学公式</h2><p>值得注意的是，原生的Hexo并不支持数学公式的显示。所以，如果你仅仅完成了以上步骤，在”hexo g -d”之后，你会发现公式的效果并没有被渲染出来。</p>
-<h3 id="安装hexo-math插件">安装hexo-math插件</h3><p>在网站根目录下，打开git bash，输入</p>
+<h2 id="Hexo中显示数学公式"><strong>Hexo中显示数学公式</strong></h2><p>值得注意的是，原生的Hexo并不支持数学公式的显示。所以，如果你仅仅完成了以上步骤，在<code>hexo g -d</code>之后，你会发现公式的效果并没有被渲染出来。</p>
+<h3 id="安装hexo-math插件">安装hexo-math插件</h3><p>在网站根目录下，打开<code>git bash</code>，输入</p>
 <pre><code>npm install hexo-<span class="built_in">math</span> <span class="comment">--save</span>
-</code></pre><p>然后，在根目录下的_config.yml文件中添加</p>
+</code></pre><p>然后，在根目录下的<code>_config.yml</code>文件中添加</p>
 <pre><code><span class="attribute">plugins</span>: <span class="string"></span>
   <span class="attribute">hexo-math</span>
 </code></pre><p>之后重新生成和部署网站即可。</p>
@@ -489,7 +489,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

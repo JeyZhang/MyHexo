@@ -76,7 +76,7 @@
 <meta property="og:image" content="http://i.imgur.com/7iVVdep.png">
 <meta property="og:image" content="http://i.imgur.com/RSCTurW.jpg">
 <meta property="og:image" content="http://i.imgur.com/AqhPQst.png">
-<meta property="og:updated_time" content="2016-01-21T03:33:39.114Z">
+<meta property="og:updated_time" content="2016-01-22T15:06:22.739Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo+Github: 搭建属于自己的静态博客">
 <meta name="twitter:description" content="Hexo是一个快速、简洁且高效的博客框架，而Github是一个免费的代码托管工具，利用Github Page可以免费创建一个静态网站。下面将介绍如何使用Hexo和Github，在win10环境下搭建一个静态的博客。
@@ -354,7 +354,7 @@
 <li>注册及绑定自己的域名地址</li>
 </ol>
 <hr>
-<h2 id="安装和配置Hexo及Github">安装和配置Hexo及Github</h2><h3 id="安装Hexo">安装Hexo</h3><p>安装Hexo前，需要安装以下：</p>
+<h2 id="安装和配置Hexo及Github"><strong>安装和配置Hexo及Github</strong></h2><h3 id="安装Hexo">安装Hexo</h3><p>安装Hexo前，需要安装以下：</p>
 <ul>
 <li><a href="http://nodejs.org/" target="_blank" rel="external">Node.js</a></li>
 <li><a href="https://git-scm.com/download/win" target="_blank" rel="external">Git</a></li>
@@ -362,12 +362,12 @@
 <p>如果已经安装完成以上程序，打开Git-bash或者cmd，输入</p>
 <pre><code>npm <span class="operator"><span class="keyword">install</span> -<span class="keyword">g</span> hexo-cli</span>
 </code></pre><p>即可完成Hexo的安装。</p>
-<h3 id="使用Hexo进行本地建站">使用Hexo进行本地建站</h3><p>选择一个本地的文件夹，如”D:\hexo”。</p>
+<h3 id="使用Hexo进行本地建站">使用Hexo进行本地建站</h3><p>选择一个本地的文件夹，如<code>D:\hexo</code>。</p>
 <p>输入</p>
 <pre><code>hexo init <span class="attribute">D</span>:<span class="string">\hexo</span>
 cd <span class="attribute">D</span>:<span class="string">\hexo</span>
 <span class="built_in">npm</span> install
-</code></pre><p>如果hexo安装成功，则在D:\hexo文件夹下的文件目录为</p>
+</code></pre><p>如果hexo安装成功，则在<code>D:\hexo</code>文件夹下的文件目录为</p>
 <pre><code>.
 ├── _config.yml <span class="comment">// 网站的配置信息，你可以在此配置大部分的参数。</span>
 ├── package.json 
@@ -384,40 +384,40 @@ cd <span class="attribute">D</span>:<span class="string">\hexo</span>
 <p>则说明本地建站成功，访问<a href="http://localhost:4000/" target="_blank" rel="external">本地地址</a>可以看到Hexo默认主题的效果。</p>
 <p>至此，Hexo的安装和本地建站完成，如需更加深入全面地了解Hexo，可访问<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external">Hexo官方文档</a>。</p>
 <h3 id="创建Github账号">创建Github账号</h3><p>如果已经注册Github，可跳过此步骤。否则，访问<a href="https://github.com/" target="_blank" rel="external">Github官网</a>进行注册，下面假设你注册Github账号名为MyGithub。</p>
-<h3 id="创建与账号同名的Repository">创建与账号同名的Repository</h3><p>注册并登陆Github官网成功后，点击页面右上角的”+”，选择”New repository”。</p>
-<p>在”Repository name”中填写”你的Github账号名.github.io”，这里是”MyGithub.github.io”。”Description”中填写对此repository的描述信息(可选，但建议填写，如”Personal website”)。</p>
-<p>点击”Create repository”，完成创建。</p>
+<h3 id="创建与账号同名的Repository">创建与账号同名的Repository</h3><p>注册并登陆Github官网成功后，点击页面右上角的<code>+</code>，选择<code>New repository</code>。</p>
+<p>在<code>Repository name</code>中填写<code>你的Github账号名.github.io</code>，这里是<code>MyGithub.github.io</code>。<code>Description</code>中填写对此repository的描述信息(可选，但建议填写，如<code>Personal website</code>)。</p>
+<p>点击<code>Create repository</code>，完成创建。</p>
 <h3 id="配置SSH">配置SSH</h3><p><strong>(1) 生成SSH</strong></p>
 <p>检查是否已经有SSH Key，打开Git Bash，输入</p>
 <pre><code><span class="built_in">cd</span> ~/.ssh
 </code></pre><p>如果没有这个目录，则生成一个新的SSH，输入</p>
 <pre><code>ssh-keygen -t rsa -<span class="keyword">C</span> <span class="string">"your e-mail"</span>
-</code></pre><p>其中，”your e-mail”是你注册Github时用到的邮箱。</p>
+</code></pre><p>其中，<code>your e-mail</code>是你注册Github时用到的邮箱。</p>
 <p>然后接下来几步都直接按回车键，最后生成如下</p>
 <p><img src="http://i.imgur.com/RSCTurW.jpg" alt=""></p>
 <p><strong>(2) 复制公钥内容到Github账户信息中</strong></p>
-<p>打开~/.ssh/id_rsa.pub文件，复制里面的内容；</p>
-<p>打开Github官网，登陆后进入到个人设置(点击头像-&gt;setting)，点击右侧的”SSH Keys”，点击”Add SSH key”；填写title之后，将之前复制的内容粘贴到Key框中，最后点击”Add key”即可。</p>
+<p>打开<code>~/.ssh/id_rsa.pub</code>文件，复制里面的内容；</p>
+<p>打开Github官网，登陆后进入到个人设置(<code>点击头像-&gt;setting</code>)，点击右侧的<code>SSH Keys</code>，点击<code>Add SSH key</code>；填写title之后，将之前复制的内容粘贴到Key框中，最后点击<code>Add key</code>即可。</p>
 <p><strong>(3) 测试SSH是否配置成功</strong></p>
 <p>输入</p>
 <pre><code><span class="title">ssh</span> -T git<span class="variable">@github</span>.com
 </code></pre><p>如果显示以下，则说明ssh配置成功。</p>
 <pre><code>Hi username<span class="comment">! You've successfully authenticated, but GitHub does not</span>
 <span class="keyword">provide</span> shell <span class="keyword">access</span>.
-</code></pre><h3 id="将网站发布到Github的同名repository中">将网站发布到Github的同名repository中</h3><p>打开D:\Hexo文件夹中的_config.yml文件，找到如下位置，填写</p>
+</code></pre><h3 id="将网站发布到Github的同名repository中">将网站发布到Github的同名repository中</h3><p>打开<code>D:\Hexo</code>文件夹中的<code>_config.yml</code>文件，找到如下位置，填写</p>
 <pre><code><span class="preprocessor"># Deployment</span>
 <span class="preprocessor">## Docs: http://hexo.io/docs/deployment.html</span>
 <span class="title">deploy</span>: 
   <span class="typedef"><span class="keyword">type</span>: git</span>
   repo: git@github.com:<span class="type">MyGithub</span>/<span class="type">MyGithub</span>.github.io
-</code></pre><p><strong>注</strong>： (1) 其中”MyGithub”替换成你的Github账户; (2) 注意在yml文件中，”:”后面都是要带空格的。</p>
-<p>此时，通过访问 <a href="http://MyGithub.github.io" target="_blank" rel="external">http://MyGithub.github.io</a> 可以看到默认的Hexo首页面（与之前本地测试时一样）。</p>
-<h2 id="选择Hexo主题及发表文章">选择Hexo主题及发表文章</h2><h3 id="简洁的Next主题">简洁的Next主题</h3><p>本网站使用的是<a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="external">Next主题</a>。该主题简洁易用，在移动端也表现不错。</p>
+</code></pre><p><strong>注</strong>： (1) 其中<code>MyGithub</code>替换成你的Github账户; (2) 注意在yml文件中，<code>:</code>后面都是要带空格的。</p>
+<p>此时，通过访问<code>http://MyGithub.github.io</code>可以看到默认的Hexo首页面（与之前本地测试时一样）。</p>
+<h2 id="选择Hexo主题及发表文章"><strong>选择Hexo主题及发表文章</strong></h2><h3 id="简洁的Next主题">简洁的Next主题</h3><p>本网站使用的是<a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="external">Next主题</a>。该主题简洁易用，在移动端也表现不错。</p>
 <p><strong>(1) 下载Next主题</strong></p>
 <pre><code>cd D:\Hexo
 git <span class="keyword">clone</span> <span class="title">https</span>://github.com/iissnan/hexo-theme-next themes/next
 </code></pre><p><strong>(2) 修改网站的主题为Next</strong></p>
-<p>打开 D:\Hexo 下的_config.yml文件，找到theme字段，将其修改为next</p>
+<p>打开<code>D:\Hexo</code>下的<code>_config.yml</code>文件，找到<code>theme</code>字段，将其修改为<code>next</code></p>
 <pre><code><span class="preprocessor"># Extensions</span>
 <span class="preprocessor">## Plugins: http://hexo.io/plugins/</span>
 <span class="preprocessor">## Themes: http://hexo.io/themes/</span>
@@ -430,27 +430,27 @@ theme: next
 <p>输入</p>
 <pre><code>hexo <span class="keyword">g</span> -<span class="literal">d</span>
 </code></pre><p>完成Github上网页文件的更新。</p>
-<h3 id="发表新文章">发表新文章</h3><p>发表文章操作非常简单，在网站存放的根目录打开git bash，输入</p>
+<h3 id="发表新文章">发表新文章</h3><p>发表文章操作非常简单，在网站存放的根目录打开<code>git bash</code>，输入</p>
 <pre><code><span class="title">hexo</span> n <span class="string">"name of the new post"</span>
-</code></pre><p>回车后，在source文件夹下的_post文件夹下，可以看到新建了一个”name of the new post.md”的文件，打开</p>
+</code></pre><p>回车后，在source文件夹下的_post文件夹下，可以看到新建了一个<code>name of the new post.md</code>的文件，打开</p>
 <pre><code>title: name of the new post
 date: 2015-12-09 22:55:25
 <span class="header">tags:
 ---</span>
 </code></pre><p>可以给文章贴上相应的tags，如有多个则按照如下格式</p>
 <pre><code>[tag1, tag2, tag3, ...]
-</code></pre><p>在”- - -“下方添加正文内容即可，注意需要使用markdown语法进行书写。</p>
+</code></pre><p>在<code>- - -</code>下方添加正文内容即可，注意需要使用markdown语法进行书写。</p>
 <p><a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">在这里</a>有关于Markdown语法的简单说明。推荐使用<a href="http://markdownpad.com/" target="_blank" rel="external">MarkdownPad2</a>进行md文件的编辑工作。</p>
 <p>文章撰写完成后保存，输入</p>
 <pre><code>hexo <span class="keyword">g</span> -<span class="literal">d</span>
 </code></pre><p>即可生成新网站，并且同步Github上的网站内容。</p>
-<h2 id="注册及绑定自己的域名地址">注册及绑定自己的域名地址</h2><p>截止到目前为止，你应该可以通过访问 <a href="http://MyGithub.github.io" target="_blank" rel="external">http://MyGithub.github.io</a> 来看到以上创建的网站了。</p>
+<h2 id="注册及绑定自己的域名地址"><strong>注册及绑定自己的域名地址</strong></h2><p>截止到目前为止，你应该可以通过访问<code>http://MyGithub.github.io</code>来看到以上创建的网站了。</p>
 <p>但是，如何拥有一个属于自己的域名地址，并将其指向在Github上所创建的网站呢？</p>
 <h3 id="注册域名">注册域名</h3><p>推荐选择国内的<a href="http://wanwang.aliyun.com/" target="_blank" rel="external">万网</a>或者国外的<a href="https://www.godaddy.com/" target="_blank" rel="external">Goddady</a>进行域名的注册。</p>
 <h3 id="DNS域名解析设置">DNS域名解析设置</h3><p>如果你选择的是万网注册的域名，可以使用其自带的域名解析服务。</p>
 <p>进入<a href="http://wanwang.aliyun.com/" target="_blank" rel="external">万网</a>，登陆后进入到个人中心(点击用户名即可)，点击左侧的”云解析”，点击之前所购买的域名，在”解析设置”中，添加如下解析规则:</p>
 <p><img src="http://i.imgur.com/AqhPQst.png" alt=""></p>
-<p>其中，当记录类型为A时，记录值为服务器的ip地址，这里的服务器地址为存放Github page的地址，你可以通过命令行输入</p>
+<p>其中，当记录类型为A时，记录值为服务器的ip地址，这里的服务器地址为存放<code>Github page</code>的地址，你可以通过命令行输入</p>
 <pre><code><span class="built_in">ping</span> github.io
 </code></pre><p>得到。</p>
 <p>DNS域名解析设置需要一定时间，之后你可以通过ping自己的域名地址来查看是否解析成功。</p>
@@ -460,9 +460,10 @@ date: 2015-12-09 22:55:25
 <p>CNAME文件设置的目的是，通过访问 MyGithub.github.io 可以跳转到你所注册的域名上。</p>
 <p>为了方便本地文件deploy的时候，CNAME文件不发生丢失，可以在本地网站根目录下的source文件夹下，添加以上的CNAME文件。以后每次deploy的时候，CNAME文件不会发生丢失。</p>
 <hr>
-<p>通过以上的设置，相信你已经可以通过注册域名来访问一个默认的hexo主题页面了。之后的工作就在于，(1)如何对主题进行个性化设置及(2)发表博文以充实网站内容。<a href="http://theme-next.iissnan.com/" target="_blank" rel="external">这里</a>有关于next主题的个性化设置说明。</p>
-<p>如果发现博文中的错误或者遇到问题，都可以在下方的评论区留言哈:)</p>
-<p>欢迎转载和参考，请注明本文的<a href="http://www.jeyzhang.com/Hexo-Github-%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/">链接地址</a>。</p>
+<p>通过以上的设置，相信你已经可以通过注册域名来访问一个默认的hexo主题页面了。之后的工作就在于，(1)如何对主题进行个性化设置及；(2)发表博文以充实网站内容。<a href="http://theme-next.iissnan.com/" target="_blank" rel="external">这里</a>有关于next主题的个性化设置说明。</p>
+<p>本文结束，感谢欣赏。</p>
+<p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
+<p><a href="http://www.jeyzhang.com/hexo-github-blog-building.html">http://www.jeyzhang.com/hexo-github-blog-building.html</a></p>
 </span>
       
     </div>
@@ -587,7 +588,7 @@ date: 2015-12-09 22:55:25
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
