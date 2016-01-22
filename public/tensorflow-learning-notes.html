@@ -1,0 +1,1062 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Artificial Intelligence,Deep Learning,Machine Learning,TensorFlow," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="TensorFlow 简介TensorFlow是Google在2015年11月份开源的人工智能系统（Github项目地址），是之前所开发的深度学习基础架构DistBelief的改进版本，该系统可以被用于语音识别、图片识别等多个领域。
+官网上对TensorFlow的介绍是，一个使用数据流图(data flow graphs)技术来进行数值计算的开源软件库。数据流图中的节点，代表数值运算；节点节点之间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow学习笔记">
+<meta property="og:url" content="http://www.jeyzhang.com/tensorflow-learning-notes.html">
+<meta property="og:site_name" content="Jey Zhang">
+<meta property="og:description" content="TensorFlow 简介TensorFlow是Google在2015年11月份开源的人工智能系统（Github项目地址），是之前所开发的深度学习基础架构DistBelief的改进版本，该系统可以被用于语音识别、图片识别等多个领域。
+官网上对TensorFlow的介绍是，一个使用数据流图(data flow graphs)技术来进行数值计算的开源软件库。数据流图中的节点，代表数值运算；节点节点之间">
+<meta property="og:image" content="http://i.imgur.com/UT4vj57.jpg">
+<meta property="og:image" content="http://i.imgur.com/SQTMzsC.png">
+<meta property="og:image" content="http://i.imgur.com/QoBA21J.png">
+<meta property="og:image" content="http://i.imgur.com/rnNXzOC.png">
+<meta property="og:image" content="http://i.imgur.com/8X0IbcY.png">
+<meta property="og:image" content="http://i.imgur.com/Zff5Y7Q.png">
+<meta property="og:image" content="http://i.imgur.com/sqlI5oC.png">
+<meta property="og:image" content="http://i.imgur.com/ANwDWKW.png">
+<meta property="og:image" content="http://i.imgur.com/f0c2kWB.png">
+<meta property="og:updated_time" content="2016-01-21T09:12:57.645Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow学习笔记">
+<meta name="twitter:description" content="TensorFlow 简介TensorFlow是Google在2015年11月份开源的人工智能系统（Github项目地址），是之前所开发的深度学习基础架构DistBelief的改进版本，该系统可以被用于语音识别、图片识别等多个领域。
+官网上对TensorFlow的介绍是，一个使用数据流图(data flow graphs)技术来进行数值计算的开源软件库。数据流图中的节点，代表数值运算；节点节点之间">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> TensorFlow学习笔记 | Jey Zhang </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71292341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?eed1a5ff91ce000d3cbee31156f82f2c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jey Zhang</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Life is Now.</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'LwCA4Pqyomh6kHjA4fV9','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                TensorFlow学习笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-01-13T16:49:49+08:00" content="2016-01-13">
+              2016-01-13
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; In
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Machine Learning</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/tensorflow-learning-notes.html#comments" itemprop="discussionUrl">
+                <span class="post-comments-count disqus-comment-count" data-disqus-identifier="tensorflow-learning-notes.html" itemprop="commentsCount"></span>
+              </a>
+            </span>
+            
+          
+
+          
+		  
+		  
+			 &nbsp; | &nbsp;
+			 <span id="/tensorflow-learning-notes.html"class="leancloud_visitors"  data-flag-title="TensorFlow学习笔记">
+             &nbsp;Views
+            </span>
+		  
+		
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p><img src="http://i.imgur.com/UT4vj57.jpg" alt="Tensor Flow"></p>
+<h2 id="TensorFlow_简介">TensorFlow 简介</h2><p>TensorFlow是Google在2015年11月份开源的人工智能系统（<a href="https://github.com/tensorflow/tensorflow" target="_blank" rel="external"><strong>Github项目地址</strong></a>），是之前所开发的深度学习基础架构DistBelief的改进版本，该系统可以被用于语音识别、图片识别等多个领域。</p>
+<p><a href="https://www.tensorflow.org/" target="_blank" rel="external">官网</a>上对TensorFlow的介绍是，一个使用数据流图(data flow graphs)技术来进行数值计算的开源软件库。数据流图中的节点，代表数值运算；节点节点之间的边，代表<strong>多维数据</strong>(tensors)之间的某种联系。你可以在多种设备（含有CPU或GPU）上通过简单的API调用来使用该系统的功能。TensorFlow是由Google Brain团队的研发人员负责的项目。</p>
+<h3 id="什么是数据流图(Data_Flow_Graph)">什么是数据流图(Data Flow Graph)</h3><p>数据流图是描述“有向图”中的数值计算过程。“有向图”中的节点通常代表数学运算，但也可以表示数据的输入、输出和读写等操作；“有向图”中的边表示节点之间的某种联系，它负责传输多维数据(Tensors)。图中这些”tensors”的”flow”也就是TensorFlow的命名来源。</p>
+<p>节点可以被分配到多个计算设备上，可以异步和并行地执行操作。因为是有向图，所以只有等到之前的入度节点们的计算状态完成后，当前节点才能执行操作。</p>
+<h3 id="TensorFlow的特性">TensorFlow的特性</h3><p><strong>1 灵活性</strong></p>
+<p>TensorFlow不是一个严格的神经网络工具包，只要你可以使用数据流图来描述你的计算过程，你可以使用TensorFlow做任何事情。你还可以方便地根据需要来构建数据流图，用简单的Python语言来实现高层次的功能。</p>
+<p><strong>2 可移植性</strong></p>
+<p>TensorFlow可以在任意具备CPU或者GPU的设备上运行，你可以专注于实现你的想法，而不用去考虑硬件环境问题，你甚至可以利用Docker技术来实现相关的云服务。</p>
+<p><strong>3 提高开发效率</strong></p>
+<p>TensorFlow可以提升你所研究的东西产品化的效率，并且可以方便与同行们共享代码。</p>
+<p><strong>4 支持语言选项</strong></p>
+<p>目前TensorFlow支持Python和C++语言。（但是你可以自己编写喜爱语言的SWIG接口）</p>
+<p><strong>5 充分利用硬件资源，最大化计算性能</strong></p>
+<h2 id="示例：曲线拟合">示例：曲线拟合</h2><p>下面是一段使用Python写的，曲线拟合计算。官网将此作为刚开始介绍的示例程序。</p>
+<pre><code><span class="preprocessor"># 简化调用库名</span>
+import tensorflow as tf
+import numpy as np
+
+<span class="preprocessor"># 模拟生成100对数据对, 对应的函数为y = x * 0.1 + 0.3</span>
+x_data = np.<span class="built_in">random</span>.rand(<span class="number">100</span>).astype(<span class="string">"float32"</span>)
+y_data = x_data * <span class="number">0.1</span> + <span class="number">0.3</span>
+
+<span class="preprocessor"># 指定w和b变量的取值范围（注意我们要利用TensorFlow来得到w和b的值）</span>
+W = tf.Variable(tf.random_uniform([<span class="number">1</span>], -<span class="number">1.0</span>, <span class="number">1.0</span>))
+b = tf.Variable(tf.zeros([<span class="number">1</span>]))
+y = W * x_data + b
+
+<span class="preprocessor"># 最小化均方误差</span>
+loss = tf.reduce_mean(tf.square(y - y_data))
+optimizer = tf.train.GradientDescentOptimizer(<span class="number">0.5</span>)
+train = optimizer.minimize(loss)
+
+<span class="preprocessor"># 初始化TensorFlow参数</span>
+init = tf.initialize_all_variables()
+
+<span class="preprocessor"># 运行数据流图（注意在这一步才开始执行计算过程）</span>
+sess = tf.Session()
+sess.<span class="built_in">run</span>(init)
+
+<span class="preprocessor"># 观察多次迭代计算时，w和b的拟合值</span>
+<span class="keyword">for</span> <span class="keyword">step</span> <span class="keyword">in</span> xrange(<span class="number">201</span>):
+    sess.<span class="built_in">run</span>(train)
+    <span class="keyword">if</span> <span class="keyword">step</span> % <span class="number">20</span> == <span class="number">0</span>:
+        print(<span class="keyword">step</span>, sess.<span class="built_in">run</span>(W), sess.<span class="built_in">run</span>(b))
+
+<span class="preprocessor"># 最好的情况是w和b分别接近甚至等于0.1和0.3</span>
+</code></pre><h2 id="MNIST手写体识别任务">MNIST手写体识别任务</h2><p>下面我们介绍一个神经网络中的经典示例，MNIST手写体识别。这个任务相当于是机器学习中的HelloWorld程序。</p>
+<h3 id="MNIST数据集介绍">MNIST数据集介绍</h3><p>MNIST是一个简单的图片数据集（<a href="http://yann.lecun.com/exdb/mnist/" target="_blank" rel="external">数据集下载地址</a>），包含了大量的数字手写体图片。下面是一些示例图片：</p>
+<p><img src="http://i.imgur.com/SQTMzsC.png" alt="MNIST"></p>
+<p>MNIST数据集是含标注信息的，以上图片分别代表5, 0, 4和1。</p>
+<p>由于MNIST数据集是TensorFlow的示例数据，所以我们不必下载。只需要下面两行代码，即可实现数据集的读取工作：</p>
+<pre><code>from tensorflow<span class="class">.examples</span><span class="class">.tutorials</span><span class="class">.mnist</span> import input_data
+mnist = input_data.<span class="function"><span class="title">read_data_sets</span><span class="params">(<span class="string">"MNIST_data/"</span>, one_hot=True)</span></span>    
+</code></pre><p>MNIST数据集一共包含三个部分：训练数据集(55,000份，mnist.train)、测试数据集(10,000份，mnist.test)和验证数据集(5,000份，mnist.validation)。一般来说，训练数据集是用来训练模型，验证数据集可以检验所训练出来的模型的正确性和是否过拟合，测试集是不可见的（相当于一个黑盒），但我们最终的目的是使得所训练出来的模型在测试集上的效果（这里是准确性）达到最佳。</p>
+<p>MNIST中的一个数据样本包含两块：手写体图片和对于的label。这里我们用”xs”和”ys”分别代表图片和对应的label，训练数据集和测试数据集都有xs和ys，我们使用 mnist.train.images 和 mnist.train.labels 表示训练数据集中图片数据和对于的label数据。</p>
+<p>一张图片是一个28*28的像素点矩阵，我们可以用一个同大小的二维整数矩阵来表示。如下：</p>
+<p><img src="http://i.imgur.com/QoBA21J.png" alt=""></p>
+<p>但是，这里我们可以先简单地使用一个长度为28 * 28 = 784的一维数组来表示图像，因为下面仅仅使用softmax regression来对图片进行识别分类（尽管这样做会损失图片的二维空间信息，所以实际上最好的计算机视觉算法是会利用图片的二维信息的）。</p>
+<p>所以MNIST的训练数据集可以是一个形状为55000 * 784位的”tensor”，也就是一个多维数组，第一维表示图片的索引，第二维表示图片中像素的索引（”tensor”中的像素值在0到1之间）。如下图：</p>
+<p><img src="http://i.imgur.com/rnNXzOC.png" alt=""></p>
+<p>MNIST中的数字手写体图片的label值在1到9之间，是图片所表示的真实数字。这里用One-hot vector来表述label值，vector的长度为label值的数目，vector中有且只有一位为1，其他为0.为了方便，我们表示某个数字时在vector中所对应的索引位置设置1，其他位置元素为0. 例如用[0,0,0,1,0,0,0,0,0,0]来表示”3”。所以，mnist.train.labels是一个55000 * 10的二维数组。如下：</p>
+<p><img src="http://i.imgur.com/8X0IbcY.png" alt=""></p>
+<p>以上是MNIST数据集的描述及TensorFlow中表示。下面介绍Softmax Regression模型。</p>
+<h3 id="Softmax_Regression模型">Softmax Regression模型</h3><p>数字手写体图片的识别，实际上可以转化成一个概率问题，如果我们知道一张图片表示”9”的概率为80%，而剩下的20%概率分布在”8”，”6”和其他数字上，那么从概率的角度上，我们可以大致推断该图片表示的是9.</p>
+<p>Softmax Regression是一个简单的模型，很适合用来处理得到一个待分类对象在多个类别上的概率分布。所以，这个模型通常是很多高级模型的最后一步。</p>
+<p>Softmax Regression大致分为两步（暂时不知道如何合理翻译，转原话）：</p>
+<p><strong>Step 1</strong>: add up the evidence of our input being in certain classes;<br><strong>Step 2</strong>: convert that evidence into probabilities.</p>
+<p>为了利用图片中各个像素点的信息，我们将图片中的各个像素点的值与一定的权值相乘并累加，权值的正负是有意义的，如果是正的，那么表示对应像素值（不为0的话）对表示该数字类别是积极的；否则，对应像素值(不为0的话)对表示该数字类别是起负面作用的。下面是一个直观的例子，图片中蓝色表示正值，红色表示负值（蓝色区域的形状趋向于数字形状）：</p>
+<p><img src="http://i.imgur.com/Zff5Y7Q.png" alt=""></p>
+<p>最后，我们在一个图片类别的evidence(不知如何翻译..)中加入偏置(bias)，加入偏置的目的是加入一些与输入独立无关的信息。所以图片类别的evidence可表示为</p>
+<p>$$ evidence_{i}=\sum _{j}W_{ij}x_{j}+b_{i} $$</p>
+<p>其中，\( W_i \) 和 \( b_i \) 分别为类别 \( i \) 的权值和偏置，\( j \) 是输入图片 \( x \) 的像素索引。然后，我们将得到的evidence值通过一个”softmax”函数转化为概率值 \( y \) :</p>
+<p>$$ y = softmax(evidence) $$</p>
+<p>这里softmax函数的作用相当于是一个转换函数，它的作用是将原始的线性函数输出结果以某种方式转换为我们需要的值，这里我们需要0-9十个类别上的概率分布。softmax函数的定义如下：</p>
+<p>$$ softmax(x) = normalize(exp(x)) $$</p>
+<p>具体计算方式如下</p>
+<p>$$ softmax(x)_{i} = \dfrac {exp\left( x_{i}\right) } {\Sigma _{j}exp\left( x_{j}\right) } $$</p>
+<p>这里的softmax函数能够得到类别上的概率值分布，并保证所有类别上的概率值之和为1. 下面的图示将有助于你理解softmax函数的计算过程：</p>
+<p><img src="http://i.imgur.com/sqlI5oC.png" alt=""></p>
+<p>如果我们将这个过程公式化，将得到</p>
+<p><img src="http://i.imgur.com/ANwDWKW.png" alt=""></p>
+<p>实际的计算中，我们通常采用矢量计算的方式，如下</p>
+<p><img src="http://i.imgur.com/f0c2kWB.png" alt=""></p>
+<p>也可以简化成</p>
+<p>$$ y = softmax( Wx + b ) $$</p>
+<h3 id="Softmax_Regression的程序实现">Softmax Regression的程序实现</h3><p>为了在Python中进行科学计算工作，我们常常使用一些独立库函数包，例如NumPy来实现复杂的矩阵计算。但是由于Python的运行效率并不够快，所以常常用一些更加高效的语言来实现。但是，这样做会带来语言转换（例如转换回python操作）的开销。TensorFlow在这方面做了一些优化，可以对你所描述的一系列的交互计算的流程完全独立于Python之外，从而避免了语言切换的开销。</p>
+<p>为了使用TensorFlow，我们需要引用该库函数</p>
+<pre><code><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf
+</code></pre><p>我们利用一些符号变量来描述交互计算的过程，创建如下</p>
+<pre><code>x = tf.<span class="function"><span class="title">placeholder</span><span class="params">(tf.float32, [None, <span class="number">784</span>])</span></span>
+</code></pre><p>这里的 \( x \) 不是一个特定的值，而是一个占位符，即需要时指定。如前所述，我们用一个1 * 784维的向量来表示一张MNIST中的图片。我们用[None, 784]这样一个二维的tensor来表示整个MNIST数据集，其中None表示可以为任意值。</p>
+<p>我们使用Variable(变量)来表示模型中的权值和偏置，这些参数是可变的。如下，</p>
+<pre><code>W = tf.<span class="function"><span class="title">Variable</span><span class="params">(tf.zeros([<span class="number">784</span>, <span class="number">10</span>])</span></span>)
+<span class="tag">b</span> = tf.<span class="function"><span class="title">Variable</span><span class="params">(tf.zeros([<span class="number">10</span>])</span></span>)
+</code></pre><p>这里的W和b均被初始化为0值矩阵。W的维数为784 * 10，是因为我们需要将一个784维的像素值经过相应的权值之乘转化为10个类别上的evidence值；b是十个类别上累加的偏置值。</p>
+<p><strong>实现softmax regression模型仅需要一行代码</strong>，如下</p>
+<pre><code>y = tf<span class="class">.nn</span><span class="class">.softmax</span>(tf.<span class="function"><span class="title">matmul</span><span class="params">(x, W)</span></span> + b)
+</code></pre><p>其中，matmul函数实现了 x 和 W 的乘积，这里 x 为二维矩阵，所以放在前面。可以看出，在TensorFlow中实现softmax regression模型是很简单的。</p>
+<h3 id="模型的训练">模型的训练</h3><p>在机器学习中，通常需要选择一个代价函数（或者损失函数），来指示训练模型的好坏。这里，我们使用交叉熵函数（cross-entropy）作为代价函数，交叉熵是一个源于信息论中信息压缩领域的概念，但是现在已经应用在多个领域。它的定义如下：</p>
+<p>$$ H_{y’}\left( y\right) = -\sum _{i}y_{i}’\log \left( y_{i}\right) $$</p>
+<p>这里 \( y \) 是所预测的概率分布，而 \( y’ \) 是真实的分布(one-hot vector表示的图片label)。直观上，交叉熵函数的输出值表示了预测的概率分布与真实的分布的符合程度。更加深入地理解交叉熵函数，可参考<a href="http://colah.github.io/posts/2015-09-Visual-Information/" target="_blank" rel="external">这篇博文</a>。</p>
+<p>为了实现交叉熵函数，我们需要先设置一个占位符在存放图片的正确label值，</p>
+<pre><code>y_ = tf.<span class="function"><span class="title">placeholder</span><span class="params">(tf.float32, [None, <span class="number">10</span>])</span></span>
+</code></pre><p>然后得到交叉熵，即\( -\sum y’\log \left( y\right) \)：</p>
+<pre><code>cross_entropy = -tf.<span class="function"><span class="title">reduce_sum</span><span class="params">(y_*tf.log(y)</span></span>)
+</code></pre><p>注意，以上的交叉熵不是局限于一张图片，而是整个可用的数据集。</p>
+<p>接下来我们以代价函数最小化为目标，来训练模型以得到相应的参数值(即权值和偏置)。TensorFlow知道你的计算过程，它会自动利用<a href="http://colah.github.io/posts/2015-08-Backprop/" target="_blank" rel="external">后向传播算法</a>来得到相应的参数变化，对代价函数最小化的影响作用。然后，你可以选择一个优化算法来决定如何最小化代价函数。如下，</p>
+<pre><code>train_step = tf<span class="class">.train</span><span class="class">.GradientDescentOptimizer</span>(<span class="number">0.01</span>).<span class="function"><span class="title">minimize</span><span class="params">(cross_entropy)</span></span>
+</code></pre><p>在这里，我们使用了一个学习率为0.01的梯度下降算法来最小化代价函数。梯度下降是一个简单的计算方式，即使得变量值朝着减小代价函数值的方向变化。TensorFlow也提供了许多<a href="https://www.tensorflow.org/versions/master/api_docs/python/train.html#optimizers" target="_blank" rel="external">其他的优化算法</a>，仅需要一行代码即可实现调用。</p>
+<p>TensorFlow提供了以上简单抽象的函数调用功能，你不需要关心其底层实现，可以更加专心于整个计算流程。在模型训练之前，还需要对所有的参数进行初始化：</p>
+<pre><code>init = tf.<span class="function"><span class="title">initialize_all_variables</span><span class="params">()</span></span>
+</code></pre><p>我们可以在一个Session里面运行模型，并且进行初始化：</p>
+<pre><code>sess = tf.<span class="function"><span class="title">Session</span><span class="params">()</span></span>
+sess.<span class="function"><span class="title">run</span><span class="params">(init)</span></span>    
+</code></pre><p>接下来，进行模型的训练</p>
+<pre><code><span class="keyword">for</span> <span class="tag">i</span> <span class="keyword">in</span> <span class="function"><span class="title">range</span><span class="params">(<span class="number">1000</span>)</span></span>:
+  batch_xs, batch_ys = mnist<span class="class">.train</span><span class="class">.next_batch</span>(<span class="number">100</span>)
+  sess.<span class="function"><span class="title">run</span><span class="params">(train_step, feed_dict={x: batch_xs, y_: batch_ys})</span></span>
+</code></pre><p>每一次的循环中，我们取训练数据中的100个随机数据，这种操作成为批处理(batch)。然后，每次运行train_step时，将之前所选择的数据，填充至所设置的占位符中，作为模型的输入。</p>
+<p>以上过程成为<strong>随机梯度下降</strong>，在这里使用它是非常合适的。因为它既能保证运行效率，也能一定程度上保证程序运行的正确性。（理论上，我们应该在每一次循环过程中，利用所有的训练数据来得到正确的梯度下降方向，但这样将非常耗时）。</p>
+<h3 id="模型的评价">模型的评价</h3><p>怎样评价所训练出来的模型？显然，我们可以用图片预测类别的准确率。</p>
+<p>首先，利用tf.argmax()函数来得到预测和实际的图片label值，再用一个tf.equal()函数来判断预测值和真实值是否一致。如下：</p>
+<pre><code>correct_prediction = tf.<span class="function"><span class="title">equal</span><span class="params">(tf.argmax(y,<span class="number">1</span>)</span></span>, tf.<span class="function"><span class="title">argmax</span><span class="params">(y_,<span class="number">1</span>)</span></span>)
+</code></pre><p>correct_prediction是一个布尔值的列表，例如 [True, False, True, True]。可以使用tf.cast()函数将其转换为[1, 0, 1, 1]，以方便准确率的计算（以上的是准确率为0.75）。</p>
+<pre><code>accuracy = tf.<span class="function"><span class="title">reduce_mean</span><span class="params">(tf.cast(correct_prediction, <span class="string">"float"</span>)</span></span>)
+</code></pre><p>最后，我们来获取模型在测试集上的准确率，</p>
+<pre><code><span class="tag">print</span>(sess.<span class="function">run</span>(accuracy, feed_dict={<span class="attribute">x</span>: mnist.test.images, <span class="attribute">y_</span>: mnist.test.labels}))
+</code></pre><p>Softmax regression模型由于模型较简单，所以在测试集上的准确率在91%左右，这个结果并不算太好。通过一些简单的优化，准确率可以达到97%，目前最好的模型的准确率为99.7%。（<a href="http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html" target="_blank" rel="external"><strong>这里</strong></a>有众多模型在MNIST数据集上的运行结果）。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Artificial-Intelligence/" rel="tag">#Artificial Intelligence</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag">#Deep Learning</a>
+          
+            <a href="/tags/Machine-Learning/" rel="tag">#Machine Learning</a>
+          
+            <a href="/tags/TensorFlow/" rel="tag">#TensorFlow</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog-on-gitcafe-with-dns-settings.html" rel="next" title="如何将博客托管至Gitcafe及相应的DNS设置">
+                <i class="fa fa-chevron-left"></i> 如何将博客托管至Gitcafe及相应的DNS设置
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/how-to-insert-equations-in-markdown.html" rel="prev" title="如何在markdown中插入公式">
+                如何在markdown中插入公式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/upload/image/avatar.png" alt="Jey Zhang" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jey Zhang</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Life is Now.</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">22</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://www.facebook.com/jeyzhang" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> facebook
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/jerrychang0402" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/zhangjieup" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> zhihu
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jeyzhang" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.yunaitong.cn" target="_blank">Tong</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFlow_简介"><span class="nav-number">1.</span> <span class="nav-text">TensorFlow 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是数据流图(Data_Flow_Graph)"><span class="nav-number">1.1.</span> <span class="nav-text">什么是数据流图(Data Flow Graph)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorFlow的特性"><span class="nav-number">1.2.</span> <span class="nav-text">TensorFlow的特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例：曲线拟合"><span class="nav-number">2.</span> <span class="nav-text">示例：曲线拟合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MNIST手写体识别任务"><span class="nav-number">3.</span> <span class="nav-text">MNIST手写体识别任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MNIST数据集介绍"><span class="nav-number">3.1.</span> <span class="nav-text">MNIST数据集介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Softmax_Regression模型"><span class="nav-number">3.2.</span> <span class="nav-text">Softmax Regression模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Softmax_Regression的程序实现"><span class="nav-number">3.3.</span> <span class="nav-text">Softmax Regression的程序实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型的训练"><span class="nav-number">3.4.</span> <span class="nav-text">模型的训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型的评价"><span class="nav-number">3.5.</span> <span class="nav-text">模型的评价</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jey Zhang</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+    
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'jeyzhang';
+      var disqus_identifier = 'tensorflow-learning-notes.html';
+      var disqus_title = 'TensorFlow学习笔记';
+      var disqus_url = 'http://www.jeyzhang.com/tensorflow-learning-notes.html';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+  
+  
+  	 <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("4KyzRuAgl6zwWXQK1UfxmIh0-gzGzoHsz", "YeXrCFBwTG1qRdqS2rUJ7XgJ");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+  
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>
