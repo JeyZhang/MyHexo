@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
+    <lastmod>2016-01-23T01:58:41.348Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.jeyzhang.com/markdown-common-problems.html</loc>
     <lastmod>2016-01-22T15:16:41.075Z</lastmod>
   </url>
@@ -39,11 +44,6 @@
   <url>
     <loc>http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html</loc>
     <lastmod>2016-01-22T14:58:36.545Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
-    <lastmod>2016-01-22T14:53:43.115Z</lastmod>
   </url>
   
   <url>

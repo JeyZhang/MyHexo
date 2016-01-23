@@ -4,6 +4,30 @@
 
     
   <url>
+    <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
+    <lastmod>2016-01-23T01:58:41.348Z</lastmod>
+    <data>
+        <display>
+        <title>Hexo的NexT主题个性化：添加文章阅读量</title>
+        <pubTime>2016-01-22T01:28:40.000Z</pubTime>
+        
+        <tag>Hexo</tag>
+         
+        <tag>LeanCloud</tag>
+         
+        <tag>Next</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hexo" url="http://www.jeyzhang.com/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.jeyzhang.com/markdown-common-problems.html</loc>
     <lastmod>2016-01-22T15:16:41.075Z</lastmod>
     <data>
@@ -191,30 +215,6 @@
            
              
               <breadCrumb title="Markdown" url="http://www.jeyzhang.com/categories/Markdown/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
-    <lastmod>2016-01-22T14:53:43.115Z</lastmod>
-    <data>
-        <display>
-        <title>Hexo的NexT主题个性化：添加文章阅读量</title>
-        <pubTime>2016-01-22T01:28:40.000Z</pubTime>
-        
-        <tag>Hexo</tag>
-         
-        <tag>LeanCloud</tag>
-         
-        <tag>Next</tag>
-         
-         
-           
-             
-              <breadCrumb title="Hexo" url="http://www.jeyzhang.com/categories/Hexo/"/>
           
         </display>
     </data>

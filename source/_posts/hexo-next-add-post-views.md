@@ -186,6 +186,43 @@ categories: Hexo
 
 **最后，重新生成并部署你的网站即可。**
 
+## **增加网站的浏览次数与访客数量统计功能** ##
+
+网站的浏览次数，即`pv`；网站的访客数为`uv`。`pv`的计算方式是，单个用户连续点击n篇文章，记录n次访问量；`uv`的计算方式是，单个用户连续点击n篇文章，只记录1次访客数。你可以根据需要添加相应的统计功能。
+
+## 安装`busuanzi.js`脚本 ##
+
+如果你使用的是NexT主题（其他主题类似），打开`/theme/next/layout/_partial/footer.swig`文件，拷贝下面的代码至文件的开头。
+
+```
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+```
+
+## 显示统计标签 ##
+
+同样编辑`/theme/next/layout/_partial/footer.swig`文件。
+
+如果你想要显示`pv`统计量，复制以下代码至你想要放置的位置，
+
+```
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+```
+
+如果你想要显示`uv`统计量，复制以下代码至你想要放置的位置，
+
+```
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+```
+
+你可以自己修改文字样式，效果图如下：
+
+![](http://i.imgur.com/rWtu2TU.png)
+
 ----------
 
 本文结束，感谢欣赏。
