@@ -14,11 +14,15 @@ SEO (Search Engine Optimization)，即搜索引擎优化。对网站做SEO优化
 
 将下面的代码
 
-![](http://i.imgur.com/jjHCELX.png)
+```
+	{% block title %} {{ config.title }} {% endlock %}
+```
 
 改成
 
-![](http://i.imgur.com/hNv09sO.png)
+```
+	{% block title %} {{ config.title }} - {{ theme.description }} {% endlock %}
+```
 
 这时将网站的描述及关键词加入了网站的`title`中，更有利于详细地描述网站。
 

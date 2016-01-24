@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.jeyzhang.com/hexo-website-seo.html</loc>
+    <lastmod>2016-01-24T13:50:41.931Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/about/index.html</loc>
+    <lastmod>2016-01-24T13:19:41.927Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
     <lastmod>2016-01-23T01:58:41.348Z</lastmod>
   </url>
@@ -22,11 +32,6 @@
   </url>
   
   <url>
-    <loc>http://www.jeyzhang.com/hexo-website-seo.html</loc>
-    <lastmod>2016-01-22T15:07:40.678Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://www.jeyzhang.com/hexo-github-blog-building.html</loc>
     <lastmod>2016-01-22T15:06:22.739Z</lastmod>
   </url>
@@ -44,11 +49,6 @@
   <url>
     <loc>http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html</loc>
     <lastmod>2016-01-22T14:58:36.545Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/about/index.html</loc>
-    <lastmod>2016-01-13T07:25:31.524Z</lastmod>
   </url>
   
   <url>

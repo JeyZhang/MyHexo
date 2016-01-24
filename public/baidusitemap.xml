@@ -4,6 +4,31 @@
 
     
   <url>
+    <loc>http://www.jeyzhang.com/hexo-website-seo.html</loc>
+    <lastmod>2016-01-24T13:50:41.931Z</lastmod>
+    <data>
+        <display>
+        <title>Hexo网站优化之SEO</title>
+        <pubTime>2015-12-17T02:04:18.000Z</pubTime>
+        
+        <tag>Hexo</tag>
+         
+        <tag>SEO</tag>
+         
+        <tag>Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hexo" url="http://www.jeyzhang.com/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+  <url>
     <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
     <lastmod>2016-01-23T01:58:41.348Z</lastmod>
     <data>
@@ -84,30 +109,6 @@
         <tag>Hexo</tag>
          
         <tag>Next</tag>
-         
-         
-           
-             
-              <breadCrumb title="Hexo" url="http://www.jeyzhang.com/categories/Hexo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.jeyzhang.com/hexo-website-seo.html</loc>
-    <lastmod>2016-01-22T15:07:40.678Z</lastmod>
-    <data>
-        <display>
-        <title>Hexo网站优化之SEO</title>
-        <pubTime>2015-12-17T02:04:18.000Z</pubTime>
-        
-        <tag>Hexo</tag>
-         
-        <tag>SEO</tag>
-         
-        <tag>Web</tag>
          
          
            
@@ -220,7 +221,6 @@
     </data>
     </url>
 
-    
     
     
     
