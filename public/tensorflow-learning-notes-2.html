@@ -1,0 +1,1031 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Artificial Intelligence,Deep Learning,Machine Learning,TensorFlow," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="上篇博文主要是TensorFlow的一个简单入门，并介绍了如何实现Softmax Regression模型，来对MNIST数据集中的数字手写体进行识别。
+然而，由于Softmax Regression模型相对简单，所以最终的识别准确率并不高。下面将针对MNIST数据集构建更加复杂精巧的模型，以进一步提高识别准确率。
+
+深度学习模型TensorFlow很适合用来进行大规模的数值计算，其中也包括实现和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow学习笔记2：构建CNN模型">
+<meta property="og:url" content="http://www.jeyzhang.com/tensorflow-learning-notes-2.html">
+<meta property="og:site_name" content="Jey Zhang">
+<meta property="og:description" content="上篇博文主要是TensorFlow的一个简单入门，并介绍了如何实现Softmax Regression模型，来对MNIST数据集中的数字手写体进行识别。
+然而，由于Softmax Regression模型相对简单，所以最终的识别准确率并不高。下面将针对MNIST数据集构建更加复杂精巧的模型，以进一步提高识别准确率。
+
+深度学习模型TensorFlow很适合用来进行大规模的数值计算，其中也包括实现和">
+<meta property="og:image" content="http://i.imgur.com/nfd2j9s.jpg">
+<meta property="og:updated_time" content="2016-03-01T11:52:01.241Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow学习笔记2：构建CNN模型">
+<meta name="twitter:description" content="上篇博文主要是TensorFlow的一个简单入门，并介绍了如何实现Softmax Regression模型，来对MNIST数据集中的数字手写体进行识别。
+然而，由于Softmax Regression模型相对简单，所以最终的识别准确率并不高。下面将针对MNIST数据集构建更加复杂精巧的模型，以进一步提高识别准确率。
+
+深度学习模型TensorFlow很适合用来进行大规模的数值计算，其中也包括实现和">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> TensorFlow学习笔记2：构建CNN模型 | Jey Zhang </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71292341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?eed1a5ff91ce000d3cbee31156f82f2c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jey Zhang</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Life is Now.</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'LwCA4Pqyomh6kHjA4fV9','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                TensorFlow学习笔记2：构建CNN模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-01-31T13:02:56+08:00" content="2016-01-31">
+              2016-01-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; In
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Machine Learning</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/tensorflow-learning-notes-2.html#comments" itemprop="discussionUrl">
+                <span class="post-comments-count disqus-comment-count" data-disqus-identifier="tensorflow-learning-notes-2.html" itemprop="commentsCount"></span>
+              </a>
+            </span>
+            
+          
+
+          
+		  
+		  
+			 &nbsp; | &nbsp;
+			 <span id="/tensorflow-learning-notes-2.html"class="leancloud_visitors"  data-flag-title="TensorFlow学习笔记2：构建CNN模型">
+             &nbsp;Views
+            </span>
+		  
+		
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p><a href="http://www.jeyzhang.com/tensorflow-learning-notes.html"><strong>上篇博文</strong></a>主要是TensorFlow的一个简单入门，并介绍了如何实现Softmax Regression模型，来对MNIST数据集中的数字手写体进行识别。</p>
+<p>然而，由于Softmax Regression模型相对简单，所以最终的识别准确率并不高。下面将针对MNIST数据集构建更加复杂精巧的模型，以进一步提高识别准确率。</p>
+<hr>
+<h2 id="深度学习模型">深度学习模型</h2><p>TensorFlow很适合用来进行大规模的数值计算，其中也包括实现和训练深度神经网络模型。下面将介绍TensorFlow中模型的基本组成部分，同时将构建一个CNN模型来对MNIST数据集中的数字手写体进行识别。</p>
+<h3 id="基本设置">基本设置</h3><p>在我们构建模型之前，我们首先加载MNIST数据集，然后开启一个TensorFlow会话(session)。</p>
+<h3 id="加载MNIST数据集">加载MNIST数据集</h3><p>TensorFlow中已经有相关脚本，来自动下载和加载MNIST数据集。（脚本会自动创建MNIST_data文件夹来存储数据集）。下面是脚本程序：</p>
+<pre><code>from tensorflow<span class="class">.examples</span><span class="class">.tutorials</span><span class="class">.mnist</span> import input_data
+mnist = input_data.<span class="function"><span class="title">read_data_sets</span><span class="params">(<span class="string">'MNIST_data'</span>, one_hot=True)</span></span>
+</code></pre><p>这里<code>mnist</code>是一个轻量级的类文件，存储了NumPy格式的训练集、验证集和测试集，它同样提供了数据中mini-batch迭代的功能。</p>
+<h3 id="开启TensorFlow会话">开启TensorFlow会话</h3><p>TensorFlow后台计算依赖于高效的C++，与后台的连接称为一个会话(session)。TensorFlow中的程序使用，通常都是先创建一个图(graph)，然后在一个会话(session)里运行它。</p>
+<p>这里我们使用了一个更为方便的类，<code>InteractiveSession</code>，这能让你在构建代码时更加灵活。<code>InteractiveSession</code>允许你做一些交互操作，通过创建一个计算流图(<a href="https://www.tensorflow.org/versions/r0.7/get_started/basic_usage.html#the-computation-graph" target="_blank" rel="external">computation graph</a>)来部分地运行图计算。当你在一些交互环境（例如IPython）中使用时将更加方便。如果你不是使用<code>InteractiveSession</code>，那么你要在启动一个会话和运行图计算前，创建一个整体的计算流图。</p>
+<p>下面是如何创建一个<code>InteractiveSession</code>：</p>
+<pre><code>import tensorflow as tf
+sess = tf.<span class="function"><span class="title">InteractiveSession</span><span class="params">()</span></span>
+</code></pre><h3 id="计算流图(Computation_Graph)">计算流图(Computation Graph)</h3><p>为了在Python中实现高效的数值运算，通常会使用一些Python以外的库函数，如NumPy。但是，这样做会造成转换Python操作的开销，尤其是在GPUs和分布式计算的环境下。TensorFlow在这一方面（指转化操作）做了优化，它让我们能够在Python之外描述一个包含各种交互计算操作的整体流图，而不是每次都独立地在Python之外运行一个单独的计算，避免了许多的转换开销。这样的优化方法同样用在了<code>Theano</code>和<code>Torch</code>上。</p>
+<p>所以，以上这样的Python代码的作用是简历一个完整的计算流图，然后指定图中的哪些部分需要运行。关于计算流图的更多具体使用见<a href="https://www.tensorflow.org/versions/r0.7/get_started/basic_usage.html#the-computation-graph" target="_blank" rel="external">这里</a>。</p>
+<h3 id="Softmax_Regression模型">Softmax Regression模型</h3><p>见<a href="http://www.jeyzhang.com/tensorflow-learning-notes.html"><strong>上篇博文</strong></a>。</p>
+<h3 id="CNN模型">CNN模型</h3><p>Softmax Regression模型在MNIST数据集上91%的准确率，其实还是比较低的。下面我们将使用一个更加精巧的模型，一个简单的卷积神经网络模型(CNN)。这个模型能够达到99.2%的准确率，尽管这不是最高的，但已经足够接受了。</p>
+<h4 id="权值初始化">权值初始化</h4><p>为了建立模型，我们需要先创建一些权值(w)和偏置(b)等参数，这些参数的初始化过程中需要加入一小部分的<code>噪声</code>以破坏参数整体的对称性，同时避免梯度为0.由于我们使用<code>ReLU</code>激活函数（<a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks" target="_blank" rel="external"><strong>详细介绍</strong></a>)），所以我们通常将这些参数初始化为很小的正值。为了避免重复的初始化操作，我们可以创建下面两个函数：</p>
+<pre><code><span class="function"><span class="keyword">def</span> <span class="title">weight_variable</span><span class="params">(shape)</span>:</span>
+  initial = tf.truncated_normal(shape, stddev=<span class="number">0.1</span>)
+  <span class="keyword">return</span> tf.Variable(initial)
+
+<span class="function"><span class="keyword">def</span> <span class="title">bias_variable</span><span class="params">(shape)</span>:</span>
+  initial = tf.constant(<span class="number">0.1</span>, shape=shape)
+  <span class="keyword">return</span> tf.Variable(initial)
+</code></pre><h4 id="卷积(Convolution)和池化(Pooling)">卷积(Convolution)和池化(Pooling)</h4><p>TensorFlow同样提供了方便的卷积和池化计算。怎样处理边界元素？怎样设置卷积窗口大小？在这个例子中，我们始终使用<code>vanilla</code>版本。这里的卷积操作仅使用了滑动步长为1的窗口，使用0进行填充，所以输出规模和输入的一致；而池化操作是在2 * 2的窗口内采用最大池化技术(max-pooling)。为了使代码简洁，同样将这些操作抽象为函数形式：</p>
+<pre><code><span class="function"><span class="keyword">def</span> <span class="title">conv2d</span><span class="params">(x, W)</span>:</span>
+  <span class="keyword">return</span> tf.nn.conv2d(x, W, strides=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)
+
+<span class="function"><span class="keyword">def</span> <span class="title">max_pool_2x2</span><span class="params">(x)</span>:</span>
+  <span class="keyword">return</span> tf.nn.max_pool(x, ksize=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>],
+                        strides=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)
+</code></pre><p>其中，<code>padding=&#39;SAME&#39;</code>表示通过填充0，使得输入和输出的形状一致。</p>
+<h4 id="第一层：卷积层">第一层：卷积层</h4><p>第一层是卷积层，卷积层将要计算出32个特征映射(feature map)，对每个5 * 5的patch。它的权值tensor的大小为[5, 5, 1, 32]. 前两维是patch的大小，第三维时输入通道的数目，最后一维是输出通道的数目。我们对每个输出通道加上了偏置(bias)。</p>
+<pre><code>W_conv1 = <span class="function"><span class="title">weight_variable</span><span class="params">([<span class="number">5</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">32</span>])</span></span>
+b_conv1 = <span class="function"><span class="title">bias_variable</span><span class="params">([<span class="number">32</span>])</span></span>
+</code></pre><p>为了使得图片与计算层匹配，我们首先<code>reshape</code>输入图像<code>x</code>为4维的tensor，第2、3维对应图片的宽和高，最后一维对应颜色通道的数目。（<strong>？第1维为什么是-1？</strong>）</p>
+<pre><code>x_image = tf.reshape(x, [-<span class="number">1</span>,<span class="number">28</span>,<span class="number">28</span>,<span class="number">1</span>])
+</code></pre><p>然后，使用<code>weight tensor</code>对<code>x_image</code>进行卷积计算，加上<code>bias</code>，再应用到一个<code>ReLU</code>激活函数，最终采用最大池化。</p>
+<pre><code>h_conv1 = tf<span class="class">.nn</span><span class="class">.relu</span>(<span class="function"><span class="title">conv2d</span><span class="params">(x_image, W_conv1)</span></span> + b_conv1)
+h_pool1 = <span class="function"><span class="title">max_pool_2x2</span><span class="params">(h_conv1)</span></span>
+</code></pre><h4 id="第二层：卷积层">第二层：卷积层</h4><p>为了使得网络有足够深度，我们重复堆积一些相同类型的层。第二层将会有64个特征，对应每个5 * 5的patch。</p>
+<pre><code>W_conv2 = <span class="function"><span class="title">weight_variable</span><span class="params">([<span class="number">5</span>, <span class="number">5</span>, <span class="number">32</span>, <span class="number">64</span>])</span></span>
+b_conv2 = <span class="function"><span class="title">bias_variable</span><span class="params">([<span class="number">64</span>])</span></span>
+
+h_conv2 = tf<span class="class">.nn</span><span class="class">.relu</span>(<span class="function"><span class="title">conv2d</span><span class="params">(h_pool1, W_conv2)</span></span> + b_conv2)
+h_pool2 = <span class="function"><span class="title">max_pool_2x2</span><span class="params">(h_conv2)</span></span>
+</code></pre><h4 id="全连接层">全连接层</h4><p>到目前为止，图像的尺寸被缩减为7 * 7，我们最后加入一个神经元数目为1024的全连接层来处理所有的图像上。接着，将最后的pooling层的输出reshape为一个一维向量，与权值相乘，加上偏置，再通过一个<code>ReLu</code>函数。</p>
+<pre><code>W_fc1 = <span class="function"><span class="title">weight_variable</span><span class="params">([<span class="number">7</span> * <span class="number">7</span> * <span class="number">64</span>, <span class="number">1024</span>])</span></span>
+b_fc1 = <span class="function"><span class="title">bias_variable</span><span class="params">([<span class="number">1024</span>])</span></span>
+
+h_pool2_flat = tf.<span class="function"><span class="title">reshape</span><span class="params">(h_pool2, [-<span class="number">1</span>, <span class="number">7</span>*<span class="number">7</span>*<span class="number">64</span>])</span></span>
+h_fc1 = tf<span class="class">.nn</span><span class="class">.relu</span>(tf.<span class="function"><span class="title">matmul</span><span class="params">(h_pool2_flat, W_fc1)</span></span> + b_fc1)
+</code></pre><p>整个CNN的网络结构如下图：</p>
+<p><img src="http://i.imgur.com/nfd2j9s.jpg" alt=""></p>
+<h4 id="Dropout">Dropout</h4><p>为了减少过拟合程度，在输出层之前应用<code>dropout</code>技术（即丢弃某些神经元的输出结果）。我们创建一个<code>placeholder</code>来表示一个神经元的输出在<code>dropout</code>时不被丢弃的概率。<code>Dropout</code>能够在训练过程中使用，而在测试过程中不使用。TensorFlow中的<code>tf.nn.dropout</code>操作能够利用<code>mask</code>技术处理各种规模的神经元输出。</p>
+<pre><code>keep_prob = tf.<span class="function"><span class="title">placeholder</span><span class="params">(tf.float32)</span></span>
+h_fc1_drop = tf<span class="class">.nn</span><span class="class">.dropout</span>(h_fc1, keep_prob)
+</code></pre><h4 id="输出层">输出层</h4><p>最终，我们用一个<code>softmax</code>层，得到类别上的概率分布。（与之前的<code>Softmax Regression</code>模型相同）。</p>
+<pre><code>W_fc2 = <span class="function"><span class="title">weight_variable</span><span class="params">([<span class="number">1024</span>, <span class="number">10</span>])</span></span>
+b_fc2 = <span class="function"><span class="title">bias_variable</span><span class="params">([<span class="number">10</span>])</span></span>
+
+y_conv=tf<span class="class">.nn</span><span class="class">.softmax</span>(tf.<span class="function"><span class="title">matmul</span><span class="params">(h_fc1_drop, W_fc2)</span></span> + b_fc2)
+</code></pre><h4 id="模型训练和测试">模型训练和测试</h4><p>为了测试模型的性能，需要先对模型进行训练，然后应用在测试集上。和之前<code>Softmax Regression</code>模型中的训练、测试过程类似。区别在于：</p>
+<ol>
+<li>用更复杂的<code>ADAM</code>最优化方法代替了之前的梯度下降；</li>
+<li>增了额外的参数<code>keep_prob</code>在<code>feed_dict</code>中，以控制<code>dropout</code>的几率；</li>
+<li>在训练过程中，增加了log输出功能（每100次迭代输出一次）。</li>
+</ol>
+<p>下面是程序：</p>
+<pre><code>cross_entropy = -tf.reduce_sum(<span class="keyword">y</span><span class="number">_</span>*tf.<span class="keyword">log</span>(y_conv))
+train_step = tf.train.AdamOptimizer(<span class="number">1</span>e-<span class="number">4</span>).minimize(cross_entropy)
+correct_prediction = tf.equal(tf.argmax(y_conv,<span class="number">1</span>), tf.argmax(<span class="keyword">y</span><span class="number">_</span>,<span class="number">1</span>))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+sess.run(tf.initialize_all_variables())
+<span class="keyword">for</span> i in range(<span class="number">20000</span>):
+  batch = mnist.train.next_batch(<span class="number">50</span>)
+  <span class="keyword">if</span> i<span class="variable">%100</span> == <span class="number">0</span>:
+    train_accuracy = accuracy.<span class="keyword">eval</span>(feed_dict={
+        <span class="keyword">x</span>:batch[<span class="number">0</span>], <span class="keyword">y</span><span class="number">_</span>: batch[<span class="number">1</span>], keep_prob: <span class="number">1.0</span>})
+    <span class="keyword">print</span>(<span class="string">"step <span class="variable">%d</span>, training accuracy <span class="variable">%g</span>"</span><span class="variable">%(</span>i, train_accuracy))
+  train_step.run(feed_dict={<span class="keyword">x</span>: batch[<span class="number">0</span>], <span class="keyword">y</span><span class="number">_</span>: batch[<span class="number">1</span>], keep_prob: <span class="number">0</span>.<span class="number">5</span>})
+
+<span class="keyword">print</span>(<span class="string">"test accuracy <span class="variable">%g</span>"</span><span class="variable">%accuracy</span>.<span class="keyword">eval</span>(feed_dict={
+    <span class="keyword">x</span>: mnist.test.images, <span class="keyword">y</span><span class="number">_</span>: mnist.test.labels, keep_prob: <span class="number">1.0</span>}))
+</code></pre><p>最终，模型在测试集上的准确率大概为99.2%，性能上要优于之前的<code>Softmax Regression</code>模型。</p>
+<hr>
+<p>本文结束，感谢欣赏。</p>
+<p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
+<p><a href="http://www.jeyzhang.com/tensorflow-learning-notes-2.html">http://www.jeyzhang.com/tensorflow-learning-notes-2.html</a></p>
+<p><strong>参考资料</strong></p>
+<p><a href="https://www.tensorflow.org/versions/r0.7/tutorials/mnist/pros/index.html#deep-mnist-for-experts" target="_blank" rel="external">TensorFlow: Deep MNIST for Experts</a></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Artificial-Intelligence/" rel="tag">#Artificial Intelligence</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag">#Deep Learning</a>
+          
+            <a href="/tags/Machine-Learning/" rel="tag">#Machine Learning</a>
+          
+            <a href="/tags/TensorFlow/" rel="tag">#TensorFlow</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/network-connection-problems-in-win10.html" rel="next" title="Win10下网络连接问题及解决方案">
+                <i class="fa fa-chevron-left"></i> Win10下网络连接问题及解决方案
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/cnn-learning-notes-1.html" rel="prev" title="卷积神经网络(CNN)学习笔记1：基础入门">
+                卷积神经网络(CNN)学习笔记1：基础入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/upload/image/avatar.png" alt="Jey Zhang" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jey Zhang</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Life is Now.</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://www.facebook.com/jeyzhang" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> facebook
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/jerrychang0402" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/zhangjieup" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> zhihu
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jeyzhang" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.yunaitong.cn" target="_blank">Tong</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#深度学习模型"><span class="nav-number">1.</span> <span class="nav-text">深度学习模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本设置"><span class="nav-number">1.1.</span> <span class="nav-text">基本设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载MNIST数据集"><span class="nav-number">1.2.</span> <span class="nav-text">加载MNIST数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启TensorFlow会话"><span class="nav-number">1.3.</span> <span class="nav-text">开启TensorFlow会话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算流图(Computation_Graph)"><span class="nav-number">1.4.</span> <span class="nav-text">计算流图(Computation Graph)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Softmax_Regression模型"><span class="nav-number">1.5.</span> <span class="nav-text">Softmax Regression模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CNN模型"><span class="nav-number">1.6.</span> <span class="nav-text">CNN模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#权值初始化"><span class="nav-number">1.6.1.</span> <span class="nav-text">权值初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卷积(Convolution)和池化(Pooling)"><span class="nav-number">1.6.2.</span> <span class="nav-text">卷积(Convolution)和池化(Pooling)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第一层：卷积层"><span class="nav-number">1.6.3.</span> <span class="nav-text">第一层：卷积层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二层：卷积层"><span class="nav-number">1.6.4.</span> <span class="nav-text">第二层：卷积层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#全连接层"><span class="nav-number">1.6.5.</span> <span class="nav-text">全连接层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dropout"><span class="nav-number">1.6.6.</span> <span class="nav-text">Dropout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出层"><span class="nav-number">1.6.7.</span> <span class="nav-text">输出层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练和测试"><span class="nav-number">1.6.8.</span> <span class="nav-text">模型训练和测试</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jey Zhang</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+<span id="busuanzi_container_site_pv">
+  &nbsp; | &nbsp;Total visited <span id="busuanzi_value_site_pv"></span> times.
+</span>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+    
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'jeyzhang';
+      var disqus_identifier = 'tensorflow-learning-notes-2.html';
+      var disqus_title = 'TensorFlow学习笔记2：构建CNN模型';
+      var disqus_url = 'http://www.jeyzhang.com/tensorflow-learning-notes-2.html';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+  
+  
+  	 <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("4KyzRuAgl6zwWXQK1UfxmIh0-gzGzoHsz", "YeXrCFBwTG1qRdqS2rUJ7XgJ");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+  
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>

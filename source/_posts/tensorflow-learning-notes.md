@@ -1,4 +1,4 @@
-title: TensorFlow学习笔记
+title: TensorFlow学习笔记1：入门
 date: 2016-01-13 16:49:49
 tags: [TensorFlow, Machine Learning, Deep Learning, Artificial Intelligence]
 categories: Machine Learning
