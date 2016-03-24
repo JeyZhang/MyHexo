@@ -68,7 +68,8 @@
 <meta property="og:image" content="http://i.imgur.com/sqlI5oC.png">
 <meta property="og:image" content="http://i.imgur.com/ANwDWKW.png">
 <meta property="og:image" content="http://i.imgur.com/f0c2kWB.png">
-<meta property="og:updated_time" content="2016-03-01T11:51:37.196Z">
+<meta property="og:image" content="http://i.imgur.com/7lEZf7M.png">
+<meta property="og:updated_time" content="2016-03-21T01:48:29.695Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TensorFlow学习笔记1：入门">
 <meta name="twitter:description" content="TensorFlow 简介TensorFlow是Google在2015年11月份开源的人工智能系统（Github项目地址），是之前所开发的深度学习基础架构DistBelief的改进版本，该系统可以被用于语音识别、图片识别等多个领域。
@@ -345,6 +346,151 @@
 <p><strong>4 支持语言选项</strong></p>
 <p>目前TensorFlow支持Python和C++语言。（但是你可以自己编写喜爱语言的SWIG接口）</p>
 <p><strong>5 充分利用硬件资源，最大化计算性能</strong></p>
+<h2 id="基本使用">基本使用</h2><p>你需要理解在TensorFlow中，是如何：</p>
+<ul>
+<li>将计算流程表示成图；</li>
+<li>通过<strong><code>Sessions</code></strong>来执行图计算；</li>
+<li>将数据表示为<strong><code>tensors</code></strong>；</li>
+<li>使用<strong><code>Variables</code></strong>来保持状态信息；</li>
+<li>分别使用<strong><code>feeds</code></strong>和<strong><code>fetches</code></strong>来填充数据和抓取任意的操作结果；</li>
+</ul>
+<h3 id="概览">概览</h3><p>TensorFlow是一种将计算表示为图的编程系统。图中的节点称为<strong><code>ops</code></strong>(operation的简称)。一个<strong><code>ops</code></strong>使用0个或以上的<code>Tensors</code>，通过执行某些运算，产生0个或以上的<code>Tensors</code>。<strong>一个<code>Tensor</code>是一个多维数组</strong>，例如，你可以将一批图像表示为一个四维的数组<code>[batch, height, width, channels]</code>，数组中的值均为浮点数。</p>
+<p>TensorFlow中的图描述了计算过程，图通过<code>Session</code>的运行而执行计算。<code>Session</code>将图的节点们(即ops)放置到计算设备(如CPUs和GPUs)上，然后通过方法执行它们；这些方法执行完成后，将返回tensors。在Python中的tensor的形式是<code>numpy ndarray</code>对象，而在C/C++中则是<code>tensorflow::Tensor</code>.</p>
+<h3 id="图计算">图计算</h3><p>TensorFlow程序中图的创建类似于一个 [施工阶段]，而在 [执行阶段] 则利用一个<code>session</code>来执行图中的节点。很常见的情况是，在 [施工阶段] 创建一个图来表示和训练神经网络，而在 [执行阶段] 在图中重复执行一系列的训练操作。</p>
+<h4 id="创建图">创建图</h4><p>在TensorFlow中，<code>Constant</code>是一种没有输入的<code>ops</code>，但是你可以将它作为其他<code>ops</code>的输入。Python库中的<code>ops构造器</code>将返回构造器的输出。TensorFlow的Python库中有一个默认的图，将<code>ops构造器</code>作为节点，更多可了解<a href="https://www.tensorflow.org/versions/r0.7/api_docs/python/framework.html#Graph" target="_blank" rel="external">Graph Class文档</a>。</p>
+<p>见下面的示例代码：</p>
+<pre><code>import tensorflow <span class="keyword">as</span> tf
+
+<span class="comment"># Create a Constant op that produces a 1x2 matrix.  The op is</span>
+<span class="comment"># added as a node to the default graph.</span>
+<span class="comment">#</span>
+<span class="comment"># The value returned by the constructor represents the output</span>
+<span class="comment"># of the Constant op.</span>
+matrix1 = tf.<span class="built_in">constant</span>([[<span class="number">3.</span>, <span class="number">3.</span>]])
+
+<span class="comment"># Create another Constant that produces a 2x1 matrix.</span>
+matrix2 = tf.<span class="built_in">constant</span>([[<span class="number">2.</span>],[<span class="number">2.</span>]])
+
+<span class="comment"># Create a Matmul op that takes 'matrix1' and 'matrix2' as inputs.</span>
+<span class="comment"># The returned value, 'product', represents the result of the matrix</span>
+<span class="comment"># multiplication.</span>
+product = tf.matmul(matrix1, matrix2)
+</code></pre><p>默认的图(Default Graph)现在有了三个节点：两个 <code>Constant()</code>ops和一个<code>matmul()</code>op。为了得到这两个矩阵的乘积结果，还需要在一个<code>session</code>中启动图计算。</p>
+<h4 id="在Session中执行图计算">在Session中执行图计算</h4><p>见下面的示例代码，更多可了解<a href="https://www.tensorflow.org/versions/r0.7/api_docs/python/client.html#session-management" target="_blank" rel="external">Session Class</a>：</p>
+<pre><code><span class="comment"># Launch the default graph.</span>
+sess = tf.<span class="type">Session</span>()
+
+<span class="comment"># To run the matmul op we call the session 'run()' method, passing 'product'</span>
+<span class="comment"># which represents the output of the matmul op.  This indicates to the call</span>
+<span class="comment"># that we want to get the output of the matmul op back.</span>
+<span class="comment">#</span>
+<span class="comment"># All inputs needed by the op are run automatically by the session.  They</span>
+<span class="comment"># typically are run in parallel.</span>
+<span class="comment">#</span>
+<span class="comment"># The call 'run(product)' thus causes the execution of threes ops in the</span>
+<span class="comment"># graph: the two constants and matmul.</span>
+<span class="comment">#</span>
+<span class="comment"># The output of the op is returned in 'result' as a numpy `ndarray` object.</span>
+<span class="literal">result</span> = sess.run(product)
+print(<span class="literal">result</span>)
+<span class="comment"># ==&gt; [[ 12.]]</span>
+
+<span class="comment"># Close the Session when we're done.</span>
+sess.close()
+</code></pre><p>Sessions最后需要关闭，以释放相关的资源；你也可以使用<code>with</code>模块，session在<code>with</code>模块中自动会关闭：</p>
+<pre><code><span class="keyword">with</span> tf.<span class="type">Session</span>() <span class="keyword">as</span> sess:
+  <span class="literal">result</span> = sess.run([product])
+  print(<span class="literal">result</span>)
+</code></pre><p>TensorFlow的这些节点最终将在计算设备(CPUs,GPus)上执行运算。如果是使用GPU，默认会在第一块GPU上执行，如果你想在第二块多余的GPU上执行：</p>
+<pre><code>with tf.<span class="function"><span class="title">Session</span><span class="params">()</span></span> as sess:
+  with tf.<span class="function"><span class="title">device</span><span class="params">(<span class="string">"/gpu:1"</span>)</span></span>:
+    matrix1 = tf.<span class="function"><span class="title">constant</span><span class="params">([[<span class="number">3</span>., <span class="number">3</span>.]])</span></span>
+    matrix2 = tf.<span class="function"><span class="title">constant</span><span class="params">([[<span class="number">2</span>.],[<span class="number">2</span>.]])</span></span>
+    product = tf.<span class="function"><span class="title">matmul</span><span class="params">(matrix1, matrix2)</span></span>
+    ...
+</code></pre><p>device中的各个字符串含义如下：</p>
+<ul>
+<li><code>&quot;/cpu:0&quot;</code>: 你机器的CPU；</li>
+<li><code>&quot;/gpu:0&quot;</code>: 你机器的第一个GPU；</li>
+<li><code>&quot;/gpu:1&quot;</code>: 你机器的第二个GPU；</li>
+</ul>
+<p>关于TensorFlow中GPU的使用见<a href="https://www.tensorflow.org/versions/r0.7/how_tos/using_gpu/index.html" target="_blank" rel="external">这里</a>。</p>
+<h3 id="交互环境下的使用">交互环境下的使用</h3><p>以上的python示例中，使用了<code>Session</code>和<code>Session.run()</code>来执行图计算。然而，在一些Python的交互环境下(如IPython中)，你可以使用<code>InteractiveSession</code>类，以及<code>Tensor.eval()</code>、<code>Operation.run()</code>等方法。例如，在交互的Python环境下执行以下代码：</p>
+<pre><code># Enter an interactive TensorFlow Session.
+import tensorflow <span class="keyword">as</span> tf
+sess = tf.InteractiveSession()
+
+x = tf.Variable([<span class="number">1.0</span>, <span class="number">2.0</span>])
+a = tf.constant([<span class="number">3.0</span>, <span class="number">3.0</span>])
+
+# Initialize <span class="string">'x'</span> <span class="keyword">using</span> the run() <span class="function"><span class="keyword">method</span> <span class="title">of</span> <span class="title">its</span> <span class="title">initializer</span> <span class="title">op</span>.
+<span class="title">x</span>.<span class="title">initializer</span>.<span class="title">run</span><span class="params">()</span>
+
+# <span class="title">Add</span> <span class="title">an</span> <span class="title">op</span> <span class="title">to</span> <span class="title">subtract</span> '<span class="title">a</span>' <span class="title">from</span> '<span class="title">x</span>'.  <span class="title">Run</span> <span class="title">it</span> <span class="title">and</span> <span class="title">print</span> <span class="title">the</span> <span class="title">result</span>
+<span class="title">sub</span> = <span class="title">tf</span>.<span class="title">sub</span><span class="params">(x, a)</span>
+<span class="title">print</span><span class="params">(sub.eval()</span>)
+# ==&gt; [-2. -1.]
+
+# <span class="title">Close</span> <span class="title">the</span> <span class="title">Session</span> <span class="title">when</span> <span class="title">we</span>'<span class="title">re</span> <span class="title">done</span>.
+<span class="title">sess</span>.<span class="title">close</span><span class="params">()</span></span>
+</code></pre><h3 id="Tensors">Tensors</h3><p>TensorFlow中使用<code>tensor</code>数据结构（实际上就是一个多维数据）表示所有的数据，并在图计算中的节点之间传递数据。一个<code>tensor</code>具有固定的类型、级别和大小，更加深入理解这些概念可参考<a href="https://www.tensorflow.org/versions/r0.7/resources/dims_types.html" target="_blank" rel="external">Rank, Shape, and Type</a>。</p>
+<h3 id="变量(Variables)">变量(Variables)</h3><p>变量在图执行的过程中，保持着自己的状态信息。下面代码中的变量充当了一个简单的计数器角色：</p>
+<pre><code><span class="comment"># Create a Variable, that will be initialized to the scalar value 0.</span>
+<span class="keyword">state</span> = tf.Variable(<span class="number">0</span>, name=<span class="string">"counter"</span>)
+
+<span class="comment"># Create an Op to add one to `state`.</span>
+
+one = tf.constant(<span class="number">1</span>)
+new_value = tf.add(<span class="keyword">state</span>, one)
+update = tf.assign(<span class="keyword">state</span>, new_value)
+
+<span class="comment"># Variables must be initialized by running an `init` Op after having</span>
+<span class="comment"># launched the graph.  We first have to add the `init` Op to the graph.</span>
+init_op = tf.initialize_all_variables()
+
+<span class="comment"># Launch the graph and run the ops.</span>
+with tf.Session() as sess:
+  <span class="comment"># Run the 'init' op</span>
+  sess.run(init_op)
+  <span class="comment"># Print the initial value of 'state'</span>
+  print(sess.run(<span class="keyword">state</span>))
+  <span class="comment"># Run the op that updates 'state' and print 'state'.</span>
+  <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">3</span>):
+    sess.run(update)
+    print(sess.run(<span class="keyword">state</span>))
+
+<span class="comment"># output:</span>
+
+<span class="comment"># 0</span>
+<span class="comment"># 1</span>
+<span class="comment"># 2</span>
+<span class="comment"># 3</span>
+</code></pre><p>赋值函数<code>assign()</code>和<code>add()</code>函数类似，直到session的<code>run()</code>之后才会执行操作。与之类似的，一般我们会将神经网络模型中的参数表示为一系列的变量，在模型的训练过程中对变量进行更新操作。</p>
+<h3 id="抓取(Fetches)">抓取(Fetches)</h3><p>为了抓取<code>ops</code>的输出，需要先执行<code>session</code>的<code>run</code>函数。然后，通过<code>print</code>函数打印状态信息。</p>
+<pre><code>input1 = tf.constant(<span class="number">3</span>.<span class="number">0</span>)
+input2 = tf.constant(<span class="number">2</span>.<span class="number">0</span>)
+input3 = tf.constant(<span class="number">5</span>.<span class="number">0</span>)
+intermed = tf.add(input2, input3)
+mul = tf.mul(input1, intermed)
+
+<span class="keyword">with</span> tf.<span class="type">Session</span>() <span class="keyword">as</span> sess:
+  <span class="literal">result</span> = sess.run([mul, intermed])
+  print(<span class="literal">result</span>)
+
+<span class="comment"># output:</span>
+<span class="comment"># [array([ 21.], dtype=float32), array([ 7.], dtype=float32)]</span>
+</code></pre><p>所有tensors的输出都是一次性 [连贯] 执行的。</p>
+<h3 id="填充(Feeds)">填充(Feeds)</h3><p>TensorFlow也提供这样的机制：先创建特定数据类型的占位符(placeholder)，之后再进行数据的填充。例如下面的程序：</p>
+<pre><code>input1 = tf.placeholder(tf.<span class="type">float32</span>)
+input2 = tf.placeholder(tf.<span class="type">float32</span>)
+output = tf.mul(input1, input2)
+
+<span class="keyword">with</span> tf.<span class="type">Session</span>() <span class="keyword">as</span> sess:
+  print(sess.run([output], feed_dict={input1:[<span class="number">7</span>.], input2:[<span class="number">2</span>.]}))
+
+<span class="comment"># output:</span>
+<span class="comment"># [array([ 14.], dtype=float32)]</span>
+</code></pre><p>如果不对<code>placeholder()</code>的变量进行数据填充，将会引发错误，更多的例子可参考<a href="https://www.tensorflow.org/versions/r0.7/tutorials/mnist/tf/index.html" target="_blank" rel="external">MNIST fully-connected feed tutorial (source code)</a>。</p>
 <h2 id="示例：曲线拟合">示例：曲线拟合</h2><p>下面是一段使用Python写的，曲线拟合计算。官网将此作为刚开始介绍的示例程序。</p>
 <pre><code><span class="preprocessor"># 简化调用库名</span>
 import tensorflow as tf
@@ -460,6 +606,46 @@ sess.<span class="function"><span class="title">run</span><span class="params">(
 </code></pre><p>最后，我们来获取模型在测试集上的准确率，</p>
 <pre><code><span class="tag">print</span>(sess.<span class="function">run</span>(accuracy, feed_dict={<span class="attribute">x</span>: mnist.test.images, <span class="attribute">y_</span>: mnist.test.labels}))
 </code></pre><p>Softmax regression模型由于模型较简单，所以在测试集上的准确率在91%左右，这个结果并不算太好。通过一些简单的优化，准确率可以达到97%，目前最好的模型的准确率为99.7%。（<a href="http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html" target="_blank" rel="external"><strong>这里</strong></a>有众多模型在MNIST数据集上的运行结果）。</p>
+<h3 id="完整代码及运行结果">完整代码及运行结果</h3><p>利用Softmax模型实现手写体识别的完整代码如下：</p>
+<pre><code>__author__ = <span class="string">'chapter'</span>
+
+<span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf
+<span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data
+
+mnist = input_data.read_data_sets(<span class="string">"MNIST_data/"</span>, one_hot=<span class="keyword">True</span>)
+print(<span class="string">"Download Done!"</span>)
+
+x = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">784</span>])
+
+<span class="comment"># paras</span>
+W = tf.Variable(tf.zeros([<span class="number">784</span>, <span class="number">10</span>]))
+b = tf.Variable(tf.zeros([<span class="number">10</span>]))
+
+y = tf.nn.softmax(tf.matmul(x, W) + b)
+y_ = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">10</span>])
+
+<span class="comment"># loss func</span>
+cross_entropy = -tf.reduce_sum(y_ * tf.log(y))
+
+train_step = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>).minimize(cross_entropy)
+
+<span class="comment"># init</span>
+init = tf.initialize_all_variables()
+
+sess = tf.Session()
+sess.run(init)
+
+<span class="comment"># train</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):
+    batch_xs, batch_ys = mnist.train.next_batch(<span class="number">100</span>)
+    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+
+correct_prediction = tf.equal(tf.arg_max(y, <span class="number">1</span>), tf.arg_max(y_, <span class="number">1</span>))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, <span class="string">"float"</span>))
+
+print(<span class="string">"Accuarcy on Test-dataset: "</span>, sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
+</code></pre><p>运行结果如下图：</p>
+<p><img src="http://i.imgur.com/7lEZf7M.png" alt=""></p>
 <hr>
 <p>本文结束，感谢欣赏。</p>
 <p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
@@ -594,7 +780,7 @@ sess.<span class="function"><span class="title">run</span><span class="params">(
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -608,7 +794,7 @@ sess.<span class="function"><span class="title">run</span><span class="params">(
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">31</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>
@@ -681,7 +867,7 @@ sess.<span class="function"><span class="title">run</span><span class="params">(
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFlow_简介"><span class="nav-number">1.</span> <span class="nav-text">TensorFlow 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是数据流图(Data_Flow_Graph)"><span class="nav-number">1.1.</span> <span class="nav-text">什么是数据流图(Data Flow Graph)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorFlow的特性"><span class="nav-number">1.2.</span> <span class="nav-text">TensorFlow的特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例：曲线拟合"><span class="nav-number">2.</span> <span class="nav-text">示例：曲线拟合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MNIST手写体识别任务"><span class="nav-number">3.</span> <span class="nav-text">MNIST手写体识别任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MNIST数据集介绍"><span class="nav-number">3.1.</span> <span class="nav-text">MNIST数据集介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Softmax_Regression模型"><span class="nav-number">3.2.</span> <span class="nav-text">Softmax Regression模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Softmax_Regression的程序实现"><span class="nav-number">3.3.</span> <span class="nav-text">Softmax Regression的程序实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型的训练"><span class="nav-number">3.4.</span> <span class="nav-text">模型的训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型的评价"><span class="nav-number">3.5.</span> <span class="nav-text">模型的评价</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFlow_简介"><span class="nav-number">1.</span> <span class="nav-text">TensorFlow 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是数据流图(Data_Flow_Graph)"><span class="nav-number">1.1.</span> <span class="nav-text">什么是数据流图(Data Flow Graph)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorFlow的特性"><span class="nav-number">1.2.</span> <span class="nav-text">TensorFlow的特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本使用"><span class="nav-number">2.</span> <span class="nav-text">基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概览"><span class="nav-number">2.1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图计算"><span class="nav-number">2.2.</span> <span class="nav-text">图计算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建图"><span class="nav-number">2.2.1.</span> <span class="nav-text">创建图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在Session中执行图计算"><span class="nav-number">2.2.2.</span> <span class="nav-text">在Session中执行图计算</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交互环境下的使用"><span class="nav-number">2.3.</span> <span class="nav-text">交互环境下的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tensors"><span class="nav-number">2.4.</span> <span class="nav-text">Tensors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量(Variables)"><span class="nav-number">2.5.</span> <span class="nav-text">变量(Variables)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抓取(Fetches)"><span class="nav-number">2.6.</span> <span class="nav-text">抓取(Fetches)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#填充(Feeds)"><span class="nav-number">2.7.</span> <span class="nav-text">填充(Feeds)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例：曲线拟合"><span class="nav-number">3.</span> <span class="nav-text">示例：曲线拟合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MNIST手写体识别任务"><span class="nav-number">4.</span> <span class="nav-text">MNIST手写体识别任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MNIST数据集介绍"><span class="nav-number">4.1.</span> <span class="nav-text">MNIST数据集介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Softmax_Regression模型"><span class="nav-number">4.2.</span> <span class="nav-text">Softmax Regression模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Softmax_Regression的程序实现"><span class="nav-number">4.3.</span> <span class="nav-text">Softmax Regression的程序实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型的训练"><span class="nav-number">4.4.</span> <span class="nav-text">模型的训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型的评价"><span class="nav-number">4.5.</span> <span class="nav-text">模型的评价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完整代码及运行结果"><span class="nav-number">4.6.</span> <span class="nav-text">完整代码及运行结果</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

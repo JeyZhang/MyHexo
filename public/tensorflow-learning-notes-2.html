@@ -64,7 +64,8 @@
 
 深度学习模型TensorFlow很适合用来进行大规模的数值计算，其中也包括实现和">
 <meta property="og:image" content="http://i.imgur.com/nfd2j9s.jpg">
-<meta property="og:updated_time" content="2016-03-01T11:52:01.241Z">
+<meta property="og:image" content="http://i.imgur.com/KIep4sT.png">
+<meta property="og:updated_time" content="2016-03-16T14:17:48.931Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TensorFlow学习笔记2：构建CNN模型">
 <meta name="twitter:description" content="上篇博文主要是TensorFlow的一个简单入门，并介绍了如何实现Softmax Regression模型，来对MNIST数据集中的数字手写体进行识别。
@@ -416,6 +417,89 @@ sess.run(tf.initialize_all_variables())
 <span class="keyword">print</span>(<span class="string">"test accuracy <span class="variable">%g</span>"</span><span class="variable">%accuracy</span>.<span class="keyword">eval</span>(feed_dict={
     <span class="keyword">x</span>: mnist.test.images, <span class="keyword">y</span><span class="number">_</span>: mnist.test.labels, keep_prob: <span class="number">1.0</span>}))
 </code></pre><p>最终，模型在测试集上的准确率大概为99.2%，性能上要优于之前的<code>Softmax Regression</code>模型。</p>
+<h4 id="完整代码及运行结果">完整代码及运行结果</h4><p>利用CNN模型实现手写体识别的完整代码如下：</p>
+<pre><code>__author__ = <span class="string">'chapter'</span>
+
+<span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf
+<span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data
+
+<span class="function"><span class="keyword">def</span> <span class="title">weight_varible</span><span class="params">(shape)</span>:</span>
+    initial = tf.truncated_normal(shape, stddev=<span class="number">0.1</span>)
+    <span class="keyword">return</span> tf.Variable(initial)
+
+<span class="function"><span class="keyword">def</span> <span class="title">bias_variable</span><span class="params">(shape)</span>:</span>
+    initial = tf.constant(<span class="number">0.1</span>, shape=shape)
+    <span class="keyword">return</span> tf.Variable(initial)
+
+<span class="function"><span class="keyword">def</span> <span class="title">conv2d</span><span class="params">(x, W)</span>:</span>
+    <span class="keyword">return</span> tf.nn.conv2d(x, W, strides=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)
+
+<span class="function"><span class="keyword">def</span> <span class="title">max_pool_2x2</span><span class="params">(x)</span>:</span>
+    <span class="keyword">return</span> tf.nn.max_pool(x, ksize=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], strides=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)
+
+
+mnist = input_data.read_data_sets(<span class="string">"MNIST_data/"</span>, one_hot=<span class="keyword">True</span>)
+print(<span class="string">"Download Done!"</span>)
+
+sess = tf.InteractiveSession()
+
+<span class="comment"># paras</span>
+W_conv1 = weight_varible([<span class="number">5</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">32</span>])
+b_conv1 = bias_variable([<span class="number">32</span>])
+
+<span class="comment"># conv layer-1</span>
+x = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">784</span>])
+x_image = tf.reshape(x, [-<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>])
+
+h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
+h_pool1 = max_pool_2x2(h_conv1)
+
+<span class="comment"># conv layer-2</span>
+W_conv2 = weight_varible([<span class="number">5</span>, <span class="number">5</span>, <span class="number">32</span>, <span class="number">64</span>])
+b_conv2 = bias_variable([<span class="number">64</span>])
+
+h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
+h_pool2 = max_pool_2x2(h_conv2)
+
+<span class="comment"># full connection</span>
+W_fc1 = weight_varible([<span class="number">7</span> * <span class="number">7</span> * <span class="number">64</span>, <span class="number">1024</span>])
+b_fc1 = bias_variable([<span class="number">1024</span>])
+
+h_pool2_flat = tf.reshape(h_pool2, [-<span class="number">1</span>, <span class="number">7</span> * <span class="number">7</span> * <span class="number">64</span>])
+h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
+
+<span class="comment"># dropout</span>
+keep_prob = tf.placeholder(tf.float32)
+h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+
+<span class="comment"># output layer: softmax</span>
+W_fc2 = weight_varible([<span class="number">1024</span>, <span class="number">10</span>])
+b_fc2 = bias_variable([<span class="number">10</span>])
+
+y_conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
+y_ = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">10</span>])
+
+<span class="comment"># model training</span>
+cross_entropy = -tf.reduce_sum(y_ * tf.log(y_conv))
+train_step = tf.train.AdamOptimizer(<span class="number">1e-4</span>).minimize(cross_entropy)
+
+correct_prediction = tf.equal(tf.arg_max(y_conv, <span class="number">1</span>), tf.arg_max(y_, <span class="number">1</span>))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+
+sess.run(tf.initialize_all_variables())
+
+<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">20000</span>):
+    batch = mnist.train.next_batch(<span class="number">50</span>)
+
+    <span class="keyword">if</span> i % <span class="number">100</span> == <span class="number">0</span>:
+        train_accuacy = accuracy.eval(feed_dict={x: batch[<span class="number">0</span>], y_: batch[<span class="number">1</span>], keep_prob: <span class="number">1.0</span>})
+        print(<span class="string">"step %d, training accuracy %g"</span>%(i, train_accuacy))
+    train_step.run(feed_dict = {x: batch[<span class="number">0</span>], y_: batch[<span class="number">1</span>], keep_prob: <span class="number">0.5</span>})
+
+<span class="comment"># accuacy on test</span>
+print(<span class="string">"test accuracy %g"</span>%(accuracy.eval(feed_dict={x: mnist.test.images, y: mnist.test.labels, keep_prob: <span class="number">1.0</span>})))
+</code></pre><p>运行结果如下图：</p>
+<p><img src="http://i.imgur.com/KIep4sT.png" alt=""></p>
 <hr>
 <p>本文结束，感谢欣赏。</p>
 <p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
@@ -550,7 +634,7 @@ sess.run(tf.initialize_all_variables())
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -564,7 +648,7 @@ sess.run(tf.initialize_all_variables())
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">31</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>
@@ -637,7 +721,7 @@ sess.run(tf.initialize_all_variables())
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#深度学习模型"><span class="nav-number">1.</span> <span class="nav-text">深度学习模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本设置"><span class="nav-number">1.1.</span> <span class="nav-text">基本设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载MNIST数据集"><span class="nav-number">1.2.</span> <span class="nav-text">加载MNIST数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启TensorFlow会话"><span class="nav-number">1.3.</span> <span class="nav-text">开启TensorFlow会话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算流图(Computation_Graph)"><span class="nav-number">1.4.</span> <span class="nav-text">计算流图(Computation Graph)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Softmax_Regression模型"><span class="nav-number">1.5.</span> <span class="nav-text">Softmax Regression模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CNN模型"><span class="nav-number">1.6.</span> <span class="nav-text">CNN模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#权值初始化"><span class="nav-number">1.6.1.</span> <span class="nav-text">权值初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卷积(Convolution)和池化(Pooling)"><span class="nav-number">1.6.2.</span> <span class="nav-text">卷积(Convolution)和池化(Pooling)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第一层：卷积层"><span class="nav-number">1.6.3.</span> <span class="nav-text">第一层：卷积层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二层：卷积层"><span class="nav-number">1.6.4.</span> <span class="nav-text">第二层：卷积层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#全连接层"><span class="nav-number">1.6.5.</span> <span class="nav-text">全连接层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dropout"><span class="nav-number">1.6.6.</span> <span class="nav-text">Dropout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出层"><span class="nav-number">1.6.7.</span> <span class="nav-text">输出层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练和测试"><span class="nav-number">1.6.8.</span> <span class="nav-text">模型训练和测试</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#深度学习模型"><span class="nav-number">1.</span> <span class="nav-text">深度学习模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本设置"><span class="nav-number">1.1.</span> <span class="nav-text">基本设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载MNIST数据集"><span class="nav-number">1.2.</span> <span class="nav-text">加载MNIST数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启TensorFlow会话"><span class="nav-number">1.3.</span> <span class="nav-text">开启TensorFlow会话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算流图(Computation_Graph)"><span class="nav-number">1.4.</span> <span class="nav-text">计算流图(Computation Graph)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Softmax_Regression模型"><span class="nav-number">1.5.</span> <span class="nav-text">Softmax Regression模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CNN模型"><span class="nav-number">1.6.</span> <span class="nav-text">CNN模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#权值初始化"><span class="nav-number">1.6.1.</span> <span class="nav-text">权值初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#卷积(Convolution)和池化(Pooling)"><span class="nav-number">1.6.2.</span> <span class="nav-text">卷积(Convolution)和池化(Pooling)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第一层：卷积层"><span class="nav-number">1.6.3.</span> <span class="nav-text">第一层：卷积层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二层：卷积层"><span class="nav-number">1.6.4.</span> <span class="nav-text">第二层：卷积层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#全连接层"><span class="nav-number">1.6.5.</span> <span class="nav-text">全连接层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dropout"><span class="nav-number">1.6.6.</span> <span class="nav-text">Dropout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出层"><span class="nav-number">1.6.7.</span> <span class="nav-text">输出层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练和测试"><span class="nav-number">1.6.8.</span> <span class="nav-text">模型训练和测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完整代码及运行结果"><span class="nav-number">1.6.9.</span> <span class="nav-text">完整代码及运行结果</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

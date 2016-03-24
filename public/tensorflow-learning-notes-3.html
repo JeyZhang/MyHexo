@@ -1,0 +1,1039 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Artificial Intelligence,Deep Learning,Machine Learning,TensorFlow," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="上篇博文讲了如何构建一个简单的CNN模型，并运行在MNIST数据集上。下面讲述一下如何在TensorFlow中生成词向量(Word Embedding)，使用的模型来自Mikolov et al。
+本文的目录如下：
+
+解释使用连续词向量的原因；
+词向量模型的原理及训练过程；
+在TensorFlow中实现模型的简单版本，并给出优化的方法；
+
+TensorFlow实现了两个版本的模型：简单版和正式版。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow学习笔记3：词向量">
+<meta property="og:url" content="http://www.jeyzhang.com/tensorflow-learning-notes-3.html">
+<meta property="og:site_name" content="Jey Zhang">
+<meta property="og:description" content="上篇博文讲了如何构建一个简单的CNN模型，并运行在MNIST数据集上。下面讲述一下如何在TensorFlow中生成词向量(Word Embedding)，使用的模型来自Mikolov et al。
+本文的目录如下：
+
+解释使用连续词向量的原因；
+词向量模型的原理及训练过程；
+在TensorFlow中实现模型的简单版本，并给出优化的方法；
+
+TensorFlow实现了两个版本的模型：简单版和正式版。">
+<meta property="og:image" content="http://i.imgur.com/dHTf4Gq.png">
+<meta property="og:image" content="http://i.imgur.com/vpOKwSG.png">
+<meta property="og:image" content="http://i.imgur.com/jG5Rppa.png">
+<meta property="og:image" content="http://i.imgur.com/Ck90mom.png">
+<meta property="og:image" content="http://i.imgur.com/KnqFhUD.png">
+<meta property="og:image" content="http://i.imgur.com/g4PPKUW.png">
+<meta property="og:image" content="http://i.imgur.com/tmgHXZZ.png">
+<meta property="og:image" content="http://i.imgur.com/vM1dtFq.png">
+<meta property="og:image" content="http://i.imgur.com/z2VpgFz.png">
+<meta property="og:updated_time" content="2016-03-17T13:15:03.661Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow学习笔记3：词向量">
+<meta name="twitter:description" content="上篇博文讲了如何构建一个简单的CNN模型，并运行在MNIST数据集上。下面讲述一下如何在TensorFlow中生成词向量(Word Embedding)，使用的模型来自Mikolov et al。
+本文的目录如下：
+
+解释使用连续词向量的原因；
+词向量模型的原理及训练过程；
+在TensorFlow中实现模型的简单版本，并给出优化的方法；
+
+TensorFlow实现了两个版本的模型：简单版和正式版。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> TensorFlow学习笔记3：词向量 | Jey Zhang </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71292341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?eed1a5ff91ce000d3cbee31156f82f2c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jey Zhang</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Life is Now.</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'LwCA4Pqyomh6kHjA4fV9','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                TensorFlow学习笔记3：词向量
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-03-16T21:24:38+08:00" content="2016-03-16">
+              2016-03-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; In
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Machine Learning</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/tensorflow-learning-notes-3.html#comments" itemprop="discussionUrl">
+                <span class="post-comments-count disqus-comment-count" data-disqus-identifier="tensorflow-learning-notes-3.html" itemprop="commentsCount"></span>
+              </a>
+            </span>
+            
+          
+
+          
+		  
+		  
+			 &nbsp; | &nbsp;
+			 <span id="/tensorflow-learning-notes-3.html"class="leancloud_visitors"  data-flag-title="TensorFlow学习笔记3：词向量">
+             &nbsp;Views
+            </span>
+		  
+		
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p><a href="http://www.jeyzhang.com/tensorflow-learning-notes-2.html"><strong>上篇博文</strong></a>讲了如何构建一个简单的CNN模型，并运行在MNIST数据集上。下面讲述一下如何在TensorFlow中生成词向量(Word Embedding)，使用的模型来自<a href="http://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf" target="_blank" rel="external">Mikolov et al</a>。</p>
+<p>本文的目录如下：</p>
+<ul>
+<li>解释使用连续词向量的原因；</li>
+<li>词向量模型的原理及训练过程；</li>
+<li>在TensorFlow中实现模型的简单版本，并给出优化的方法；</li>
+</ul>
+<p>TensorFlow实现了两个版本的模型：<a href="https://www.tensorflow.org/code/tensorflow/examples/tutorials/word2vec/word2vec_basic.py" target="_blank" rel="external">简单版</a>和<a href="https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py" target="_blank" rel="external">正式版</a>。如果想看源码的，可以直接下载。</p>
+<hr>
+<h3 id="为什么要使用Word_Embedding">为什么要使用Word Embedding</h3><p>在信号处理领域，图像和音频信号的输入往往是表示成高维度、密集的向量形式，在图像和音频的应用系统中，如何对输入信息进行编码(Encoding)显得非常重要和关键，这将直接决定了系统的质量。然而，在自然语言处理领域中，传统的做法是将词表示成离散的符号，例如将 [cat] 表示为 [Id537]，而 [dog] 表示为 [Id143]。<strong>这样做的缺点在于，没有提供足够的信息来体现词语之间的某种关联</strong>，例如尽管cat和dog不是同一个词，但是却应该有着某种的联系（如都是属于动物种类）。由于这种一元表示法(One-hot Representation)使得词向量过于稀疏，所以往往需要大量的语料数据才能训练出一个令人满意的模型。而Word Embedding技术则可以解决上述传统方法带来的问题。</p>
+<p><img src="http://i.imgur.com/dHTf4Gq.png" alt=""></p>
+<p><strong>向量空间模型(Vector space models, VSMs)</strong>将词语表示为一个连续的词向量，并且语义接近的词语对应的词向量在空间上也是接近的。VSMs在NLP中拥有很长的历史，但是所有的方法在某种程度上都是基于一种<strong><a href="https://en.wikipedia.org/wiki/Distributional_semantics#Distributional_Hypothesis" target="_blank" rel="external">分布式假说</a></strong>，该假说的思想是<strong>如果两个词的上下文(context)相同，那么这两个词所表达的语义也是一样的</strong>；换言之，两个词的语义是否相同或相似，取决于两个词的上下文内容，上下文相同表示两个词是可以等价替换的。</p>
+<p>基于分布式假说理论的词向量生成方法主要分两大类：<strong>计数法</strong>(count-based methods, e.g. <a href="https://en.wikipedia.org/wiki/Latent_semantic_analysis" target="_blank" rel="external">Latent Semantic Analysis</a>)和<strong>预测法</strong>(predictive methods, e.g. <a href="http://www.scholarpedia.org/article/Neural_net_language_models" target="_blank" rel="external">neural probabilistic language models</a>)。<a href="http://clic.cimec.unitn.it/marco/publications/acl2014/baroni-etal-countpredict-acl2014.pdf" target="_blank" rel="external">Baroni等人</a>详细论述了这两种方法的区别，简而言之，计数法是在大型语料中统计词语及邻近的词的共现频率，然后将之为每个词都映射为一个稠密的向量表示；预测法是直接利用词语的邻近词信息来得到预测词的词向量（词向量通常作为模型的训练参数）。</p>
+<p><strong><code>Wrod2vec</code></strong>是一个典型的预测模型，用于高效地学习Word Embedding。实现的模型有两种：<strong>连续词袋模型(CBOW)</strong>和<strong>Skip-Gram模型</strong>。算法上这两个模型是相似的，只不过CBOW是从输入的上下文信息来预测目标词(例如利用 [the cat sits on the] 来预测 [mat] )；而skip-gram模型则是相反的，从目标词来预测上下文信息。一般而言，这种方式上的区别使得CBOW模型更适合应用在小规模的数据集上，能够对很多的分布式信息进行平滑处理；而Skip-Gram模型则比较适合用于大规模的数据集上。</p>
+<p>下面重点将介绍Skip-Gram模型。</p>
+<h3 id="噪声-对比(Noise-Contrastive)训练">噪声-对比(Noise-Contrastive)训练</h3><p>基于神经网络的概率语言模型通常都是使用<strong><a href="https://en.wikipedia.org/wiki/Maximum_likelihood" target="_blank" rel="external">最大似然估计</a></strong>的方法进行训练的，通过Softmax函数得到在前面出现的词语 \( h \) (<code>history</code>)的情况下，目标词 \( w_{t} \) (<code>target</code>)出现的最大概率，数学表达式如下：</p>
+<p><img src="http://i.imgur.com/vpOKwSG.png" alt=""></p>
+<p>其中，\( score(w_t, h) \) 为词 \(w_t\) 和上下文 \(h\) 的 [兼容程度]。上式的对数形式如下：</p>
+<p><img src="http://i.imgur.com/jG5Rppa.png" alt=""></p>
+<p>理论上可以根据这个来建立一个合理的模型，但是现实中目标函数的计算代价非常昂贵，这是因为在训练过程中的每一步，我们都需要计算词库 \(w’\) 中其他词在当前的上下文环境下出现的概率值，这导致计算量十分巨大。</p>
+<p><img src="http://i.imgur.com/Ck90mom.png" alt=""></p>
+<p>然而，对于word2vec中的特征学习，可以不需要一个完整的概率模型。CBOW和Skip-Gram模型在输出端使用的是一个二分类器(即Logistic Regression)，来区分目标词和词库中其他的 \(k\) 个词。下面是一个CBOW模型的图示，对于Skip-Gram模型输入输出是倒置的。</p>
+<p><img src="http://i.imgur.com/KnqFhUD.png" alt=""></p>
+<p>此时，最大化的目标函数如下：</p>
+<p><img src="http://i.imgur.com/g4PPKUW.png" alt=""></p>
+<p>其中，\( Q_\theta(D=1 | w, h) \) 为二元逻辑回归的概率，具体为在数据集 \(D\) 中、输入的embedding vector \( \theta \)、上下文为 \( h \) 的情况下词语 \(w\) 出现的概率；公式后半部分为 \(k\) 个从 [噪声数据集] 中随机选择 \(k\) 个对立的词语出现概率(log形式)的期望值（即为<a href="https://en.wikipedia.org/wiki/Monte_Carlo_integration" target="_blank" rel="external">Monte Carlo average</a>）。</p>
+<p>可以看出，目标函数的意义是显然的，即尽可能的 [分配(assign)] 高概率给真实的目标词，而低概率给其他 \( k \) 个 [噪声词]，这种技术称为<strong><a href="http://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf" target="_blank" rel="external">负采样(Negative Sampling)</a></strong>。同时，该目标函数具有很好的数学意义：<strong>即在条件限制(训练时间)的情况下尽可能的逼近原有的Softmax函数（选择 \( k \) 个 [噪声点] 作为整个 [噪声数据] 的代表）</strong>，这样做无疑能够大大提升模型训练的速度。实际中我们使用的是类似的<a href="http://papers.nips.cc/paper/5165-learning-word-embeddings-efficiently-with-noise-contrastive-estimation.pdf" target="_blank" rel="external">噪声对比估计损失函数(noise-contrastive estimation (NCE))</a>，在TensorFlow中对应的实现函数为<code>tf.nn.nce_loss()</code>。</p>
+<p>下面看看具体是如何训练Skip-Gram模型的。</p>
+<h3 id="Skip-Gram模型">Skip-Gram模型</h3><p>举个例子，假设现在的数据集如下：</p>
+<pre><code><span class="operator">the</span> quick brown fox jumped over <span class="operator">the</span> lazy dog
+</code></pre><p>这个数据集中包含了词语及其上下文信息。值得说明的是，<strong>上下文信息(Context)</strong>是一个比较宽泛的概念，有多种不同的理解：例如，词语周边的句法结构，词语的左边部分的若干个词语信息，对应的右半部分等。这里，我们使用最原始和基本的定义，即认为<strong>词语左右相邻的若干个词汇是该词对应的上下文信息</strong>。例如，取左右的词窗口为1，下面是数据集中的<strong><code>(上下文信息，对应的词)</code></strong>的pairs：</p>
+<pre><code><span class="comment">([the, brown], quick)</span>, <span class="comment">([quick, fox], brown)</span>, <span class="comment">([brown, jumped], fox)</span>, ...
+</code></pre><p>Skip-Gram模型是通过输入的目标词来预测其对应的上下文信息，所以目标是通过[quick]来预测[the]和[brown]，通过[brown]来预测[quick]和[fox]… 将上面的pair转换为<strong><code>(input, output)</code></strong>的形式如下：</p>
+<pre><code><span class="comment">(quick, the)</span>, <span class="comment">(quick, brown)</span>, <span class="comment">(brown, quick)</span>, <span class="comment">(brown, fox)</span>, ...
+</code></pre><p>目标函数定义如上，使用<a href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent" target="_blank" rel="external">随机梯度下降算法(SGD)</a>来进行最优化求解，并且使用mini-batch方法 (通常batch_size在16到512之间)。</p>
+<p>下面将详细剖析一下训练过程。假设在训练的第 \(t\) 步，目标是得到上面第一个实例输入 [quick] 的输出预测；我们选择<code>num_noise</code>个 [噪声点数据]，简单起见，这里<code>num_noise</code>为1，假设选择 [sheep] 作为噪声对比词。那么，此时的目标函数值如下：</p>
+<p><img src="http://i.imgur.com/tmgHXZZ.png" alt=""></p>
+<p>目标是<strong>更新embedding参数 \(\theta\) 以增大目标函数值</strong>，更新的方式是计算损失函数对参数 \(\theta\) 的导数，即 \( \frac{\partial}{\partial \theta} J_\text{NEG} \) (TensorFlow中有相应的函数以方便计算)，然后使得参数 \(\theta\) 朝梯度方向进行调整。当这个过程在训练数据集上执行多次后，产生的效果是使得输入的embedding vector的值发生改变，使得模型最终能够很好地区别目标词和 [噪声词]。</p>
+<p>我们可以将学到的词向量进行降维(如<a href="\frac{\partial}{\partial \theta} J_\text{NEG}">t-SNE降维技术</a>)和可视化，通过可视化发现<strong>连续的词向量能够捕捉到更多的语义和关联信息</strong>；有趣的是，在降维空间中某些特定的方向表征着特定的语义信息，例如下图中的[man-&gt;women]，[king-&gt;queen]方向表示性别关系(出自<a href="http://www.aclweb.org/anthology/N13-1090" target="_blank" rel="external">Mikolov et al., 2013</a>)。</p>
+<p><img src="http://i.imgur.com/vM1dtFq.png" alt=""></p>
+<p>这也证实了连续词向量的作用，目前有非常多NLP中的任务(例如词性标注、命名实体识别等)都是使用连续词向量作为特征输入（更多可参考<a href="http://arxiv.org/abs/1103.0398" target="_blank" rel="external">Collobert et al., 2011</a>，<a href="http://www.aclweb.org/anthology/P10-1040" target="_blank" rel="external">Turian et al., 2010</a>）。</p>
+<p>下面看看具体在TensorFlow中，是如何实现模型的创建和训练的。</p>
+<h3 id="构建模型">构建模型</h3><p>首先，我们要定义一下<strong>词嵌入矩阵(Embedding Matrix)</strong>，并随机初始化。</p>
+<pre><code>embeddings = tf.Variable(
+tf.<span class="function"><span class="title">random_uniform</span><span class="params">([vocabulary_size, embedding_size], -<span class="number">1.0</span>, <span class="number">1.0</span>)</span></span>)
+</code></pre><p>噪声-对比估计的损失函数在输出的逻辑回归模型中定义，为此，需要定义词库中每个词的权值和偏置参数(称为输出层权值参数)，如下：</p>
+<pre><code>nce_weights = tf.Variable(
+  tf.truncated_normal([vocabulary_size, embedding_size],
+    stddev=<span class="number">1.0</span> / math.<span class="function"><span class="title">sqrt</span><span class="params">(embedding_size)</span></span>))
+nce_biases = tf.<span class="function"><span class="title">Variable</span><span class="params">(tf.zeros([vocabulary_size])</span></span>)
+</code></pre><p>现在我们有了这些模型参数，接下来需要定义Skip-Gram模型。简单起见，假设我们已经将语料库中的词[<strong>整数化</strong>]，即每个词被表示为一个整数(具体见<a href="https://www.tensorflow.org/code/tensorflow/examples/tutorials/word2vec/word2vec_basic.py" target="_blank" rel="external">tensorflow/examples/tutorials/word2vec/word2vec_basic.py</a>)。Skip-Gram模型有两种输入，都是整数形式表示：一种是批量的上下文词汇，一种是目标词。我们先为这些输入创建占位符(placeholder)，之后再进行数据的填充。</p>
+<pre><code># Placeholders <span class="keyword">for</span> inputs
+train_inputs = <span class="keyword">tf</span>.placeholder(<span class="keyword">tf</span>.int32, shape=[batch_size])
+train_labels = <span class="keyword">tf</span>.placeholder(<span class="keyword">tf</span>.int32, shape=[batch_size, <span class="number">1</span>])
+</code></pre><p>我们还需要能够查找(look up)batch中的输入词对应的vector，如下：</p>
+<pre><code>embed = tf<span class="class">.nn</span><span class="class">.embedding_lookup</span>(embeddings, train_inputs)
+</code></pre><p>现在，我们有了每个词对应的embedding，接下来使用噪声-对比策略来预测目标词：</p>
+<pre><code><span class="comment"># Compute the NCE loss, using a sample of the negative labels each time.</span>
+<span class="constant">loss</span> = tf.reduce_mean(
+  tf.nn.nce_loss(nce_weights, nce_biases, embed, train_labels,
+                 num_sampled, vocabulary_size))
+</code></pre><p>现在，我们有了损失函数节点(loss node)，还需要利用随机梯度下降来进行优化，定义如下的优化器：</p>
+<pre><code><span class="comment"># We use the SGD optimizer.</span>
+<span class="setting">optimizer = <span class="value">tf.train.GradientDescentOptimizer(learning_rate=<span class="number">1.0</span>).minimize(loss)</span></span>
+</code></pre><h3 id="模型的训练">模型的训练</h3><p>模型的训练方式很简单，只需要迭代地通过<code>feed_dict</code>进行训练数据的填充，并启动一个session。</p>
+<pre><code><span class="keyword">for</span> inputs, labels <span class="keyword">in</span> generate_batch(...):
+  feed_dict = {<span class="string">training_inputs:</span> inputs, <span class="string">training_labels:</span> labels}
+  _, cur_loss = session.run([optimizer, loss], feed_dict=feed_dict)
+</code></pre><p>完整的示例代码请参考<a href="https://www.tensorflow.org/code/tensorflow/examples/tutorials/word2vec/word2vec_basic.py" target="_blank" rel="external">tensorflow/examples/tutorials/word2vec/word2vec_basic.py</a>。</p>
+<h3 id="Embedding的可视化">Embedding的可视化</h3><p>模型训练结束后，我们利用<code>t-SNE技术</code>实现学习到的embedding可视化，如下图所示：</p>
+<p><img src="http://i.imgur.com/z2VpgFz.png" alt=""></p>
+<p>正如我们期望的那样，语义相似的词语会聚集在一起。关于word2vec更加高级的实现版本，可参考<a href="https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py" target="_blank" rel="external">tensorflow/models/embedding/word2vec.py</a>。</p>
+<h3 id="Embedding的评价：类比推理(Analogical_Reasoning)">Embedding的评价：类比推理(Analogical Reasoning)</h3><p>Embedding在许多的NLP任务中都很有效果，那么如何评价Embedding的效果呢？一种简单的方式是，直接用来预测句法和语义的关联性，例如预测<strong><code>king is to queen as father is to ?</code></strong>，这称作<strong><code>Analogical Reasoning</code></strong>(By <a href="http://msr-waypoint.com/en-us/um/people/gzweig/Pubs/NAACL2013Regularities.pdf" target="_blank" rel="external">Mikolov and colleagues</a>, 评价数据集可在<a href="https://www.google.com/url?q=https://word2vec.googlecode.com/svn/trunk/questions-words.txt&amp;usg=AFQjCNHs2OomcnDRRaht8ih-rL2oHnOSwQ" target="_blank" rel="external">这里</a>下载)。</p>
+<p>具体如何进行评价的，可以参考<a href="https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py" target="_blank" rel="external">正式word2vec版本</a>中的<code>build_eval_graph()</code>和<code>eval()</code>函数。</p>
+<p>评价任务的准确性依赖于模型的超参数们，为了达到最佳的效果，往往需要将评价任务建立在一个巨大的数据集上，还可能需要使用一些trick，例如数据抽样、适当的fine tuning等。</p>
+<h3 id="进一步的优化">进一步的优化</h3><p>以上的Vanilla版本展示了TensorFlow的简单易用。例如，只需要调用<code>tf.nn.nce_loss()</code>就可以替换<code>tf.nn.sampled_softmax_loss()</code>。如果你有关于损失函数的新想法，也可以自己在TensorFlow中手写一个，然后使用优化器计算导数并作优化。TensorFlow的简单易用，可以帮助你快速验证自己的想法。</p>
+<p>一旦你有了一个令人满意的模型结构，你可以针对它进行优化使其更加高效。例如，原始版本中有个不足之处是，数据读取和填充是用Python实现的，因此会相对低效。你可以自己实现一个reader，参考<a href="https://www.tensorflow.org/versions/r0.7/how_tos/new_data_formats/index.html" target="_blank" rel="external">数据格式要求</a>。对于Skip-Gram模型，我们在<a href="https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec.py" target="_blank" rel="external">这个版本</a>中自定义了reader，可供参考。</p>
+<p>如果你的模型在I/O上足够好了，但仍然想要提升效率，你可以自己编写TensorFlow Ops（<a href="https://www.tensorflow.org/versions/r0.7/how_tos/adding_an_op/index.html" target="_blank" rel="external">参考这里</a>）.<a href="https://www.tensorflow.org/code/tensorflow/models/embedding/word2vec_optimized.py" target="_blank" rel="external">优化版本</a>中提供了示例。</p>
+<h3 id="总结">总结</h3><p>这篇博文介绍了word2vec模型，一个用来高效学习出word embedding的模型。我们解释了为什么word embedding是有效的，讨论了如何更加高效地训练模型以及如何在TensorFlow中去实现。</p>
+<hr>
+<p>本文结束，感谢欣赏。</p>
+<p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
+<p><a href="http://www.jeyzhang.com/tensorflow-learning-notes-3.html">http://www.jeyzhang.com/tensorflow-learning-notes-3.html</a></p>
+<p><strong>参考资料</strong></p>
+<p><a href="https://www.tensorflow.org/versions/r0.7/tutorials/word2vec/index.html" target="_blank" rel="external">TensorFlow: Vector Representation of Words</a></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Artificial-Intelligence/" rel="tag">#Artificial Intelligence</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag">#Deep Learning</a>
+          
+            <a href="/tags/Machine-Learning/" rel="tag">#Machine Learning</a>
+          
+            <a href="/tags/TensorFlow/" rel="tag">#TensorFlow</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/cnn-apply-on-modelling-sentence.html" rel="next" title="卷积神经网络(CNN)在句子建模上的应用">
+                <i class="fa fa-chevron-left"></i> 卷积神经网络(CNN)在句子建模上的应用
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/upload/image/avatar.png" alt="Jey Zhang" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jey Zhang</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Life is Now.</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://www.facebook.com/jeyzhang" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> facebook
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/jerrychang0402" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/zhangjieup" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> zhihu
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jeyzhang" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.yunaitong.cn" target="_blank">Tong</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要使用Word_Embedding"><span class="nav-number">1.</span> <span class="nav-text">为什么要使用Word Embedding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#噪声-对比(Noise-Contrastive)训练"><span class="nav-number">2.</span> <span class="nav-text">噪声-对比(Noise-Contrastive)训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Skip-Gram模型"><span class="nav-number">3.</span> <span class="nav-text">Skip-Gram模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构建模型"><span class="nav-number">4.</span> <span class="nav-text">构建模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型的训练"><span class="nav-number">5.</span> <span class="nav-text">模型的训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding的可视化"><span class="nav-number">6.</span> <span class="nav-text">Embedding的可视化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding的评价：类比推理(Analogical_Reasoning)"><span class="nav-number">7.</span> <span class="nav-text">Embedding的评价：类比推理(Analogical Reasoning)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进一步的优化"><span class="nav-number">8.</span> <span class="nav-text">进一步的优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jey Zhang</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+<span id="busuanzi_container_site_pv">
+  &nbsp; | &nbsp;Total visited <span id="busuanzi_value_site_pv"></span> times.
+</span>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+    
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'jeyzhang';
+      var disqus_identifier = 'tensorflow-learning-notes-3.html';
+      var disqus_title = 'TensorFlow学习笔记3：词向量';
+      var disqus_url = 'http://www.jeyzhang.com/tensorflow-learning-notes-3.html';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+  
+  
+  	 <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("4KyzRuAgl6zwWXQK1UfxmIh0-gzGzoHsz", "YeXrCFBwTG1qRdqS2rUJ7XgJ");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+  
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>

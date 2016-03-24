@@ -1,0 +1,1149 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CNN,Deep Learning,Machine Learning,NLP,Sentence Model," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="之前的博文已经介绍了CNN的基本原理，本文将大概总结一下最近CNN在NLP中的句子建模（或者句子表示）方面的应用情况，主要阅读了以下的文献（打包下载地址）：
+
+Kim Y. Convolutional neural networks for sentence classification[J]. arXiv preprint arXiv:1408.5882, 2014.
+Kalchbrenner">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卷积神经网络(CNN)在句子建模上的应用">
+<meta property="og:url" content="http://www.jeyzhang.com/cnn-apply-on-modelling-sentence.html">
+<meta property="og:site_name" content="Jey Zhang">
+<meta property="og:description" content="之前的博文已经介绍了CNN的基本原理，本文将大概总结一下最近CNN在NLP中的句子建模（或者句子表示）方面的应用情况，主要阅读了以下的文献（打包下载地址）：
+
+Kim Y. Convolutional neural networks for sentence classification[J]. arXiv preprint arXiv:1408.5882, 2014.
+Kalchbrenner">
+<meta property="og:image" content="http://i.imgur.com/yxoZDt9.png">
+<meta property="og:image" content="http://i.imgur.com/8VDJDDJ.png">
+<meta property="og:image" content="http://i.imgur.com/sNpll24.png">
+<meta property="og:image" content="http://i.imgur.com/fW6pr0p.png">
+<meta property="og:image" content="http://i.imgur.com/3IbLJX4.png">
+<meta property="og:image" content="http://i.imgur.com/CNMa0VL.png">
+<meta property="og:image" content="http://i.imgur.com/YgM3Tsg.png">
+<meta property="og:image" content="http://i.imgur.com/zuf2bSu.png">
+<meta property="og:image" content="http://i.imgur.com/6lWY7zC.png">
+<meta property="og:image" content="http://i.imgur.com/PX9N2JB.png">
+<meta property="og:image" content="http://i.imgur.com/kG7AbW3.png">
+<meta property="og:image" content="http://i.imgur.com/yrFS2k1.png">
+<meta property="og:image" content="http://i.imgur.com/xaP0KNV.png">
+<meta property="og:image" content="http://i.imgur.com/NWvAPVr.png">
+<meta property="og:image" content="http://i.imgur.com/f3DqYsp.png">
+<meta property="og:image" content="http://i.imgur.com/DaFv3ps.png">
+<meta property="og:image" content="http://i.imgur.com/Pr5Mm9n.png">
+<meta property="og:image" content="http://i.imgur.com/wLIUAHW.png">
+<meta property="og:image" content="http://i.imgur.com/fO0Xhnj.png">
+<meta property="og:image" content="http://i.imgur.com/qRfsoB0.png">
+<meta property="og:updated_time" content="2016-03-22T13:02:40.742Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="卷积神经网络(CNN)在句子建模上的应用">
+<meta name="twitter:description" content="之前的博文已经介绍了CNN的基本原理，本文将大概总结一下最近CNN在NLP中的句子建模（或者句子表示）方面的应用情况，主要阅读了以下的文献（打包下载地址）：
+
+Kim Y. Convolutional neural networks for sentence classification[J]. arXiv preprint arXiv:1408.5882, 2014.
+Kalchbrenner">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> 卷积神经网络(CNN)在句子建模上的应用 | Jey Zhang </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71292341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?eed1a5ff91ce000d3cbee31156f82f2c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jey Zhang</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Life is Now.</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+      
+        <li class="menu-item menu-item-search">
+          <a href="#" class="st-search-show-outputs">
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'LwCA4Pqyomh6kHjA4fV9','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                卷积神经网络(CNN)在句子建模上的应用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-03-11T10:36:35+08:00" content="2016-03-11">
+              2016-03-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; In
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Machine Learning</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/cnn-apply-on-modelling-sentence.html#comments" itemprop="discussionUrl">
+                <span class="post-comments-count disqus-comment-count" data-disqus-identifier="cnn-apply-on-modelling-sentence.html" itemprop="commentsCount"></span>
+              </a>
+            </span>
+            
+          
+
+          
+		  
+		  
+			 &nbsp; | &nbsp;
+			 <span id="/cnn-apply-on-modelling-sentence.html"class="leancloud_visitors"  data-flag-title="卷积神经网络(CNN)在句子建模上的应用">
+             &nbsp;Views
+            </span>
+		  
+		
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>之前的博文已经介绍了CNN的基本原理，本文将大概总结一下最近CNN在NLP中的句子建模（或者句子表示）方面的应用情况，主要阅读了以下的文献（<a href="http://pan.baidu.com/s/1jHfWnzg" target="_blank" rel="external">打包下载地址</a>）：</p>
+<blockquote>
+<p>Kim Y. Convolutional neural networks for sentence classification[J]. arXiv preprint arXiv:1408.5882, 2014.</p>
+<p>Kalchbrenner N, Grefenstette E, Blunsom P. A convolutional neural network for modelling sentences[J]. arXiv preprint arXiv:1404.2188, 2014.</p>
+<p>Hu B, Lu Z, Li H, et al. Convolutional neural network architectures for matching natural language sentences[C]//Advances in Neural Information Processing Systems. 2014: 2042-2050.</p>
+</blockquote>
+<p>下面对文献中CNN的结构和细节进行梳理。</p>
+<hr>
+<h3 id="Kim_Y’s_Paper">Kim Y’s Paper</h3><h4 id="模型结构及原理">模型结构及原理</h4><p>模型的结构如下：</p>
+<p><img src="http://i.imgur.com/yxoZDt9.png" alt=""></p>
+<p>说明如下：</p>
+<ul>
+<li><strong>输入层</strong></li>
+</ul>
+<p>如图所示，输入层是句子中的词语对应的word vector依次（从上到下）排列的矩阵，假设句子有 \( n \) 个词，vector的维数为 \( k \) ，那么这个矩阵就是 \( n × k \) 的。</p>
+<p>这个矩阵的类型可以是静态的(static)，也可以是动态的(non static)。静态就是word vector是固定不变的，而动态则是在模型训练过程中，word vector也当做是可优化的参数，通常把反向误差传播导致word vector中值发生变化的这一过程称为<strong><code>Fine tune</code></strong>。</p>
+<p>对于未登录词的vector，可以用0或者随机小的正数来填充。</p>
+<ul>
+<li><strong>第一层卷积层</strong></li>
+</ul>
+<p>输入层通过卷积操作得到若干个<code>Feature Map</code>，卷积窗口的大小为 \( h × k \) ，其中 \( h \) 表示纵向词语的个数，而 \( k \) 表示word vector的维数。通过这样一个大型的卷积窗口，将得到若干个列数为1的<code>Feature Map</code>。</p>
+<ul>
+<li><strong>池化层</strong></li>
+</ul>
+<p>接下来的池化层，文中用了一种称为<strong><code>Max-over-time Pooling</code></strong>的方法。这种方法就是简单地从之前一维的<code>Feature Map</code>中提出最大的值，文中解释最大值代表着最重要的信号。可以看出，这种Pooling方式可以解决可变长度的句子输入问题（因为不管<code>Feature Map</code>中有多少个值，只需要提取其中的最大值）。</p>
+<p>最终池化层的输出为各个<code>Feature Map</code>的最大值们，即一个一维的向量。</p>
+<ul>
+<li><strong>全连接 + Softmax层</strong></li>
+</ul>
+<p>池化层的一维向量的输出通过全连接的方式，连接一个Softmax层，Softmax层可根据任务的需要设置（通常反映着最终类别上的概率分布）。</p>
+<p>最终实现时，我们可以在倒数第二层的全连接部分上使用<code>Dropout</code>技术，即对全连接层上的权值参数给予<strong><code>L2正则化</code></strong>的限制。这样做的好处是防止隐藏层单元自适应（或者对称），从而减轻过拟合的程度。</p>
+<h4 id="实验部分">实验部分</h4><p><strong>1. 数据</strong></p>
+<p>实验用到的数据集如下（具体的名称和来源可以参考论文）：</p>
+<p><img src="http://i.imgur.com/8VDJDDJ.png" alt=""></p>
+<p><strong>2. 模型训练和调参</strong></p>
+<ul>
+<li>修正线性单元(Rectified linear units)</li>
+<li>滤波器的h大小：3,4,5；对应的Feature Map的数量为100；</li>
+<li>Dropout率为0.5，L2正则化限制权值大小不超过3；</li>
+<li>mini-batch的大小为50；</li>
+</ul>
+<p>这些参数的选择都是基于SST-2 dev数据集，通过网格搜索方法(Grid Search)得到的最优参数。另外，训练过程中采用随机梯度下降方法，基于shuffled mini-batches之上的，使用了Adadelta update rule(Zeiler, 2012)。</p>
+<p><strong>3. 预训练的Word Vector</strong></p>
+<p>这里的word vector使用的是公开的数据，即连续词袋模型(COW)在Google News上的训练结果。未登录次的vector值是随机初始化的。</p>
+<p><strong>4. 实验结果</strong></p>
+<p>实验结果如下图：</p>
+<p><img src="http://i.imgur.com/sNpll24.png" alt=""></p>
+<p>其中，前四个模型是上文中所提出的基本模型的各个变种：</p>
+<ul>
+<li><strong>CNN-rand</strong>: 所有的word vector都是随机初始化的，同时当做训练过程中优化的参数；</li>
+<li><strong>CNN-static</strong>: 所有的word vector直接使用无监督学习即Google的Word2Vector工具(COW模型)得到的结果，并且是固定不变的；</li>
+<li><strong>CNN-non-static</strong>: 所有的word vector直接使用无监督学习即Google的Word2Vector工具(COW模型)得到的结果，但是会在训练过程中被<code>Fine tuned</code>；</li>
+<li><strong>CNN-multichannel</strong>: CNN-static和CNN-non-static的混合版本，即两种类型的输入；</li>
+</ul>
+<p><strong>5. 结论</strong></p>
+<ul>
+<li><strong><code>CNN-static</code></strong>较与<strong><code>CNN-rand</code></strong>好，<strong>说明pre-training的word vector确实有较大的提升作用</strong>（这也难怪，因为pre-training的word vector显然利用了更大规模的文本数据信息）；</li>
+<li><strong><code>CNN-non-static</code></strong>较于<strong><code>CNN-static</code></strong>大部分要好，<strong>说明适当的Fine tune也是有利的，是因为使得vectors更加贴近于具体的任务</strong>；</li>
+<li><strong><code>CNN-multichannel</code></strong>较于<strong><code>CNN-single</code></strong>在小规模的数据集上有更好的表现，实际上<strong><code>CNN-multichannel</code></strong>体现了一种折中思想，即既不希望Fine tuned的vector距离原始值太远，但同时保留其一定的变化空间。</li>
+</ul>
+<p>值得注意的是，static的vector和non-static的相比，有一些有意思的现象如下表格：</p>
+<p><img src="http://i.imgur.com/fW6pr0p.png" alt=""></p>
+<ul>
+<li>原始的word2vector训练结果中，<code>bad</code>对应的最相近词为<code>good</code>，原因是这两个词在句法上的使用是极其类似的（可以简单替换，不会出现语句毛病）；而在<code>non-static</code>的版本中，<code>bad</code>对应的最相近词为<code>terrible</code>，这是因为在<code>Fune tune</code>的过程中，vector的值发生改变从而更加贴切数据集（是一个情感分类的数据集），所以在情感表达的角度这两个词会更加接近；</li>
+<li>句子中的<strong><code>!</code></strong>最接近一些表达形式较为激进的词汇，如<code>lush</code>等；而<strong><code>,</code></strong>则接近于一些连接词，这和我们的主观感受也是相符的。</li>
+</ul>
+<h3 id="Kalchbrenner’s_Paper">Kalchbrenner’s Paper</h3><p>Kal的这篇文章引用次数较高，他提出了一种名为DCNN(Dynamic Convolutional Neural Network)的网络模型，在上一篇（Kim’s Paper）中的实验结果部分也验证了这种模型的有效性。这个模型的精妙之处在于Pooling的方式，使用了一种称为<strong><code>动态Pooling</code></strong>的方法。</p>
+<p>下图是这个模型对句子语义建模的过程，可以看到底层通过组合邻近的词语信息，逐步向上传递，上层则又组合新的Phrase信息，从而使得句子中即使相离较远的词语也有交互行为（或者某种语义联系）。从直观上来看，这个模型能够通过词语的组合，提取出句子中重要的语义信息（通过Pooling），某种意义上来说，层次结构的<strong><code>feature graph</code></strong>的作用类似于一棵语法解析树。</p>
+<p><img src="http://i.imgur.com/3IbLJX4.png" alt=""></p>
+<p>DCNN能够处理可变长度的输入，网络中包含两种类型的层，分别是<strong>一维的卷积层</strong>和<strong>动态k-max的池化层(Dynamic k-max pooling)</strong>。其中，动态k-max池化是最大化池化更一般的形式。之前LeCun将CNN的池化操作定义为一种非线性的抽样方式，返回一堆数中的最大值，原话如下：</p>
+<blockquote>
+<p>The max pooling operator is a non-linear subsampling function that returns the maximum of a set of values (LuCun et al., 1998).</p>
+</blockquote>
+<p>而文中的k-max pooling方式的一般化体现在：</p>
+<ul>
+<li>pooling的结果不是返回一个最大值，而是返回k组最大值，这些最大值是原输入的一个子序列；</li>
+<li>pooling中的参数k可以是一个动态函数，具体的值依赖于输入或者网络的其他参数；</li>
+</ul>
+<h4 id="模型结构及原理-1">模型结构及原理</h4><p>DCNN的网络结构如下图：</p>
+<p><img src="http://i.imgur.com/CNMa0VL.png" alt=""></p>
+<p>网络中的卷积层使用了一种称之为<strong><code>宽卷积(Wide Convolution)</code></strong>的方式，紧接着是动态的k-max池化层。中间卷积层的输出即<code>Feature Map</code>的大小会根据输入句子的长度而变化。下面讲解一下这些操作的具体细节：</p>
+<p><strong>1. 宽卷积</strong></p>
+<p>相比于传统的卷积操作，宽卷积的输出的<code>Feature Map</code>的宽度(width)会更宽，原因是卷积窗口并不需要覆盖所有的输入值，也可以是部分输入值（可以认为此时其余的输入值为0，即填充0）。如下图所示：</p>
+<p><img src="http://i.imgur.com/YgM3Tsg.png" alt=""></p>
+<p>图中的右图即表示宽卷积的计算过程，当计算第一个节点即\( s_1 \)时，可以假使\( s_1 \)节点前面有四个输入值为0的节点参与卷积（卷积窗口为5）。明显看出，狭义上的卷积输出结果是宽卷积输出结果的一个子集。</p>
+<p><strong>2. k-max池化</strong></p>
+<p>给出数学形式化的表述是，给定一个\( k \)值，和一个序列\( p \in R^p \)(其中\( p ≥ k \))，<code>k-max pooling</code>选择了序列\( p \)中的前\( k \)个最大值，这些最大值保留原来序列的次序（实际上是原序列的一个子序列）。</p>
+<p><code>k-max pooling</code>的好处在于，既提取除了句子中的较重要信息（不止一个），同时保留了它们的次序信息（相对位置）。同时，由于应用在最后的卷积层上只需要提取出\( k \)个值，所以这种方法允许不同长度的输入（输入的长度应该要大于\( k \)）。然而，对于中间的卷积层而言，池化的参数\( k \)不是固定的，具体的选择方法见下面的介绍。</p>
+<p><strong>3. 动态k-max池化</strong></p>
+<p>动态k-max池化操作，其中的\( k \)是<code>输入句子长度</code>和<code>网络深度</code>两个参数的函数，具体如下：</p>
+<p>$$ K_{l}=\max \left( k_{top}, \left \lceil \frac {L-l}{L} s \right \rceil \right) $$</p>
+<p>其中\( l \)表示当前卷积的层数（即第几个卷积层），\( L \)是网络中总共卷积层的层数；\( k_{top} \)为最顶层的卷积层pooling对应的\( k \)值，是一个固定的值。举个例子，例如网络中有三个卷积层，\( k_{top} = 3\)，输入的句子长度为18；那么，对于第一层卷积层下面的pooling参数\( k_{1} = 12\)，而第二层卷积层对于的为\( k_{2} = 6\)，而\( k_{3} = k_{top} = 3\)。</p>
+<p>动态k-max池化的意义在于，从不同长度的句子中提取出相应数量的语义特征信息，以保证后续的卷积层的统一性。</p>
+<p><strong>4. 非线性特征函数</strong></p>
+<p>pooling层与下一个卷积层之间，是通过与一些权值参数相乘后，加上某个偏置参数而来的，这与传统的CNN模型是一样的。</p>
+<p><strong>5. 多个Feature Map</strong></p>
+<p>和传统的CNN一样，会提出多个Feature Map以保证提取特征的多样性。</p>
+<p><strong>6. 折叠操作(Folding)</strong></p>
+<p>之前的宽卷积是在输入矩阵\( d × s \)中的每一行内进行计算操作，其中\(d\)是word vector的维数，\(s\)是输入句子的词语数量。而<strong><code>Folding</code></strong>操作则是考虑相邻的两行之间的某种联系，方式也很简单，就是将两行的vector相加；该操作没有增加参数数量，但是提前（在最后的全连接层之前）考虑了特征矩阵中行与行之间的某种关联。</p>
+<h4 id="模型的特点">模型的特点</h4><ul>
+<li>保留了句子中词序信息和词语之间的相对位置；</li>
+<li>宽卷积的结果是传统卷积的一个扩展，某种意义上，也是n-gram的一个扩展；</li>
+<li>模型不需要任何的先验知识，例如句法依存树等，并且模型考虑了句子中相隔较远的词语之间的语义信息；</li>
+</ul>
+<h4 id="实验部分-1">实验部分</h4><p><strong>1. 模型训练及参数</strong></p>
+<ul>
+<li>输出层是一个类别概率分布（即softmax），与倒数第二层全连接；</li>
+<li>代价函数为交叉熵，训练目标是最小化代价函数；</li>
+<li>L2正则化；</li>
+<li>优化方法：mini-batch + gradient-based (使用Adagrad update rule, Duchi et al., 2011)</li>
+</ul>
+<p><strong>2. 实验结果</strong></p>
+<p>在三个数据集上进行了实验，分别是(1)电影评论数据集上的情感识别，(2)TREC问题分类，以及(3)Twitter数据集上的情感识别。结果如下图：</p>
+<p><img src="http://i.imgur.com/zuf2bSu.png" alt=""></p>
+<p><img src="http://i.imgur.com/6lWY7zC.png" alt=""></p>
+<p><img src="http://i.imgur.com/PX9N2JB.png" alt=""></p>
+<p>可以看出，DCNN的性能非常好，几乎不逊色于传统的模型；而且，DCNN的好处在于不需要任何的先验信息输入，也不需要构造非常复杂的人工特征。</p>
+<h3 id="Hu’s_Paper">Hu’s Paper</h3><h4 id="模型结构与原理">模型结构与原理</h4><p><strong>1. 基于CNN的句子建模</strong></p>
+<p>这篇论文主要针对的是<strong>句子匹配(Sentence Matching)</strong>的问题，但是基础问题仍然是句子建模。首先，文中提出了一种基于CNN的句子建模网络，如下图：</p>
+<p><img src="http://i.imgur.com/kG7AbW3.png" alt=""></p>
+<p>图中灰色的部分表示对于长度较短的句子，其后面不足的部分填充的全是0值(Zero Padding)。可以看出，模型解决不同长度句子输入的方法是规定一个最大的可输入句子长度，然后长度不够的部分进行0值的填充；图中的卷积计算和传统的CNN卷积计算无异，而池化则是使用Max-Pooling。</p>
+<ul>
+<li><strong>卷积结构的分析</strong></li>
+</ul>
+<p>下图示意性地说明了卷积结构的作用，作者认为卷积的作用是<strong>从句子中提取出局部的语义组合信息</strong>，而多张<code>Feature Map</code>则是从多种角度进行提取，也就是<strong>保证提取的语义组合的多样性</strong>；而池化的作用是对多种语义组合进行选择，过滤掉一些置信度低的组合（可能这样的组合语义上并无意义）。</p>
+<p><img src="http://i.imgur.com/yrFS2k1.png" alt=""></p>
+<p><strong>2. 基于CNN的句子匹配模型</strong></p>
+<p>下面是基于之前的句子模型，建立的两种用于两个句子的匹配模型。</p>
+<p><strong>2.1 结构I</strong></p>
+<p>模型结构如下图：</p>
+<p><img src="http://i.imgur.com/xaP0KNV.png" alt=""></p>
+<p>简单来说，首先分别单独地对两个句子进行建模（使用上文中的句子模型），从而得到两个相同且固定长度的向量，向量表示句子经过建模后抽象得来的特征信息；然后，将这两个向量作为一个多层感知机(MLP)的输入，最后计算匹配的分数。</p>
+<p>这个模型比较简单，但是有一个较大的缺点：两个句子在建模过程中是完全独立的，没有任何交互行为，一直到最后生成抽象的向量表示后才有交互行为（一起作为下一个模型的输入），这样做使得句子在抽象建模的过程中会丧失很多语义细节，同时过早地失去了句子间语义交互计算的机会。因此，推出了第二种模型结构。</p>
+<p><strong>2.2 结构II</strong></p>
+<p>模型结构如下图：</p>
+<p><img src="http://i.imgur.com/NWvAPVr.png" alt=""></p>
+<p>图中可以看出，这种结构提前了两个句子间的交互行为。</p>
+<ul>
+<li><strong>第一层卷积层</strong></li>
+</ul>
+<p>第一层中，首先取一个固定的卷积窗口\( k1 \)，然后遍历 \( S_{x} \) 和 \( S_{y} \) 中所有组合的二维矩阵进行卷积，每一个二维矩阵输出一个值（文中把这个称作为一维卷积，因为实际上是把组合中所有词语的vector排成一行进行的卷积计算），构成Layer-2。下面给出数学形式化表述：</p>
+<p><img src="http://i.imgur.com/f3DqYsp.png" alt=""></p>
+<ul>
+<li><strong>第一层卷积层后的Max-Pooling层</strong></li>
+</ul>
+<p>从而得到Layer-2，然后进行2×2的Max-pooling：</p>
+<p><img src="http://i.imgur.com/DaFv3ps.png" alt=""></p>
+<ul>
+<li><strong>后续的卷积层</strong></li>
+</ul>
+<p>后续的卷积层均是传统的二维卷积操作，形式化表述如下：</p>
+<p><img src="http://i.imgur.com/Pr5Mm9n.png" alt=""></p>
+<ul>
+<li><strong>二维卷积结果后的Pooling层</strong></li>
+</ul>
+<p>与第一层卷积层后的简单Max-Pooling方式不同，后续的卷积层的Pooling是一种<strong>动态Pooling方法</strong>，这种方法来源于参考文献[1]。</p>
+<ul>
+<li><strong>结构II的性质</strong></li>
+</ul>
+<ol>
+<li>保留了词序信息；</li>
+<li>更具一般性，实际上结构I是结构II的一种特殊情况（取消指定的权值参数）；</li>
+</ol>
+<h4 id="实验部分-2">实验部分</h4><p><strong>1. 模型训练及参数</strong></p>
+<ul>
+<li>使用基于排序的自定义损失函数(Ranking-based Loss)</li>
+<li>BP反向传播+随机梯度下降；</li>
+<li>mini-batch为100-200,并行化；</li>
+<li>为了防止过拟合，对于中型和大型数据集，会提前停止模型训练；而对于小型数据集，还会使用Dropout策略；</li>
+<li>Word2Vector：50维；英文语料为Wikipedia(~1B words)，中文语料为微博数据(~300M words)；</li>
+<li>使用ReLu函数作为激活函数；</li>
+<li>卷积窗口为3-word window；</li>
+<li>使用Fine tuning；</li>
+</ul>
+<p><strong>2. 实验结果</strong></p>
+<p>一共做了三个实验，分别是(1)句子自动填充任务，(2)推文与评论的匹配，以及(3)同义句识别；结果如下面的图示：</p>
+<p><img src="http://i.imgur.com/wLIUAHW.png" alt=""></p>
+<p><img src="http://i.imgur.com/fO0Xhnj.png" alt=""></p>
+<p><img src="http://i.imgur.com/qRfsoB0.png" alt=""></p>
+<p>其实结构I和结构II的结果相差不大，结构II稍好一些；而相比于其他的模型而言，结构I和结构II的优势还是较大的。</p>
+<hr>
+<p>本文结束，感谢欣赏。</p>
+<p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
+<p><a href="http://www.jeyzhang.com/cnn-apply-on-modelling-sentence.html">http://www.jeyzhang.com/cnn-apply-on-modelling-sentence.html</a></p>
+<p><strong>参考文献</strong></p>
+<p>[1] R. Socher, E. H. Huang, and A. Y. Ng. Dynamic pooling and unfolding recursive autoencoders for paraphrase detection. In Advances in NIPS, 2011.</p>
+<p><strong>推荐资料</strong></p>
+<p><a href="http://arxiv.org/abs/1510.03820" target="_blank" rel="external">A Sensitivity Analysis of (and Practitioners’ Guide to) Convolutional Neural Networks for Sentence Classification</a></p>
+<p><a href="http://www.wildml.com/2015/12/implementing-a-cnn-for-text-classification-in-tensorflow/" target="_blank" rel="external">Implementing a CNN for Text Classification in TensorFlow</a></p>
+<p><a href="https://github.com/yoonkim/CNN_sentence" target="_blank" rel="external">Kim Y’s Implement: Convolutional Neural Networks for Sentence Classification</a></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CNN/" rel="tag">#CNN</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag">#Deep Learning</a>
+          
+            <a href="/tags/Machine-Learning/" rel="tag">#Machine Learning</a>
+          
+            <a href="/tags/NLP/" rel="tag">#NLP</a>
+          
+            <a href="/tags/Sentence-Model/" rel="tag">#Sentence Model</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/introduction-to-word-representation.html" rel="next" title="词向量表示技术(Word Representation)介绍">
+                <i class="fa fa-chevron-left"></i> 词向量表示技术(Word Representation)介绍
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/tensorflow-learning-notes-3.html" rel="prev" title="TensorFlow学习笔记3：词向量">
+                TensorFlow学习笔记3：词向量 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/upload/image/avatar.png" alt="Jey Zhang" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Jey Zhang</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Life is Now.</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="http://www.facebook.com/jeyzhang" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> facebook
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/jerrychang0402" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/zhangjieup" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> zhihu
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jeyzhang" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">Links</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.yunaitong.cn" target="_blank">Tong</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kim_Y’s_Paper"><span class="nav-number">1.</span> <span class="nav-text">Kim Y’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构及原理"><span class="nav-number">1.1.</span> <span class="nav-text">模型结构及原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分"><span class="nav-number">1.2.</span> <span class="nav-text">实验部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kalchbrenner’s_Paper"><span class="nav-number">2.</span> <span class="nav-text">Kalchbrenner’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构及原理-1"><span class="nav-number">2.1.</span> <span class="nav-text">模型结构及原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型的特点"><span class="nav-number">2.2.</span> <span class="nav-text">模型的特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分-1"><span class="nav-number">2.3.</span> <span class="nav-text">实验部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hu’s_Paper"><span class="nav-number">3.</span> <span class="nav-text">Hu’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构与原理"><span class="nav-number">3.1.</span> <span class="nav-text">模型结构与原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分-2"><span class="nav-number">3.2.</span> <span class="nav-text">实验部分</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jey Zhang</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+<span id="busuanzi_container_site_pv">
+  &nbsp; | &nbsp;Total visited <span id="busuanzi_value_site_pv"></span> times.
+</span>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+    
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'jeyzhang';
+      var disqus_identifier = 'cnn-apply-on-modelling-sentence.html';
+      var disqus_title = '卷积神经网络(CNN)在句子建模上的应用';
+      var disqus_url = 'http://www.jeyzhang.com/cnn-apply-on-modelling-sentence.html';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+  
+  
+  	 <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("4KyzRuAgl6zwWXQK1UfxmIh0-gzGzoHsz", "YeXrCFBwTG1qRdqS2rUJ7XgJ");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+  
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</body>
+</html>

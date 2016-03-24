@@ -38,6 +38,198 @@ TensorFlow可以提升你所研究的东西产品化的效率，并且可以方�
 
 **5 充分利用硬件资源，最大化计算性能**
 
+## 基本使用 ##
+
+你需要理解在TensorFlow中，是如何：
+
+- 将计算流程表示成图；
+- 通过**`Sessions`**来执行图计算；
+- 将数据表示为**`tensors`**；
+- 使用**`Variables`**来保持状态信息；
+- 分别使用**`feeds`**和**`fetches`**来填充数据和抓取任意的操作结果；
+
+### 概览 ###
+
+TensorFlow是一种将计算表示为图的编程系统。图中的节点称为**`ops`**(operation的简称)。一个**`ops`**使用0个或以上的`Tensors`，通过执行某些运算，产生0个或以上的`Tensors`。**一个`Tensor`是一个多维数组**，例如，你可以将一批图像表示为一个四维的数组`[batch, height, width, channels]`，数组中的值均为浮点数。
+
+TensorFlow中的图描述了计算过程，图通过`Session`的运行而执行计算。`Session`将图的节点们(即ops)放置到计算设备(如CPUs和GPUs)上，然后通过方法执行它们；这些方法执行完成后，将返回tensors。在Python中的tensor的形式是`numpy ndarray`对象，而在C/C++中则是`tensorflow::Tensor`.
+
+### 图计算 ###
+
+TensorFlow程序中图的创建类似于一个 [施工阶段]，而在 [执行阶段] 则利用一个`session`来执行图中的节点。很常见的情况是，在 [施工阶段] 创建一个图来表示和训练神经网络，而在 [执行阶段] 在图中重复执行一系列的训练操作。
+
+#### 创建图 ####
+
+在TensorFlow中，`Constant`是一种没有输入的`ops`，但是你可以将它作为其他`ops`的输入。Python库中的`ops构造器`将返回构造器的输出。TensorFlow的Python库中有一个默认的图，将`ops构造器`作为节点，更多可了解[Graph Class文档](https://www.tensorflow.org/versions/r0.7/api_docs/python/framework.html#Graph)。
+
+见下面的示例代码：
+
+	import tensorflow as tf
+	
+	# Create a Constant op that produces a 1x2 matrix.  The op is
+	# added as a node to the default graph.
+	#
+	# The value returned by the constructor represents the output
+	# of the Constant op.
+	matrix1 = tf.constant([[3., 3.]])
+	
+	# Create another Constant that produces a 2x1 matrix.
+	matrix2 = tf.constant([[2.],[2.]])
+	
+	# Create a Matmul op that takes 'matrix1' and 'matrix2' as inputs.
+	# The returned value, 'product', represents the result of the matrix
+	# multiplication.
+	product = tf.matmul(matrix1, matrix2)
+
+默认的图(Default Graph)现在有了三个节点：两个 `Constant()`ops和一个`matmul()`op。为了得到这两个矩阵的乘积结果，还需要在一个`session`中启动图计算。
+
+#### 在Session中执行图计算 ####
+
+见下面的示例代码，更多可了解[Session Class](https://www.tensorflow.org/versions/r0.7/api_docs/python/client.html#session-management)：
+
+	# Launch the default graph.
+	sess = tf.Session()
+	
+	# To run the matmul op we call the session 'run()' method, passing 'product'
+	# which represents the output of the matmul op.  This indicates to the call
+	# that we want to get the output of the matmul op back.
+	#
+	# All inputs needed by the op are run automatically by the session.  They
+	# typically are run in parallel.
+	#
+	# The call 'run(product)' thus causes the execution of threes ops in the
+	# graph: the two constants and matmul.
+	#
+	# The output of the op is returned in 'result' as a numpy `ndarray` object.
+	result = sess.run(product)
+	print(result)
+	# ==> [[ 12.]]
+	
+	# Close the Session when we're done.
+	sess.close()
+
+Sessions最后需要关闭，以释放相关的资源；你也可以使用`with`模块，session在`with`模块中自动会关闭：
+
+	with tf.Session() as sess:
+	  result = sess.run([product])
+	  print(result)
+
+TensorFlow的这些节点最终将在计算设备(CPUs,GPus)上执行运算。如果是使用GPU，默认会在第一块GPU上执行，如果你想在第二块多余的GPU上执行：
+
+	with tf.Session() as sess:
+	  with tf.device("/gpu:1"):
+	    matrix1 = tf.constant([[3., 3.]])
+	    matrix2 = tf.constant([[2.],[2.]])
+	    product = tf.matmul(matrix1, matrix2)
+	    ...
+
+device中的各个字符串含义如下：
+
+- `"/cpu:0"`: 你机器的CPU；
+- `"/gpu:0"`: 你机器的第一个GPU；
+- `"/gpu:1"`: 你机器的第二个GPU；
+
+关于TensorFlow中GPU的使用见[这里](https://www.tensorflow.org/versions/r0.7/how_tos/using_gpu/index.html)。
+
+### 交互环境下的使用 ###
+
+以上的python示例中，使用了`Session`和`Session.run()`来执行图计算。然而，在一些Python的交互环境下(如IPython中)，你可以使用`InteractiveSession`类，以及`Tensor.eval()`、`Operation.run()`等方法。例如，在交互的Python环境下执行以下代码：
+
+	# Enter an interactive TensorFlow Session.
+	import tensorflow as tf
+	sess = tf.InteractiveSession()
+	
+	x = tf.Variable([1.0, 2.0])
+	a = tf.constant([3.0, 3.0])
+	
+	# Initialize 'x' using the run() method of its initializer op.
+	x.initializer.run()
+	
+	# Add an op to subtract 'a' from 'x'.  Run it and print the result
+	sub = tf.sub(x, a)
+	print(sub.eval())
+	# ==> [-2. -1.]
+	
+	# Close the Session when we're done.
+	sess.close()
+
+### Tensors ###
+
+TensorFlow中使用`tensor`数据结构（实际上就是一个多维数据）表示所有的数据，并在图计算中的节点之间传递数据。一个`tensor`具有固定的类型、级别和大小，更加深入理解这些概念可参考[Rank, Shape, and Type](https://www.tensorflow.org/versions/r0.7/resources/dims_types.html)。
+
+### 变量(Variables) ###
+
+变量在图执行的过程中，保持着自己的状态信息。下面代码中的变量充当了一个简单的计数器角色：
+
+	# Create a Variable, that will be initialized to the scalar value 0.
+	state = tf.Variable(0, name="counter")
+	
+	# Create an Op to add one to `state`.
+	
+	one = tf.constant(1)
+	new_value = tf.add(state, one)
+	update = tf.assign(state, new_value)
+	
+	# Variables must be initialized by running an `init` Op after having
+	# launched the graph.  We first have to add the `init` Op to the graph.
+	init_op = tf.initialize_all_variables()
+	
+	# Launch the graph and run the ops.
+	with tf.Session() as sess:
+	  # Run the 'init' op
+	  sess.run(init_op)
+	  # Print the initial value of 'state'
+	  print(sess.run(state))
+	  # Run the op that updates 'state' and print 'state'.
+	  for _ in range(3):
+	    sess.run(update)
+	    print(sess.run(state))
+	
+	# output:
+	
+	# 0
+	# 1
+	# 2
+	# 3
+
+赋值函数`assign()`和`add()`函数类似，直到session的`run()`之后才会执行操作。与之类似的，一般我们会将神经网络模型中的参数表示为一系列的变量，在模型的训练过程中对变量进行更新操作。
+
+### 抓取(Fetches) ###
+
+为了抓取`ops`的输出，需要先执行`session`的`run`函数。然后，通过`print`函数打印状态信息。
+
+	input1 = tf.constant(3.0)
+	input2 = tf.constant(2.0)
+	input3 = tf.constant(5.0)
+	intermed = tf.add(input2, input3)
+	mul = tf.mul(input1, intermed)
+	
+	with tf.Session() as sess:
+	  result = sess.run([mul, intermed])
+	  print(result)
+	
+	# output:
+	# [array([ 21.], dtype=float32), array([ 7.], dtype=float32)]
+
+所有tensors的输出都是一次性 [连贯] 执行的。
+
+### 填充(Feeds) ###
+
+TensorFlow也提供这样的机制：先创建特定数据类型的占位符(placeholder)，之后再进行数据的填充。例如下面的程序：
+
+	input1 = tf.placeholder(tf.float32)
+	input2 = tf.placeholder(tf.float32)
+	output = tf.mul(input1, input2)
+	
+	with tf.Session() as sess:
+	  print(sess.run([output], feed_dict={input1:[7.], input2:[2.]}))
+	
+	# output:
+	# [array([ 14.], dtype=float32)]
+
+如果不对`placeholder()`的变量进行数据填充，将会引发错误，更多的例子可参考[MNIST fully-connected feed tutorial (source code)](https://www.tensorflow.org/versions/r0.7/tutorials/mnist/tf/index.html)。
+
+
 ## 示例：曲线拟合 ##
 
 下面是一段使用Python写的，曲线拟合计算。官网将此作为刚开始介绍的示例程序。
@@ -247,6 +439,53 @@ correct_prediction是一个布尔值的列表，例如 [True, False, True, True]
 	print(sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
 
 Softmax regression模型由于模型较简单，所以在测试集上的准确率在91%左右，这个结果并不算太好。通过一些简单的优化，准确率可以达到97%，目前最好的模型的准确率为99.7%。（[**这里**](http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html)有众多模型在MNIST数据集上的运行结果）。
+
+### 完整代码及运行结果 ###
+
+利用Softmax模型实现手写体识别的完整代码如下：
+
+	__author__ = 'chapter'
+	
+	import tensorflow as tf
+	from tensorflow.examples.tutorials.mnist import input_data
+	
+	mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+	print("Download Done!")
+	
+	x = tf.placeholder(tf.float32, [None, 784])
+	
+	# paras
+	W = tf.Variable(tf.zeros([784, 10]))
+	b = tf.Variable(tf.zeros([10]))
+	
+	y = tf.nn.softmax(tf.matmul(x, W) + b)
+	y_ = tf.placeholder(tf.float32, [None, 10])
+	
+	# loss func
+	cross_entropy = -tf.reduce_sum(y_ * tf.log(y))
+	
+	train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
+	
+	# init
+	init = tf.initialize_all_variables()
+	
+	sess = tf.Session()
+	sess.run(init)
+	
+	# train
+	for i in range(1000):
+	    batch_xs, batch_ys = mnist.train.next_batch(100)
+	    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+	
+	correct_prediction = tf.equal(tf.arg_max(y, 1), tf.arg_max(y_, 1))
+	accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+	
+	print("Accuarcy on Test-dataset: ", sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
+
+
+运行结果如下图：
+
+![](http://i.imgur.com/7lEZf7M.png)
 
 ----------
 
