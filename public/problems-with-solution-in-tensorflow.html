@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Markdown," />
+  <meta name="keywords" content="Artificial Intelligence,Deep Learning,Machine Learning,TensorFlow," />
 
 
 
@@ -51,49 +51,22 @@
 
 
 
-<meta name="description" content="本文记录markdown写作过程中所遇到的问题及相应的解决方法，以供参考。
+<meta name="description" content="本文记录一下自己在使用TensorFlow的过程中，遇到的较为困扰的问题及最终的解决方法。
 
-所包围的语句&quot;&amp;gt;Q1: 代码中出现{% 和 %}所包围的语句如果代码中出现了类似于{%××××××%}格式的语句，需要在这些语句块的首尾加上
-1&amp;#123;% raw %&amp;#125;
-和1&amp;#123;% endraw %&amp;#125;
-以保证显示原始的语句。
-示例如下：
-
-显示效果如下：
-
-	{% if theme.lea">
+Q1. 如何查看TensorFlow中Tensor, Variable, Constant的值？TensorFlow中的许多方法返回的都是一个Tensor对象。在Debug的过程中，我们发现只能看到Tensor对象的一些属性信息，无法查看Tensor具体的输出值；而对于Variable和Constant，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="markdown写作中的常见问题">
-<meta property="og:url" content="http://www.jeyzhang.com/markdown-common-problems.html">
+<meta property="og:title" content="TensorFlow中遇到的问题及解决方法">
+<meta property="og:url" content="http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html">
 <meta property="og:site_name" content="Jey Zhang">
-<meta property="og:description" content="本文记录markdown写作过程中所遇到的问题及相应的解决方法，以供参考。
+<meta property="og:description" content="本文记录一下自己在使用TensorFlow的过程中，遇到的较为困扰的问题及最终的解决方法。
 
-所包围的语句&quot;&amp;gt;Q1: 代码中出现{% 和 %}所包围的语句如果代码中出现了类似于{%××××××%}格式的语句，需要在这些语句块的首尾加上
-1&amp;#123;% raw %&amp;#125;
-和1&amp;#123;% endraw %&amp;#125;
-以保证显示原始的语句。
-示例如下：
-
-显示效果如下：
-
-	{% if theme.lea">
-<meta property="og:image" content="http://i.imgur.com/aYitATq.png">
-<meta property="og:image" content="http://i.imgur.com/B1XqXXr.png">
-<meta property="og:image" content="http://i.imgur.com/fr7Fapa.png">
-<meta property="og:updated_time" content="2016-01-23T11:46:28.980Z">
+Q1. 如何查看TensorFlow中Tensor, Variable, Constant的值？TensorFlow中的许多方法返回的都是一个Tensor对象。在Debug的过程中，我们发现只能看到Tensor对象的一些属性信息，无法查看Tensor具体的输出值；而对于Variable和Constant，">
+<meta property="og:updated_time" content="2016-03-25T14:48:54.901Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="markdown写作中的常见问题">
-<meta name="twitter:description" content="本文记录markdown写作过程中所遇到的问题及相应的解决方法，以供参考。
+<meta name="twitter:title" content="TensorFlow中遇到的问题及解决方法">
+<meta name="twitter:description" content="本文记录一下自己在使用TensorFlow的过程中，遇到的较为困扰的问题及最终的解决方法。
 
-所包围的语句&quot;&amp;gt;Q1: 代码中出现{% 和 %}所包围的语句如果代码中出现了类似于{%××××××%}格式的语句，需要在这些语句块的首尾加上
-1&amp;#123;% raw %&amp;#125;
-和1&amp;#123;% endraw %&amp;#125;
-以保证显示原始的语句。
-示例如下：
-
-显示效果如下：
-
-	{% if theme.lea">
+Q1. 如何查看TensorFlow中Tensor, Variable, Constant的值？TensorFlow中的许多方法返回的都是一个Tensor对象。在Debug的过程中，我们发现只能看到Tensor对象的一些属性信息，无法查看Tensor具体的输出值；而对于Variable和Constant，">
 
 
 
@@ -105,7 +78,7 @@
   };
 </script>
 
-  <title> markdown写作中的常见问题 | Jey Zhang </title>
+  <title> TensorFlow中遇到的问题及解决方法 | Jey Zhang </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -290,7 +263,7 @@
             
             
               
-                markdown写作中的常见问题
+                TensorFlow中遇到的问题及解决方法
               
             
           </h1>
@@ -299,8 +272,8 @@
         <div class="post-meta">
           <span class="post-time">
             Posted on
-            <time itemprop="dateCreated" datetime="2016-01-22T21:44:33+08:00" content="2016-01-22">
-              2016-01-22
+            <time itemprop="dateCreated" datetime="2016-03-25T22:36:46+08:00" content="2016-03-25">
+              2016-03-25
             </time>
           </span>
 
@@ -309,8 +282,8 @@
               &nbsp; | &nbsp; In
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Markdown/" itemprop="url" rel="index">
-                    <span itemprop="name">Markdown</span>
+                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Machine Learning</span>
                   </a>
                 </span>
 
@@ -325,8 +298,8 @@
             
               <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/markdown-common-problems.html#comments" itemprop="discussionUrl">
-                <span class="post-comments-count disqus-comment-count" data-disqus-identifier="markdown-common-problems.html" itemprop="commentsCount"></span>
+              <a href="/problems-with-solution-in-tensorflow.html#comments" itemprop="discussionUrl">
+                <span class="post-comments-count disqus-comment-count" data-disqus-identifier="problems-with-solution-in-tensorflow.html" itemprop="commentsCount"></span>
               </a>
             </span>
             
@@ -336,7 +309,7 @@
 		  
 		  
 			 &nbsp; | &nbsp;
-			 <span id="/markdown-common-problems.html"class="leancloud_visitors"  data-flag-title="markdown写作中的常见问题">
+			 <span id="/problems-with-solution-in-tensorflow.html"class="leancloud_visitors"  data-flag-title="TensorFlow中遇到的问题及解决方法">
              &nbsp;Views
             </span>
 		  
@@ -352,36 +325,63 @@
       
 
       
-        <span itemprop="articleBody"><p>本文记录markdown写作过程中所遇到的问题及相应的解决方法，以供参考。</p>
+        <span itemprop="articleBody"><p>本文记录一下自己在使用TensorFlow的过程中，遇到的较为困扰的问题及最终的解决方法。</p>
 <hr>
-<h2 id="Q1:_代码中出现<!-￼3->所包围的语句">Q1: 代码中出现{% 和 %}所包围的语句</h2><p>如果代码中出现了类似于{%××××××%}格式的语句，需要在这些<code>语句块的首尾</code>加上</p>
-<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="preprocessor">%</span> raw <span class="preprocessor">%</span>&#125;</span><br></pre></td></tr></table></figure>
-<p>和<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="var_expand">% endraw %</span>&#125;</span><br></pre></td></tr></table></figure></p>
-<p>以保证显示原始的语句。</p>
-<p>示例如下：</p>
-<p><img src="http://i.imgur.com/aYitATq.png" alt=""></p>
-<p>显示效果如下：</p>
-<pre><code><span class="comment">
-	{% if theme.leancloud_visitors.enable %}
-	{% include "_scripts/lean-analytics.swig" %}
-	{% endif %}
-	</span>
-</code></pre><h2 id="Q2:_如何显示原始的html代码">Q2: 如何显示原始的html代码</h2><p>在html代码块的上下均加上<code>三个连续的反引号</code>。</p>
-<p>示例如下：</p>
-<p><img src="http://i.imgur.com/B1XqXXr.png" alt=""></p>
-<p>显示效果如下：</p>
-<figure class="highlight django"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"></span><span class="template_tag">&#123;% <span class="keyword">if</span> theme.leancloud_visitors.enable %&#125;</span><span class="xml"></span><br><span class="line"></span><span class="template_tag">&#123;% <span class="keyword">include</span> '_scripts/lean-analytics.swig' %&#125;</span><span class="xml"></span><br><span class="line"></span><span class="template_tag">&#123;% <span class="keyword">endif</span> %&#125;</span><span class="xml"></span></span><br></pre></td></tr></table></figure>
-<h2 id="Q3:_怎样给字体阴影的效果">Q3: 怎样给字体阴影的效果</h2><p>例如<code>这样的阴影效果</code>，只需要在内容的前后加上一个反引号，如下图：</p>
-<p><img src="http://i.imgur.com/fr7Fapa.png" alt=""></p>
-<p>（持续更新中…）</p>
+<h3 id="Q1-_如何查看TensorFlow中Tensor,_Variable,_Constant的值？">Q1. 如何查看TensorFlow中Tensor, Variable, Constant的值？</h3><p>TensorFlow中的许多方法返回的都是一个Tensor对象。在Debug的过程中，我们发现只能看到Tensor对象的一些属性信息，无法查看Tensor具体的输出值；而对于Variable和Constant，我们很容易对其进行创建操作，但是如何得到它们的值呢？</p>
+<p>假设<code>ts</code>是我们想要查看的对象(Variable / Constant / 0输入的Tensor)，运行</p>
+<pre><code>ts_res = sess.<span class="function"><span class="title">run</span><span class="params">(ts)</span></span>
+<span class="function"><span class="title">print</span><span class="params">(ts_res)</span></span>
+</code></pre><p>其中，<code>sess</code>为之前创建或默认的<code>session</code>. 运行后将得到一个<code>narray</code>格式的<code>ts_res</code>对象，通过<code>print</code>函数我们可以很方便的查看其中的内容。</p>
+<p>但是，如果<code>ts</code>是一个有输入要求的Tensor，需要在查看其输出值前，填充(feed)输入数据。如下（假设ts只有一种输入）：</p>
+<pre><code><span class="built_in">input</span> = ××××××  # the <span class="built_in">input</span> data need <span class="keyword">to</span> feed
+ts_res = sess.run(<span class="keyword">ts</span>, feed_dict=<span class="built_in">input</span>)
+<span class="keyword">print</span>(ts_res)
+</code></pre><p>其他要求多种输入的Tensor类似处理即可。</p>
+<h3 id="Q2-_模型训练完成后，如何获取模型的参数？">Q2. 模型训练完成后，如何获取模型的参数？</h3><p>模型训练完成后，通常会将模型参数存储于/checkpoint/×××.model文件(当然文件路径和文件名都可以更改，许多基于TensorFlow的开源包习惯将模型参数存储为model或者model.ckpt文件)。那么，在模型训练完成后，如何得到这些模型参数呢？</p>
+<p>需要以下两个步骤：</p>
+<p><strong>Step 1: 通过tf.train.Saver()恢复模型参数</strong> </p>
+<p>运行</p>
+<pre><code>saver = tf<span class="class">.train</span><span class="class">.Saver</span>()
+</code></pre><p>通过<code>saver</code>的<code>restore()</code>方法可以从本地的模型文件中恢复模型参数。大致做法如下：</p>
+<pre><code><span class="comment"># your model's params</span>
+<span class="comment"># you don't have to initialize them</span>
+
+<span class="constant">x</span> = tf.placeholder(tf.float32)
+<span class="constant">y</span> = tf.placeholder(tf.float32)
+<span class="constant">W</span> = tf.Variable(...)
+<span class="constant">b</span> = tf.Variable(...)
+
+<span class="constant">y_</span> = tf.add(b, tf.matmul(x, w))
+
+<span class="comment"># create the saver</span>
+
+<span class="constant">saver</span> = tf.train.Saver()
+
+<span class="comment"># creat the session you used in the training processing</span>
+<span class="comment"># launch the model</span>
+
+with tf.Session() as sess:
+  <span class="comment"># Restore variables from disk.</span>
+  saver.restore(sess, "/your/path/model.ckpt")
+  print("Model restored.")
+  <span class="comment"># Do some work with the model, such as do a prediction</span>
+  pred = sess.run(y_, feed_dict={batch_x})
+  ...
+</code></pre><p>有关TensorFlow中变量的创建、存储及恢复操作，详细见<a href="http://tensorflow.org/how_tos/variables/index.md" target="_blank" rel="external">API文档</a>.</p>
+<p><strong>Step 2: 通过tf.trainable_variables()得到训练参数</strong></p>
+<p>tf.trainable_variables()方法将返回模型中所有可训练的参数，详细见<a href="https://www.tensorflow.org/versions/r0.7/api_docs/python/state_ops.html#trainable_variables" target="_blank" rel="external">API文档</a>。类似于以下的变量参数不会被返回：</p>
+<pre><code>tf_var = tf.<span class="function"><span class="title">Variable</span><span class="params">(<span class="number">0</span>, name=<span class="string">"××××××"</span>, trainable=False)</span></span>
+</code></pre><p>还可以通过<code>Variable</code>的<code>name</code>属性过滤出需要查看的参数，如下：</p>
+<pre><code><span class="tag">var</span> = [v <span class="keyword">for</span> v <span class="keyword">in</span> t_vars <span class="keyword">if</span> v<span class="class">.name</span> == <span class="string">"W"</span>]
+</code></pre><p>（不断更新中…）</p>
 <hr>
 <p>本文结束，感谢欣赏。</p>
 <p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
-<p><a href="http://www.jeyzhang.com/markdown-common-problems.html">http://www.jeyzhang.com/markdown-common-problems.html</a></p>
+<p><a href="http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html">http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html</a></p>
 <p><strong>参考资料</strong></p>
-<p><a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">Markdown 语法说明 (简体中文版)</a></p>
-<p><a href="https://github.com/hexojs/hexo/issues/587" target="_blank" rel="external">issue#587: Markdown代码块中的Markdown语法</a></p>
-<p><a href="https://www.v2ex.com/t/57233" target="_blank" rel="external">V2EX: markdown反引号内怎么转义反引号</a></p>
+<p><a href="https://stackoverflow.com/questions/33759623/tensorflow-how-to-restore-a-previously-saved-model-python" target="_blank" rel="external">Tensorflow: How to restore a previously saved model (python)</a></p>
+<p><a href="https://stackoverflow.com/questions/34172622/get-original-value-of-tensor-in-tensorflow" target="_blank" rel="external">Get original value of Tensor in Tensorflow</a></p>
+<p><a href="https://stackoverflow.com/questions/36193553/get-the-value-of-some-weights-in-a-model-trained-by-tensorflow" target="_blank" rel="external">Get the value of some weights in a model trained by TensorFlow</a></p>
 </span>
       
     </div>
@@ -390,7 +390,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Markdown/" rel="tag">#Markdown</a>
+            <a href="/tags/Artificial-Intelligence/" rel="tag">#Artificial Intelligence</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag">#Deep Learning</a>
+          
+            <a href="/tags/Machine-Learning/" rel="tag">#Machine Learning</a>
+          
+            <a href="/tags/TensorFlow/" rel="tag">#TensorFlow</a>
           
         </div>
       
@@ -399,17 +405,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/hexo-next-add-post-views.html" rel="next" title="Hexo的NexT主题个性化：添加文章阅读量">
-                <i class="fa fa-chevron-left"></i> Hexo的NexT主题个性化：添加文章阅读量
+              <a href="/tensorflow-learning-notes-3.html" rel="next" title="TensorFlow学习笔记3：词向量">
+                <i class="fa fa-chevron-left"></i> TensorFlow学习笔记3：词向量
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/network-connection-problems-in-win10.html" rel="prev" title="Win10下网络连接问题及解决方案">
-                Win10下网络连接问题及解决方案 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -591,7 +593,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Q1:_代码中出现<!-￼3->所包围的语句"><span class="nav-number">1.</span> <span class="nav-text">Q1: 代码中出现{% 和 %}所包围的语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Q2:_如何显示原始的html代码"><span class="nav-number">2.</span> <span class="nav-text">Q2: 如何显示原始的html代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Q3:_怎样给字体阴影的效果"><span class="nav-number">3.</span> <span class="nav-text">Q3: 怎样给字体阴影的效果</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q1-_如何查看TensorFlow中Tensor,_Variable,_Constant的值？"><span class="nav-number">1.</span> <span class="nav-text">Q1. 如何查看TensorFlow中Tensor, Variable, Constant的值？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q2-_模型训练完成后，如何获取模型的参数？"><span class="nav-number">2.</span> <span class="nav-text">Q2. 模型训练完成后，如何获取模型的参数？</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -658,9 +660,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'jeyzhang';
-      var disqus_identifier = 'markdown-common-problems.html';
-      var disqus_title = 'markdown写作中的常见问题';
-      var disqus_url = 'http://www.jeyzhang.com/markdown-common-problems.html';
+      var disqus_identifier = 'problems-with-solution-in-tensorflow.html';
+      var disqus_title = 'TensorFlow中遇到的问题及解决方法';
+      var disqus_url = 'http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
