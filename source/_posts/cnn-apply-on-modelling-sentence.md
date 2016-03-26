@@ -84,6 +84,14 @@ categories: Machine Learning
 - **CNN-non-static**: 所有的word vector直接使用无监督学习即Google的Word2Vector工具(COW模型)得到的结果，但是会在训练过程中被`Fine tuned`；
 - **CNN-multichannel**: CNN-static和CNN-non-static的混合版本，即两种类型的输入；
 
+博主自己下载了论文作者的实现程序([**Github地址**](https://github.com/yoonkim/CNN_sentence))，最终在MR数据集上的运行结果如下：
+
+- CNN-rand: 0.7669
+- CNN-static: 0.8076
+- CNN-non-static: 0.8151
+
+和论文中的结果差不多。
+
 **5. 结论**
 
 - **`CNN-static`**较与**`CNN-rand`**好，**说明pre-training的word vector确实有较大的提升作用**（这也难怪，因为pre-training的word vector显然利用了更大规模的文本数据信息）；
