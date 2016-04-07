@@ -4,6 +4,34 @@
 
     
   <url>
+    <loc>http://www.jeyzhang.com/cnn-apply-on-modelling-sentence.html</loc>
+    <lastmod>2016-04-07T13:32:33.078Z</lastmod>
+    <data>
+        <display>
+        <title>卷积神经网络(CNN)在句子建模上的应用</title>
+        <pubTime>2016-03-11T02:36:35.000Z</pubTime>
+        
+        <tag>CNN</tag>
+         
+        <tag>Deep Learning</tag>
+         
+        <tag>Machine Learning</tag>
+         
+        <tag>NLP</tag>
+         
+        <tag>Sentence Model</tag>
+         
+         
+           
+             
+              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.jeyzhang.com/2015-campus-recruit-summary.html</loc>
     <lastmod>2016-04-07T08:55:26.382Z</lastmod>
     <data>
@@ -107,32 +135,6 @@
     
     
     
-    
-  <url>
-    <loc>http://www.jeyzhang.com/introduction-to-word-representation.html</loc>
-    <lastmod>2016-04-07T03:49:59.602Z</lastmod>
-    <data>
-        <display>
-        <title>词向量表示技术(Word Representation)介绍</title>
-        <pubTime>2016-03-09T01:56:08.000Z</pubTime>
-        
-        <tag>Deep Learning</tag>
-         
-        <tag>Machine Learning</tag>
-         
-        <tag>Word Embedding</tag>
-         
-        <tag>Word2Vector</tag>
-         
-         
-           
-             
-              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
-          
-        </display>
-    </data>
-    </url>
-
     
   <url>
     <loc>http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html</loc>
@@ -258,22 +260,20 @@
 
     
   <url>
-    <loc>http://www.jeyzhang.com/cnn-apply-on-modelling-sentence.html</loc>
+    <loc>http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html</loc>
     <lastmod>2016-04-07T03:49:59.602Z</lastmod>
     <data>
         <display>
-        <title>卷积神经网络(CNN)在句子建模上的应用</title>
-        <pubTime>2016-03-11T02:36:35.000Z</pubTime>
+        <title>TensorFlow中遇到的问题及解决方法</title>
+        <pubTime>2016-03-25T14:36:46.000Z</pubTime>
         
-        <tag>CNN</tag>
+        <tag>Artificial Intelligence</tag>
          
         <tag>Deep Learning</tag>
          
         <tag>Machine Learning</tag>
          
-        <tag>NLP</tag>
-         
-        <tag>Sentence Model</tag>
+        <tag>TensorFlow</tag>
          
          
            
@@ -338,33 +338,6 @@
 
     
   <url>
-    <loc>http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html</loc>
-    <lastmod>2016-04-07T03:49:59.602Z</lastmod>
-    <data>
-        <display>
-        <title>TensorFlow中遇到的问题及解决方法</title>
-        <pubTime>2016-03-25T14:36:46.000Z</pubTime>
-        
-        <tag>Artificial Intelligence</tag>
-         
-        <tag>Deep Learning</tag>
-         
-        <tag>Machine Learning</tag>
-         
-        <tag>TensorFlow</tag>
-         
-         
-           
-             
-              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-    
-  <url>
     <loc>http://www.jeyzhang.com/next-theme-personal-settings.html</loc>
     <lastmod>2016-04-07T03:49:59.602Z</lastmod>
     <data>
@@ -385,6 +358,7 @@
     </data>
     </url>
 
+    
     
   <url>
     <loc>http://www.jeyzhang.com/network-connection-problems-in-win10.html</loc>
@@ -424,6 +398,32 @@
            
              
               <breadCrumb title="Markdown" url="http://www.jeyzhang.com/categories/Markdown/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.jeyzhang.com/introduction-to-word-representation.html</loc>
+    <lastmod>2016-04-07T03:49:59.602Z</lastmod>
+    <data>
+        <display>
+        <title>词向量表示技术(Word Representation)介绍</title>
+        <pubTime>2016-03-09T01:56:08.000Z</pubTime>
+        
+        <tag>Deep Learning</tag>
+         
+        <tag>Machine Learning</tag>
+         
+        <tag>Word Embedding</tag>
+         
+        <tag>Word2Vector</tag>
+         
+         
+           
+             
+              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
           
         </display>
     </data>
