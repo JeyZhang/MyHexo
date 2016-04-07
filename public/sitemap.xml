@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.jeyzhang.com/2015-campus-recruit-summary.html</loc>
+    <lastmod>2016-04-07T08:55:26.382Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.jeyzhang.com/tensorflow-learning-notes.html</loc>
     <lastmod>2016-04-07T03:49:59.606Z</lastmod>
   </url>
@@ -29,11 +34,6 @@
   <url>
     <loc>http://www.jeyzhang.com/about/index.html</loc>
     <lastmod>2016-04-07T03:49:59.606Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/markdown-common-problems.html</loc>
-    <lastmod>2016-04-07T03:49:59.602Z</lastmod>
   </url>
   
   <url>
@@ -87,17 +87,12 @@
   </url>
   
   <url>
-    <loc>http://www.jeyzhang.com/2015-campus-recruit-summary.html</loc>
+    <loc>http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html</loc>
     <lastmod>2016-04-07T03:49:59.602Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/404.html</loc>
-    <lastmod>2016-04-07T03:49:59.602Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html</loc>
     <lastmod>2016-04-07T03:49:59.602Z</lastmod>
   </url>
   
@@ -108,6 +103,11 @@
   
   <url>
     <loc>http://www.jeyzhang.com/network-connection-problems-in-win10.html</loc>
+    <lastmod>2016-04-07T03:49:59.602Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/markdown-common-problems.html</loc>
     <lastmod>2016-04-07T03:49:59.602Z</lastmod>
   </url>
   

@@ -14,6 +14,8 @@ categories: Machine Learning
 
 > He H, Gimpel K, Lin J. Multi-perspective sentence similarity modeling with convolutional neural networks[C]//Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing. 2015: 1576-1586.
 
+
+
 > Zhang Y, Wallace B. A Sensitivity Analysis of (and Practitioners' Guide to) Convolutional Neural Networks for Sentence Classification[J]. arXiv preprint arXiv:1510.03820, 2015.
 
 下面对文献中CNN的结构和细节进行梳理。
@@ -111,6 +113,26 @@ categories: Machine Learning
 
 Kim Y的这个模型很简单，但是却有着很好的性能。后续Denny用TensorFlow实现了这个模型的简单版本，可参考**[这篇博文](http://www.wildml.com/2015/12/implementing-a-cnn-for-text-classification-in-tensorflow/)**；以及Ye Zhang等人对这个模型进行了大量的实验，并给出了调参的建议，可参考**[这篇论文](http://arxiv.org/abs/1510.03820)**。
 
+下面总结一下Ye Zhang等人基于Kim Y的模型做了大量的调参实验之后的结论：
+
+* 由于模型训练过程中的随机性因素，如随机初始化的权重参数，mini-batch，随机梯度下降优化算法等，造成模型在数据集上的结果有一定的浮动，如准确率(accuracy)能达到1.5%的浮动，而AUC则有3.4%的浮动；
+* 词向量是使用word2vec还是GloVe，对实验结果有一定的影响，具体哪个更好依赖于任务本身；
+* Filter的大小对模型性能有较大的影响，并且Filter的参数应该是可以更新的；
+* Feature Map的数量也有一定影响，但是需要兼顾模型的训练效率；
+* 1-max pooling的方式已经足够好了，相比于其他的pooling方式而言；
+* 正则化的作用微乎其微。
+
+Ye Zhang等人给予模型调参者的建议如下：
+
+* 使用**`non-static`**版本的**`word2vec`**或者**`GloVe`**要比单纯的`one-hot representation`取得的效果好得多；
+* 为了找到最优的过滤器(Filter)大小，可以使用线性搜索的方法。通常过滤器的大小范围在**`1-10`**之间，当然对于长句，使用更大的过滤器也是有必要的；
+* **`Feature Map`**的数量在**`100-600`**之间；
+* 可以尽量多尝试激活函数，实验发现**`ReLU`**和**`tanh`**两种激活函数表现较佳；
+* 使用简单的**`1-max pooling`**就已经足够了，可以没必要设置太复杂的pooling方式；
+* 当发现增加`Feature Map`的数量使得模型的性能下降时，可以考虑增大正则的力度，如调高`dropout`的概率；
+* 为了检验模型的性能水平，多次反复的交叉验证是必要的，这可以确保模型的高性能并不是偶然。
+
+论文附录中还附上了各种调参结果，感兴趣的可以前往阅读之。
 
 ### Kalchbrenner's Paper ###
 
