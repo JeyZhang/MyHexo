@@ -4,8 +4,82 @@
 
     
   <url>
+    <loc>http://www.jeyzhang.com/cnn-apply-on-modelling-sentence.html</loc>
+    <lastmod>2016-04-01T06:29:05.400Z</lastmod>
+    <data>
+        <display>
+        <title>卷积神经网络(CNN)在句子建模上的应用</title>
+        <pubTime>2016-03-11T02:36:35.000Z</pubTime>
+        
+        <tag>CNN</tag>
+         
+        <tag>Deep Learning</tag>
+         
+        <tag>Machine Learning</tag>
+         
+        <tag>NLP</tag>
+         
+        <tag>Sentence Model</tag>
+         
+         
+           
+             
+              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.jeyzhang.com/markdown-common-problems.html</loc>
+    <lastmod>2016-03-31T07:43:01.321Z</lastmod>
+    <data>
+        <display>
+        <title>markdown写作中的常见问题</title>
+        <pubTime>2016-01-22T13:44:33.000Z</pubTime>
+        
+        <tag>Markdown</tag>
+         
+         
+           
+             
+              <breadCrumb title="Markdown" url="http://www.jeyzhang.com/categories/Markdown/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.jeyzhang.com/2015-campus-recurit-technology-interview-summary.html</loc>
+    <lastmod>2016-03-31T01:23:46.273Z</lastmod>
+    <data>
+        <display>
+        <title>2015年校招总结：技术面试干货</title>
+        <pubTime>2016-03-03T12:11:07.000Z</pubTime>
+        
+        <tag>Algorithm</tag>
+         
+        <tag>IT</tag>
+         
+        <tag>Interview</tag>
+         
+        <tag>Job</tag>
+         
+         
+           
+             
+              <breadCrumb title="Interview" url="http://www.jeyzhang.com/categories/Interview/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html</loc>
-    <lastmod>2016-03-25T14:48:54.901Z</lastmod>
+    <lastmod>2016-03-26T09:28:31.290Z</lastmod>
     <data>
         <display>
         <title>TensorFlow中遇到的问题及解决方法</title>
@@ -56,32 +130,6 @@
 
     
   <url>
-    <loc>http://www.jeyzhang.com/tensorflow-learning-notes-3.html</loc>
-    <lastmod>2016-03-25T14:26:37.790Z</lastmod>
-    <data>
-        <display>
-        <title>TensorFlow学习笔记3：词向量</title>
-        <pubTime>2016-03-16T13:24:38.000Z</pubTime>
-        
-        <tag>Artificial Intelligence</tag>
-         
-        <tag>Deep Learning</tag>
-         
-        <tag>Machine Learning</tag>
-         
-        <tag>TensorFlow</tag>
-         
-         
-           
-             
-              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.jeyzhang.com/tensorflow-learning-notes-2.html</loc>
     <lastmod>2016-03-25T14:26:37.785Z</lastmod>
     <data>
@@ -96,32 +144,6 @@
         <tag>Machine Learning</tag>
          
         <tag>TensorFlow</tag>
-         
-         
-           
-             
-              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.jeyzhang.com/introduction-to-word-representation.html</loc>
-    <lastmod>2016-03-25T14:26:37.759Z</lastmod>
-    <data>
-        <display>
-        <title>词向量表示技术(Word Representation)介绍</title>
-        <pubTime>2016-03-09T01:56:08.000Z</pubTime>
-        
-        <tag>Deep Learning</tag>
-         
-        <tag>Machine Learning</tag>
-         
-        <tag>Word Embedding</tag>
-         
-        <tag>Word2Vector</tag>
          
          
            
@@ -160,108 +182,6 @@
 
     
   <url>
-    <loc>http://www.jeyzhang.com/cnn-learning-notes-2.html</loc>
-    <lastmod>2016-03-25T14:26:37.728Z</lastmod>
-    <data>
-        <display>
-        <title>卷积神经网络(CNN)学习笔记2：模型训练</title>
-        <pubTime>2016-03-03T05:41:05.000Z</pubTime>
-        
-        <tag>CNN</tag>
-         
-        <tag>Deep Learning</tag>
-         
-        <tag>Machine Learning</tag>
-         
-         
-           
-             
-              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.jeyzhang.com/cnn-learning-notes-1.html</loc>
-    <lastmod>2016-03-25T14:26:37.724Z</lastmod>
-    <data>
-        <display>
-        <title>卷积神经网络(CNN)学习笔记1：基础入门</title>
-        <pubTime>2016-03-01T11:25:11.000Z</pubTime>
-        
-        <tag>CNN</tag>
-         
-        <tag>Deep Learning</tag>
-         
-        <tag>Machine Learning</tag>
-         
-         
-           
-             
-              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.jeyzhang.com/cnn-apply-on-modelling-sentence.html</loc>
-    <lastmod>2016-03-25T14:26:37.719Z</lastmod>
-    <data>
-        <display>
-        <title>卷积神经网络(CNN)在句子建模上的应用</title>
-        <pubTime>2016-03-11T02:36:35.000Z</pubTime>
-        
-        <tag>CNN</tag>
-         
-        <tag>Deep Learning</tag>
-         
-        <tag>Machine Learning</tag>
-         
-        <tag>NLP</tag>
-         
-        <tag>Sentence Model</tag>
-         
-         
-           
-             
-              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.jeyzhang.com/2015-campus-recurit-technology-interview-summary.html</loc>
-    <lastmod>2016-03-25T14:26:37.715Z</lastmod>
-    <data>
-        <display>
-        <title>2015年校招总结：技术面试干货</title>
-        <pubTime>2016-03-03T12:11:07.000Z</pubTime>
-        
-        <tag>Algorithm</tag>
-         
-        <tag>IT</tag>
-         
-        <tag>Interview</tag>
-         
-        <tag>Job</tag>
-         
-         
-           
-             
-              <breadCrumb title="Interview" url="http://www.jeyzhang.com/categories/Interview/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.jeyzhang.com/2015-campus-recruit-summary.html</loc>
     <lastmod>2016-03-25T14:26:37.710Z</lastmod>
     <data>
@@ -286,8 +206,108 @@
 
     
   <url>
+    <loc>http://www.jeyzhang.com/tensorflow-learning-notes-3.html</loc>
+    <lastmod>2016-03-17T13:15:03.661Z</lastmod>
+    <data>
+        <display>
+        <title>TensorFlow学习笔记3：词向量</title>
+        <pubTime>2016-03-16T13:24:38.000Z</pubTime>
+        
+        <tag>Artificial Intelligence</tag>
+         
+        <tag>Deep Learning</tag>
+         
+        <tag>Machine Learning</tag>
+         
+        <tag>TensorFlow</tag>
+         
+         
+           
+             
+              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.jeyzhang.com/cnn-learning-notes-1.html</loc>
+    <lastmod>2016-03-09T02:12:45.988Z</lastmod>
+    <data>
+        <display>
+        <title>卷积神经网络(CNN)学习笔记1：基础入门</title>
+        <pubTime>2016-03-01T11:25:11.000Z</pubTime>
+        
+        <tag>CNN</tag>
+         
+        <tag>Deep Learning</tag>
+         
+        <tag>Machine Learning</tag>
+         
+         
+           
+             
+              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.jeyzhang.com/introduction-to-word-representation.html</loc>
+    <lastmod>2016-03-09T02:03:02.327Z</lastmod>
+    <data>
+        <display>
+        <title>词向量表示技术(Word Representation)介绍</title>
+        <pubTime>2016-03-09T01:56:08.000Z</pubTime>
+        
+        <tag>Deep Learning</tag>
+         
+        <tag>Machine Learning</tag>
+         
+        <tag>Word Embedding</tag>
+         
+        <tag>Word2Vector</tag>
+         
+         
+           
+             
+              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.jeyzhang.com/cnn-learning-notes-2.html</loc>
+    <lastmod>2016-03-03T11:25:39.607Z</lastmod>
+    <data>
+        <display>
+        <title>卷积神经网络(CNN)学习笔记2：模型训练</title>
+        <pubTime>2016-03-03T05:41:05.000Z</pubTime>
+        
+        <tag>CNN</tag>
+         
+        <tag>Deep Learning</tag>
+         
+        <tag>Machine Learning</tag>
+         
+         
+           
+             
+              <breadCrumb title="Machine Learning" url="http://www.jeyzhang.com/categories/Machine-Learning/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.jeyzhang.com/network-connection-problems-in-win10.html</loc>
-    <lastmod>2016-01-28T11:21:48.917Z</lastmod>
+    <lastmod>2016-02-26T10:49:35.539Z</lastmod>
     <data>
         <display>
         <title>Win10下网络连接问题及解决方案</title>
@@ -359,50 +379,6 @@
 
     
   <url>
-    <loc>http://www.jeyzhang.com/markdown-common-problems.html</loc>
-    <lastmod>2016-01-23T11:46:28.980Z</lastmod>
-    <data>
-        <display>
-        <title>markdown写作中的常见问题</title>
-        <pubTime>2016-01-22T13:44:33.000Z</pubTime>
-        
-        <tag>Markdown</tag>
-         
-         
-           
-             
-              <breadCrumb title="Markdown" url="http://www.jeyzhang.com/categories/Markdown/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
-    <lastmod>2016-01-23T11:46:28.923Z</lastmod>
-    <data>
-        <display>
-        <title>Hexo的NexT主题个性化：添加文章阅读量</title>
-        <pubTime>2016-01-22T01:28:40.000Z</pubTime>
-        
-        <tag>Hexo</tag>
-         
-        <tag>LeanCloud</tag>
-         
-        <tag>Next</tag>
-         
-         
-           
-             
-              <breadCrumb title="Hexo" url="http://www.jeyzhang.com/categories/Hexo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.jeyzhang.com/hexo-github-blog-building.html</loc>
     <lastmod>2016-01-23T11:46:28.913Z</lastmod>
     <data>
@@ -455,4 +431,28 @@
 
     
     
+    
+  <url>
+    <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
+    <lastmod>2016-01-23T01:58:41.348Z</lastmod>
+    <data>
+        <display>
+        <title>Hexo的NexT主题个性化：添加文章阅读量</title>
+        <pubTime>2016-01-22T01:28:40.000Z</pubTime>
+        
+        <tag>Hexo</tag>
+         
+        <tag>LeanCloud</tag>
+         
+        <tag>Next</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hexo" url="http://www.jeyzhang.com/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
 </urlset>

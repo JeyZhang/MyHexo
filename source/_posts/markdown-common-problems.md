@@ -57,7 +57,9 @@ categories: Markdown
 
 ![](http://i.imgur.com/fr7Fapa.png)
 
-（持续更新中...）
+## Q4: 如何显示公式中的花括号{} ##
+
+markdown中正常文本中使用`\`对`{}`进行转义即可；而公式中的`{}`即使这样转义也是不会显示的，正确做法是使用`\lbrace \rbrace`来表示左右花括号。
 
 ----------
 
@@ -75,3 +77,5 @@ http://www.jeyzhang.com/markdown-common-problems.html
 [issue#587: Markdown代码块中的Markdown语法](https://github.com/hexojs/hexo/issues/587)
 
 [V2EX: markdown反引号内怎么转义反引号](https://www.v2ex.com/t/57233)
+
+[Markdown中写数学公式](http://jzqt.github.io/2015/06/30/Markdown%E4%B8%AD%E5%86%99%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/)
