@@ -14,7 +14,7 @@ categories: Machine Learning
 
 > He H, Gimpel K, Lin J. Multi-perspective sentence similarity modeling with convolutional neural networks[C]//Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing. 2015: 1576-1586.
 
-
+> Wenpeng Yin, Hinrich Schütze. Convolutional Neural Network for Paraphrase Identification. The 2015 Conference of the North American Chapter of the Association for Computational Linguistics
 
 > Zhang Y, Wallace B. A Sensitivity Analysis of (and Practitioners' Guide to) Convolutional Neural Networks for Sentence Classification[J]. arXiv preprint arXiv:1510.03820, 2015.
 
@@ -494,6 +494,42 @@ $$ block\_{B} = \lbrace group\_{B}(ws\_{b}, p, sent): p \in {max, min} \rbrace $
 文中的模型包含两个部分：卷积-池化模型和相似度计算模型。实验部分已经验证了模型的有效性，在MSRP数据集上模型取得了仅次于state-of-art的结果，并且在基于NN的方法中是最好的。模型中的相似度计算层是有必要的，因为对卷积池化处理后的句子成分进行了针对性的比较，从直观上要比直接扔进全连接层更合理，而实验结果也表明了这一点。
 
 然而，个人觉得，文中的模型结构较为复杂，而且其中有很多trick的地方，比如为什么要对word embedding中的每一维度做卷积，\\(block\_{B}\\) 中的`pooling`方式为什么只用了max和min，不用mean的方式等问题，而这些方式或许是作者自己做了大量实验后，从果到因而使用的。
+
+### Yin's Paper ###
+
+Yin的这篇论文提出了一种叫`Bi-CNN-MI`的架构，其中`Bi-CNN`表示两个使用`Siamese`框架的CNN模型；`MI`表示多粒度的交互特征。`Bi-CNN-MI`包含三个部分：
+
+* **句子分析模型 (CNN-SM)**
+
+这部分模型主要使用了上述Kal在2014年提出的模型，针对句子本身提取出四种粒度的特征表示：词、短*ngram*、长*ngram*和句子粒度。多种粒度的特征表示是非常必要的，一方面提高模型的性能，另一方面增强模型的鲁棒性。
+
+* **句子交互计算模型 (CNN-IM)**
+
+这部分模型主要是基于2011年Socher提出的RAE模型，做了一些简化，即仅对同一种粒度下的提取特征做两两比较。
+
+* **LR或Softmax网络层以适配任务**
+
+#### 模型结构 ####
+
+论文提出的模型主要是基于Kal的模型及Socher的RAE模型的结合体，如下图：
+
+![](http://imgur.com/Ubku2XR.png)
+
+通过模型图可以看出模型的主要思想：一方面利用Kal的模型进行多种粒度上的特征提取，另一方面采取RAE模型的思想，对提取出来的特征进行两两的相似度计算，计算完成的结果通过`dynamic pooling`的方式进一步提取少量特征，然后各个层次的`pooling`计算结果平摊为一组向量，通过全连接的方式与LR(或者softmax)层连接，从而适配同义句检测任务本身。
+
+这个模型具体的计算细节不再赘述了，感兴趣的读者可以直接去看论文。除了提出这种模型结构之外，论文还有一个亮点在于使用了一种类似于语言模型的`CNN-LM`来对上述CNN部分的模型进行预训练，从而提前确定模型的参数。`CNN-LM`的网络结构如下图：
+
+![](http://imgur.com/zMyzscM.png)
+
+`CNN-LM`模型的训练预料使用了最终的实验数据集，即MSRP；另外，由于MSRP的数据规模较小，所以作者又增加了100,000个英文句子语料。`CNN-LM`模型最终能够得到word embedding, 模型权值等参数。需要注意的是，这些参数并不是固定的，在之后的句子匹配任务中是会不断更新的。从后面的实验结果中可以看出，`CNN-LM`的作用是显著的。
+
+#### 实验结果 ####
+
+论文仅使用了一种数据集，即公认的PI (Paraphrase Identification)任务数据集，MSRP。实验结果如下：
+
+![](http://imgur.com/Y67eY0a.png)
+
+可以看出，`CNN-LM`的预训练效果显著，预训练后的模型性能很强（但是结果上比之前He提出的模型稍差一些）。
 
 ----------
 

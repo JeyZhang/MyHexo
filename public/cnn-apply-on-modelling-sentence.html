@@ -96,7 +96,10 @@ Kalchbrenner N, Grefe">
 <meta property="og:image" content="http://imgur.com/16bJWHS.png">
 <meta property="og:image" content="http://imgur.com/s89LYEb.png">
 <meta property="og:image" content="http://imgur.com/pmTY9TY.png">
-<meta property="og:updated_time" content="2016-04-07T13:32:33.078Z">
+<meta property="og:image" content="http://imgur.com/Ubku2XR.png">
+<meta property="og:image" content="http://imgur.com/zMyzscM.png">
+<meta property="og:image" content="http://imgur.com/Y67eY0a.png">
+<meta property="og:updated_time" content="2016-04-11T08:58:41.081Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="卷积神经网络(CNN)在句子建模上的应用">
 <meta name="twitter:description" content="之前的博文已经介绍了CNN的基本原理，本文将大概总结一下最近CNN在NLP中的句子建模（或者句子表示）方面的应用情况，主要阅读了以下的文献：
@@ -367,6 +370,7 @@ Kalchbrenner N, Grefe">
 <p>Kalchbrenner N, Grefenstette E, Blunsom P. A convolutional neural network for modelling sentences[J]. arXiv preprint arXiv:1404.2188, 2014.</p>
 <p>Hu B, Lu Z, Li H, et al. Convolutional neural network architectures for matching natural language sentences[C]//Advances in Neural Information Processing Systems. 2014: 2042-2050.</p>
 <p>He H, Gimpel K, Lin J. Multi-perspective sentence similarity modeling with convolutional neural networks[C]//Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing. 2015: 1576-1586.</p>
+<p>Wenpeng Yin, Hinrich Schütze. Convolutional Neural Network for Paraphrase Identification. The 2015 Conference of the North American Chapter of the Association for Computational Linguistics</p>
 <p>Zhang Y, Wallace B. A Sensitivity Analysis of (and Practitioners’ Guide to) Convolutional Neural Networks for Sentence Classification[J]. arXiv preprint arXiv:1510.03820, 2015.</p>
 </blockquote>
 <p>下面对文献中CNN的结构和细节进行梳理。</p>
@@ -707,6 +711,27 @@ Kalchbrenner N, Grefe">
 </ol>
 <p>文中的模型包含两个部分：卷积-池化模型和相似度计算模型。实验部分已经验证了模型的有效性，在MSRP数据集上模型取得了仅次于state-of-art的结果，并且在基于NN的方法中是最好的。模型中的相似度计算层是有必要的，因为对卷积池化处理后的句子成分进行了针对性的比较，从直观上要比直接扔进全连接层更合理，而实验结果也表明了这一点。</p>
 <p>然而，个人觉得，文中的模型结构较为复杂，而且其中有很多trick的地方，比如为什么要对word embedding中的每一维度做卷积，\(block_{B}\) 中的<code>pooling</code>方式为什么只用了max和min，不用mean的方式等问题，而这些方式或许是作者自己做了大量实验后，从果到因而使用的。</p>
+<h3 id="Yin’s_Paper">Yin’s Paper</h3><p>Yin的这篇论文提出了一种叫<code>Bi-CNN-MI</code>的架构，其中<code>Bi-CNN</code>表示两个使用<code>Siamese</code>框架的CNN模型；<code>MI</code>表示多粒度的交互特征。<code>Bi-CNN-MI</code>包含三个部分：</p>
+<ul>
+<li><strong>句子分析模型 (CNN-SM)</strong></li>
+</ul>
+<p>这部分模型主要使用了上述Kal在2014年提出的模型，针对句子本身提取出四种粒度的特征表示：词、短<em>ngram</em>、长<em>ngram</em>和句子粒度。多种粒度的特征表示是非常必要的，一方面提高模型的性能，另一方面增强模型的鲁棒性。</p>
+<ul>
+<li><strong>句子交互计算模型 (CNN-IM)</strong></li>
+</ul>
+<p>这部分模型主要是基于2011年Socher提出的RAE模型，做了一些简化，即仅对同一种粒度下的提取特征做两两比较。</p>
+<ul>
+<li><strong>LR或Softmax网络层以适配任务</strong></li>
+</ul>
+<h4 id="模型结构">模型结构</h4><p>论文提出的模型主要是基于Kal的模型及Socher的RAE模型的结合体，如下图：</p>
+<p><img src="http://imgur.com/Ubku2XR.png" alt=""></p>
+<p>通过模型图可以看出模型的主要思想：一方面利用Kal的模型进行多种粒度上的特征提取，另一方面采取RAE模型的思想，对提取出来的特征进行两两的相似度计算，计算完成的结果通过<code>dynamic pooling</code>的方式进一步提取少量特征，然后各个层次的<code>pooling</code>计算结果平摊为一组向量，通过全连接的方式与LR(或者softmax)层连接，从而适配同义句检测任务本身。</p>
+<p>这个模型具体的计算细节不再赘述了，感兴趣的读者可以直接去看论文。除了提出这种模型结构之外，论文还有一个亮点在于使用了一种类似于语言模型的<code>CNN-LM</code>来对上述CNN部分的模型进行预训练，从而提前确定模型的参数。<code>CNN-LM</code>的网络结构如下图：</p>
+<p><img src="http://imgur.com/zMyzscM.png" alt=""></p>
+<p><code>CNN-LM</code>模型的训练预料使用了最终的实验数据集，即MSRP；另外，由于MSRP的数据规模较小，所以作者又增加了100,000个英文句子语料。<code>CNN-LM</code>模型最终能够得到word embedding, 模型权值等参数。需要注意的是，这些参数并不是固定的，在之后的句子匹配任务中是会不断更新的。从后面的实验结果中可以看出，<code>CNN-LM</code>的作用是显著的。</p>
+<h4 id="实验结果">实验结果</h4><p>论文仅使用了一种数据集，即公认的PI (Paraphrase Identification)任务数据集，MSRP。实验结果如下：</p>
+<p><img src="http://imgur.com/Y67eY0a.png" alt=""></p>
+<p>可以看出，<code>CNN-LM</code>的预训练效果显著，预训练后的模型性能很强（但是结果上比之前He提出的模型稍差一些）。</p>
 <hr>
 <p>本文结束，感谢欣赏。</p>
 <p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
@@ -934,7 +959,7 @@ Kalchbrenner N, Grefe">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kim_Y’s_Paper"><span class="nav-number">1.</span> <span class="nav-text">Kim Y’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构及原理"><span class="nav-number">1.1.</span> <span class="nav-text">模型结构及原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分"><span class="nav-number">1.2.</span> <span class="nav-text">实验部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kalchbrenner’s_Paper"><span class="nav-number">2.</span> <span class="nav-text">Kalchbrenner’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构及原理-1"><span class="nav-number">2.1.</span> <span class="nav-text">模型结构及原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型的特点"><span class="nav-number">2.2.</span> <span class="nav-text">模型的特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分-1"><span class="nav-number">2.3.</span> <span class="nav-text">实验部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hu’s_Paper"><span class="nav-number">3.</span> <span class="nav-text">Hu’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构与原理"><span class="nav-number">3.1.</span> <span class="nav-text">模型结构与原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分-2"><span class="nav-number">3.2.</span> <span class="nav-text">实验部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#He’s_Paper"><span class="nav-number">4.</span> <span class="nav-text">He’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构与原理-1"><span class="nav-number">4.1.</span> <span class="nav-text">模型结构与原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分-3"><span class="nav-number">4.2.</span> <span class="nav-text">实验部分</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kim_Y’s_Paper"><span class="nav-number">1.</span> <span class="nav-text">Kim Y’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构及原理"><span class="nav-number">1.1.</span> <span class="nav-text">模型结构及原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分"><span class="nav-number">1.2.</span> <span class="nav-text">实验部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kalchbrenner’s_Paper"><span class="nav-number">2.</span> <span class="nav-text">Kalchbrenner’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构及原理-1"><span class="nav-number">2.1.</span> <span class="nav-text">模型结构及原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型的特点"><span class="nav-number">2.2.</span> <span class="nav-text">模型的特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分-1"><span class="nav-number">2.3.</span> <span class="nav-text">实验部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hu’s_Paper"><span class="nav-number">3.</span> <span class="nav-text">Hu’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构与原理"><span class="nav-number">3.1.</span> <span class="nav-text">模型结构与原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分-2"><span class="nav-number">3.2.</span> <span class="nav-text">实验部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#He’s_Paper"><span class="nav-number">4.</span> <span class="nav-text">He’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构与原理-1"><span class="nav-number">4.1.</span> <span class="nav-text">模型结构与原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验部分-3"><span class="nav-number">4.2.</span> <span class="nav-text">实验部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Yin’s_Paper"><span class="nav-number">5.</span> <span class="nav-text">Yin’s Paper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模型结构"><span class="nav-number">5.1.</span> <span class="nav-text">模型结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果"><span class="nav-number">5.2.</span> <span class="nav-text">实验结果</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
