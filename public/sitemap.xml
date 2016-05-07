@@ -2,118 +2,128 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://www.jeyzhang.com/cnn-apply-on-modelling-sentence.html</loc>
-    <lastmod>2016-04-11T08:58:41.081Z</lastmod>
+    <loc>http://www.jeyzhang.com/realization-of-full-chinese-text-search-using-whoosh-and-jieba.html</loc>
+    <lastmod>2016-04-28T05:11:25.015Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.jeyzhang.com/introduction-to-word-representation.html</loc>
-    <lastmod>2016-04-07T03:49:59.602Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
-    <lastmod>2016-04-07T03:49:59.602Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/markdown-common-problems.html</loc>
-    <lastmod>2016-03-31T07:43:01.321Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/2015-campus-recurit-technology-interview-summary.html</loc>
-    <lastmod>2016-03-31T01:23:46.273Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html</loc>
-    <lastmod>2016-03-26T09:28:31.290Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/tensorflow-learning-notes.html</loc>
-    <lastmod>2016-03-21T01:48:29.695Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/tensorflow-learning-notes-3.html</loc>
-    <lastmod>2016-03-17T13:15:03.661Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/tensorflow-learning-notes-2.html</loc>
-    <lastmod>2016-03-16T14:17:48.931Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/cnn-learning-notes-1.html</loc>
-    <lastmod>2016-03-09T02:12:45.988Z</lastmod>
+    <loc>http://www.jeyzhang.com/python-learning-notes-and-common-problems.html</loc>
+    <lastmod>2016-04-27T12:09:28.172Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/2015-campus-recruit-summary.html</loc>
-    <lastmod>2016-03-08T00:55:30.999Z</lastmod>
+    <lastmod>2016-04-27T12:05:11.332Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.jeyzhang.com/cnn-learning-notes-2.html</loc>
-    <lastmod>2016-03-03T11:25:39.607Z</lastmod>
+    <loc>http://www.jeyzhang.com/hexo-next-add-post-views.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html</loc>
-    <lastmod>2016-03-03T06:52:49.879Z</lastmod>
+    <loc>http://www.jeyzhang.com/tensorflow-learning-notes-2.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.jeyzhang.com/network-connection-problems-in-win10.html</loc>
-    <lastmod>2016-02-26T10:49:35.539Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/hexo-website-seo.html</loc>
-    <lastmod>2016-01-24T13:50:41.931Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/about/index.html</loc>
-    <lastmod>2016-01-24T13:19:41.927Z</lastmod>
+    <loc>http://www.jeyzhang.com/problems-with-solution-in-tensorflow.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/next-theme-personal-settings.html</loc>
-    <lastmod>2016-01-22T15:11:14.081Z</lastmod>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/network-connection-problems-in-win10.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/markdown-common-problems.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/introduction-to-word-representation.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/hexo-website-seo.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/tensorflow-learning-notes-3.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/hexo-github-blog-building.html</loc>
-    <lastmod>2016-01-22T15:06:22.739Z</lastmod>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/cnn-learning-notes-2.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/cnn-learning-notes-1.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/cnn-apply-on-modelling-sentence.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/blog-on-gitcafe-with-dns-settings.html</loc>
-    <lastmod>2016-01-22T15:01:31.823Z</lastmod>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.jeyzhang.com/tags/index.html</loc>
-    <lastmod>2016-01-13T02:30:40.223Z</lastmod>
+    <loc>http://www.jeyzhang.com/2015-campus-recurit-technology-interview-summary.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
   </url>
   
   <url>
-    <loc>http://www.jeyzhang.com/categories/index.html</loc>
-    <lastmod>2016-01-13T02:30:40.212Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.jeyzhang.com/404_old.html</loc>
-    <lastmod>2016-01-13T02:30:40.159Z</lastmod>
+    <loc>http://www.jeyzhang.com/tensorflow-learning-notes.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
   </url>
   
   <url>
     <loc>http://www.jeyzhang.com/404.html</loc>
-    <lastmod>2016-01-13T02:30:40.153Z</lastmod>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/tags/index.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/categories/index.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/about/index.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.jeyzhang.com/404_old.html</loc>
+    <lastmod>2016-04-20T06:45:54.834Z</lastmod>
   </url>
   
 </urlset>
