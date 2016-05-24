@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="DNS,Gitcafe,Github,Hexo," />
+  <meta name="keywords" content="Coding,DNS,Gitcafe,Github,Hexo," />
 
 
 
@@ -54,15 +54,17 @@
 <meta name="description" content="在之前的博文中，已经介绍了如何创建一个Hexo网站并且将其托管至Github上，从而实现一个静态的博客网站。由于国内访问Github速度较慢甚至无法访问，因此有了国内版的Github，也就是Gitcafe。将网站托管至Gitcafe上的好处就是，你的网站即使在国内的网络环境下也能被访问，同时也便于百度等中文搜索引擎的收录。
 将博客托管至Gitcafe与托管至Github类似，但是仍存在一些细小的差">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何将博客托管至Gitcafe及相应的DNS设置">
+<meta property="og:title" content="如何将博客托管至Coding及相应的DNS设置">
 <meta property="og:url" content="http://www.jeyzhang.com/blog-on-gitcafe-with-dns-settings.html">
 <meta property="og:site_name" content="Jey Zhang">
 <meta property="og:description" content="在之前的博文中，已经介绍了如何创建一个Hexo网站并且将其托管至Github上，从而实现一个静态的博客网站。由于国内访问Github速度较慢甚至无法访问，因此有了国内版的Github，也就是Gitcafe。将网站托管至Gitcafe上的好处就是，你的网站即使在国内的网络环境下也能被访问，同时也便于百度等中文搜索引擎的收录。
 将博客托管至Gitcafe与托管至Github类似，但是仍存在一些细小的差">
 <meta property="og:image" content="http://i.imgur.com/gw8SKtu.png">
-<meta property="og:updated_time" content="2016-04-20T06:45:54.834Z">
+<meta property="og:image" content="http://i.imgur.com/2Ko41Xk.png">
+<meta property="og:image" content="http://i.imgur.com/rMOVcTS.png">
+<meta property="og:updated_time" content="2016-05-12T09:40:00.840Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何将博客托管至Gitcafe及相应的DNS设置">
+<meta name="twitter:title" content="如何将博客托管至Coding及相应的DNS设置">
 <meta name="twitter:description" content="在之前的博文中，已经介绍了如何创建一个Hexo网站并且将其托管至Github上，从而实现一个静态的博客网站。由于国内访问Github速度较慢甚至无法访问，因此有了国内版的Github，也就是Gitcafe。将网站托管至Gitcafe上的好处就是，你的网站即使在国内的网络环境下也能被访问，同时也便于百度等中文搜索引擎的收录。
 将博客托管至Gitcafe与托管至Github类似，但是仍存在一些细小的差">
 
@@ -76,7 +78,7 @@
   };
 </script>
 
-  <title> 如何将博客托管至Gitcafe及相应的DNS设置 | Jey Zhang </title>
+  <title> 如何将博客托管至Coding及相应的DNS设置 | Jey Zhang </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -261,7 +263,7 @@
             
             
               
-                如何将博客托管至Gitcafe及相应的DNS设置
+                如何将博客托管至Coding及相应的DNS设置
               
             
           </h1>
@@ -307,7 +309,7 @@
 		  
 		  
 			 &nbsp; | &nbsp;
-			 <span id="/blog-on-gitcafe-with-dns-settings.html"class="leancloud_visitors"  data-flag-title="如何将博客托管至Gitcafe及相应的DNS设置">
+			 <span id="/blog-on-gitcafe-with-dns-settings.html"class="leancloud_visitors"  data-flag-title="如何将博客托管至Coding及相应的DNS设置">
              &nbsp;Views
             </span>
 		  
@@ -329,6 +331,7 @@
 <li>将网站托管至Gitcafe上；</li>
 <li>相应的DNS域名解析设置以实现国内外分流访问网站（即国外网络环境下是通过Github Page访问你的网站，而国内则是通过Gitcafe Page访问）。</li>
 </ol>
+<p><strong>Gitcafe目前已经面临关闭，博文最后介绍了将静态网站迁移至Coding的方法。</strong></p>
 <hr>
 <h1 id="将博客托管至Gitcafe上">将博客托管至Gitcafe上</h1><h2 id="注册Gitcafe账号">注册Gitcafe账号</h2><p>打开<a href="https://gitcafe.com" target="_blank" rel="external">Gitcafe官网</a>，注册账号。</p>
 <h2 id="配置SSH">配置SSH</h2><p>假设你已经完成将网站托管至Github上，此时你的本地已经生成了SSH公钥文件，打开这个文件并复制其中的内容。下面是我的ssh公钥文件路径</p>
@@ -362,6 +365,28 @@ deploy:
 <p><img src="http://i.imgur.com/gw8SKtu.png" alt=""></p>
 <p>国内线路选择Gitcafe，国外线路选择Github，从而实现国内外分流访问网站。主机记录为<code>@</code>可以实现访问<code>××××××.com</code>时，自动填充”www”开头，因为之前我们绑定的网站是<code>www.××××××.com</code>的二级域名。</p>
 <p>等待一段时间生效即可。</p>
+<h1 id="将博客托管至Coding平台">将博客托管至Coding平台</h1><p>托管的方法与Gitcafe的类似，托管完成后，你可以手动删除Gitcafe上的项目（2016年5月31号之后系统也会自动清除的）。</p>
+<h2 id="注册Coding账户并建立项目">注册Coding账户并建立项目</h2><p>去<a href="https://coding.net" target="_blank" rel="external">Coding的官网</a>注册，在个人主页的<code>项目</code>中创建一个项目，最好创建与你账户名相同的项目。例如，我的账户名为jeyzhang, 创建的项目名为JeyZhang（大小写不区分）。</p>
+<h2 id="上传SSH文件">上传SSH文件</h2><p>在Coding的个人主页的<code>账户</code>中，进入<code>SSH公钥</code>。添加你的公钥，如果你之前生成过，公钥在<code>C:\Users\你的用户名\.ssh\id_rsa.pub</code>。复制里面的内容在<code>SSH-RSA公钥内容</code>中即可。</p>
+<p>打开<code>git bash</code>，输入</p>
+<pre><code>ssh -T git@git<span class="class">.coding</span><span class="class">.net</span>
+</code></pre><p>进行测试，如果显示如下则SSH配置成功：</p>
+<pre><code>Hello ...! You've conected <span class="keyword">to</span> Coding.net <span class="keyword">by</span> SSH successfully!
+</code></pre><h2 id="修改网站的配置文件">修改网站的配置文件</h2><p>修改网站根目录下的配置文件<code>_config.yml</code>，找到<code>deploy</code>的设置处，改为如下：</p>
+<pre><code><span class="attribute">deploy</span>:
+  <span class="attribute">type</span>: git
+  <span class="attribute">repo</span>: 
+    <span class="attribute">github</span>: git<span class="variable">@github</span>.<span class="attribute">com</span>:JeyZhang/jeyzhang.github.io.git
+    <span class="attribute">coding</span>: git<span class="variable">@git</span>.coding.<span class="attribute">net</span>:JeyZhang/JeyZhang.git,master
+</code></pre><p>注意要改成你的项目地址。</p>
+<h2 id="将网站文件部署至Coding">将网站文件部署至Coding</h2><p>在网站根目录下打开<code>git bash</code>，输入</p>
+<pre><code>hexo <span class="keyword">g</span> -<span class="literal">d</span>
+</code></pre><p>进行网站文件的生成和部署。成功之后，进入你的Coding对应的项目中应该能看到网站文件。</p>
+<h2 id="配置Coding的Page服务">配置Coding的Page服务</h2><p>进入你在Coding上的项目，点击左侧的<code>代码</code>可以看到<code>Coding Pages</code>服务。输入分支为<code>master</code>，点击开启服务。在自定义域名处填上你的网站域名，如下图所示：</p>
+<p><img src="http://i.imgur.com/2Ko41Xk.png" alt=""></p>
+<h2 id="配置DNS">配置DNS</h2><p>笔者使用<a href="https://www.dnspod.cn/" target="_blank" rel="external">DNSPod</a>进行网站的DNS设置。将国内线路设置为<code>CNAME</code>的<code>page.coding.me</code>即可。如下图所示。</p>
+<p><img src="http://i.imgur.com/rMOVcTS.png" alt=""></p>
+<p>等待一会儿，你就能在国内网络快速访问你的网站了。</p>
 <hr>
 <p>本文结束，感谢欣赏。</p>
 <p><strong>欢迎转载，请注明本文的链接地址：</strong></p>
@@ -373,6 +398,8 @@ deploy:
     <footer class="post-footer">
       
         <div class="post-tags">
+          
+            <a href="/tags/Coding/" rel="tag">#Coding</a>
           
             <a href="/tags/DNS/" rel="tag">#DNS</a>
           
@@ -508,7 +535,7 @@ deploy:
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">35</span>
+              <span class="site-state-item-count">36</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>
@@ -581,7 +608,7 @@ deploy:
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#将博客托管至Gitcafe上"><span class="nav-number">1.</span> <span class="nav-text">将博客托管至Gitcafe上</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注册Gitcafe账号"><span class="nav-number">1.1.</span> <span class="nav-text">注册Gitcafe账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置SSH"><span class="nav-number">1.2.</span> <span class="nav-text">配置SSH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建同名项目以及修改配置文件"><span class="nav-number">1.3.</span> <span class="nav-text">创建同名项目以及修改配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将本地网站同步至Gitcafe项目中"><span class="nav-number">1.4.</span> <span class="nav-text">将本地网站同步至Gitcafe项目中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试是否成功将网站托管至Gitcafe上"><span class="nav-number">1.5.</span> <span class="nav-text">测试是否成功将网站托管至Gitcafe上</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DNS解析设置"><span class="nav-number">2.</span> <span class="nav-text">DNS解析设置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#将博客托管至Gitcafe上"><span class="nav-number">1.</span> <span class="nav-text">将博客托管至Gitcafe上</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注册Gitcafe账号"><span class="nav-number">1.1.</span> <span class="nav-text">注册Gitcafe账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置SSH"><span class="nav-number">1.2.</span> <span class="nav-text">配置SSH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建同名项目以及修改配置文件"><span class="nav-number">1.3.</span> <span class="nav-text">创建同名项目以及修改配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将本地网站同步至Gitcafe项目中"><span class="nav-number">1.4.</span> <span class="nav-text">将本地网站同步至Gitcafe项目中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试是否成功将网站托管至Gitcafe上"><span class="nav-number">1.5.</span> <span class="nav-text">测试是否成功将网站托管至Gitcafe上</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DNS解析设置"><span class="nav-number">2.</span> <span class="nav-text">DNS解析设置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#将博客托管至Coding平台"><span class="nav-number">3.</span> <span class="nav-text">将博客托管至Coding平台</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注册Coding账户并建立项目"><span class="nav-number">3.1.</span> <span class="nav-text">注册Coding账户并建立项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上传SSH文件"><span class="nav-number">3.2.</span> <span class="nav-text">上传SSH文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改网站的配置文件"><span class="nav-number">3.3.</span> <span class="nav-text">修改网站的配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将网站文件部署至Coding"><span class="nav-number">3.4.</span> <span class="nav-text">将网站文件部署至Coding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Coding的Page服务"><span class="nav-number">3.5.</span> <span class="nav-text">配置Coding的Page服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置DNS"><span class="nav-number">3.6.</span> <span class="nav-text">配置DNS</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -649,7 +676,7 @@ deploy:
     <script type="text/javascript">
       var disqus_shortname = 'jeyzhang';
       var disqus_identifier = 'blog-on-gitcafe-with-dns-settings.html';
-      var disqus_title = '如何将博客托管至Gitcafe及相应的DNS设置';
+      var disqus_title = '如何将博客托管至Coding及相应的DNS设置';
       var disqus_url = 'http://www.jeyzhang.com/blog-on-gitcafe-with-dns-settings.html';
 
       function run_disqus_script(disqus_script){

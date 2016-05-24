@@ -72,7 +72,7 @@ deploy:
   type: git
   repo: 
     github: git@github.com:JeyZhang/jeyzhang.github.io.git
-    gitcafe: git@gitcafe.com:JeyZhang/JeyZhang.git,gitcafe-pages
+    coding: git@git.coding.net:JeyZhang/JeyZhang.git,master
 	
 # Comment plug-in
 disqus_shortname: jeyzhang
